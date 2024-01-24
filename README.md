@@ -15,7 +15,7 @@ Trails. Ours.
 * pull [node](https://hub.docker.com/_/node) image - follow instructions in [Containerized Nodejs](./doc/nodejs.md) document
 
 ### virtual environment
-Open terminal and type:
+Open terminal inside project directory and type:
 ```bash
 . ./.venv
 ```

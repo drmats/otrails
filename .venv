@@ -14,6 +14,9 @@ if [ "${BASH_SOURCE-}" = "$0" ]; then
     exit 8
 fi
 
+# paths
+PROJECT_ROOT=$(pwd)
+
 # node
 unset -f node >/dev/null 2>&1
 alias node 2>/dev/null >/dev/null && unalias node || true
@@ -25,20 +28,16 @@ node () {
 unset -f npm >/dev/null 2>&1
 alias npm 2>/dev/null >/dev/null && unalias npm || true
 npm () {
-    podman run -it --rm -v $(pwd):/usr/src/app -w /usr/src/app node:20 npm "$@"
+    RP=$(realpath --relative-to="$PROJECT_ROOT" $(pwd))
+    podman run -it --rm -v "$PROJECT_ROOT":/usr/src/app -w /usr/src/app/"$RP" node:20 npm "$@"
 }
 
 # yarn
 unset -f yarn >/dev/null 2>&1
 alias yarn 2>/dev/null >/dev/null && unalias yarn || true
 yarn () {
-    ls | grep package.json > /dev/null 2>&1
-    if [ $? -eq 0 ]; then
-        podman run -it --rm -v $(pwd):/usr/src/app -w /usr/src/app node:20 yarn "$@"
-    else
-        echo "Missing package.json file."
-        return 1
-    fi
+    RP=$(realpath --relative-to="$PROJECT_ROOT" $(pwd))
+    podman run -it --rm -v "$PROJECT_ROOT":/usr/src/app -w /usr/src/app/"$RP" node:20 yarn "$@"
 }
 
 # psql
