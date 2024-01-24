@@ -1,0 +1,19 @@
+{
+    "folders": [
+        {
+            "name": "common",
+            "path": "../packages/common"
+        },
+        {
+            "name": "root",
+            "path": "../"
+        },
+    ],
+    "settings": {
+        "files.exclude": {
+            "node_modules/": true,
+            "packages/": true
+        },
+        "typescript.tsdk": "root/node_modules/typescript/lib",
+    }
+}
