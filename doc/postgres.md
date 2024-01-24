@@ -11,6 +11,8 @@ podman system reset
 sudo rm -rf ~/.local/share/containers/
 ```
 
+<br />
+
 
 
 
@@ -45,6 +47,8 @@ podman stop otrails-postgis
 ```bash
 podman exec -it otrails-postgis psql -U robot otrails
 ```
+
+<br />
 
 
 
