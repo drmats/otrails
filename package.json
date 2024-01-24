@@ -1,0 +1,76 @@
+{
+
+    "author": "Mat.",
+
+    "bugs": {
+        "url": "https://github.com/drmats/otrails/issues"
+    },
+
+    "contributors": [
+        {
+            "name": "Mat.",
+            "email": "xcmats@protonmail.com",
+            "url": "https://twitter.com/xcmats/"
+        }
+    ],
+
+    "description": "Trails. Ours.",
+
+    "devDependencies": {
+        "rimraf": "3.0.2"
+    },
+
+    "engines": {
+        "node": ">=20.0.0",
+        "npm": ">=10.0.0"
+    },
+
+    "homepage": "https://github.com/drmats/otrails",
+
+    "keywords": [
+        "hikes",
+        "maps",
+        "trails"
+    ],
+
+    "license": "BSD-2-Clause",
+
+    "name": "@xcmats/otrails",
+
+    "private": true,
+
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/drmats/otrails.git"
+    },
+
+    "resolutions": {
+        "**/@xcmats/js-toolbox": "0.14.7",
+        "**/rimraf": "3.0.2"
+    },
+
+    "scripts": {
+
+        "clean:modules": "yarn clean:modules:all",
+        "clean:modules:all": "yarn clean:modules:common && yarn clean:modules:root",
+        "clean:modules:root": "rimraf node_modules",
+        "clean:modules:common": "cd ./packages/common; yarn clean:modules",
+
+        "vars": "cd ./packages/common && yarn vars",
+
+        "test": "yarn test:all",
+        "test:all": "yarn test:common",
+        "test:common": "cd ./packages/common; yarn test",
+
+        "build": "yarn build:all",
+        "build:all": "yarn test:common"
+
+    },
+
+    "version": "0.0.1",
+
+    "workspaces": [
+        "packages/*"
+    ]
+
+}

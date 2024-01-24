@@ -1,0 +1,64 @@
+{
+
+    "author": "Mat.",
+
+    "bugs": {
+        "url": "https://github.com/drmats/otrails/issues"
+    },
+
+    "contributors": [
+        {
+            "name": "Mat.",
+            "email": "xcmats@protonmail.com",
+            "url": "https://twitter.com/xcmats/"
+        }
+    ],
+
+    "dependencies": {
+        "@xcmats/js-toolbox": "0.14.7"
+    },
+
+    "description": "otrails - common library.",
+
+    "devDependencies": {
+        "rimraf": "3.0.2"
+    },
+
+    "engines": {
+        "node": ">=20.0.0",
+        "npm": ">=10.0.0"
+    },
+
+    "homepage": "https://github.com/drmats/otrails",
+
+    "keywords": [
+        "common",
+        "functions"
+    ],
+
+    "license": "BSD-2-Clause",
+
+    "name": "@xcmats/otrails-common",
+
+    "private": true,
+
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/drmats/otrails.git"
+    },
+
+    "scripts": {
+
+        "clean:modules": "rimraf node_modules",
+
+        "vars": "node scripts/vars.js",
+
+        "test": "echo \"Warning: no tests specified (yet)\""
+
+    },
+
+    "sideEffects": false,
+
+    "version": "0.0.1"
+
+}

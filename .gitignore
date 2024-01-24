@@ -1,1 +1,4 @@
 data/pg/pgdata
+data/vars.json
+node_modules
+yarn-error.log
