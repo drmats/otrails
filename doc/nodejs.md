@@ -26,15 +26,15 @@ podman pull docker.io/library/node:20
 
 ### run node interpreter once
 ```bash
-podman run -it --rm node:20 node
+podman run -it --rm --net host node:20 node
 ```
 
 ### run node script once
 ```bash
-podman run -it --rm -v $(pwd):/usr/src/app -w /usr/src/app node:20 node script.js
+podman run -it --rm --net host -v $(pwd):/usr/src/app -w /usr/src/app node:20 node script.js
 ```
 
 ### run yarn
 ```bash
-podman run -it --rm -v $(pwd):/usr/src/app -w /usr/src/app node:20 yarn
+podman run -it --rm --net host -v $(pwd):/usr/src/app -w /usr/src/app node:20 yarn
 ```

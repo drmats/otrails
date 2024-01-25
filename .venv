@@ -21,7 +21,7 @@ PROJECT_ROOT=$(pwd)
 unset -f node >/dev/null 2>&1
 alias node 2>/dev/null >/dev/null && unalias node || true
 node () {
-    podman run -it --rm -v $(pwd):/usr/src/app -w /usr/src/app node:20 node "$@"
+    podman run -it --rm --net host -v $(pwd):/usr/src/app -w /usr/src/app node:20 node "$@"
 }
 
 # npm
@@ -29,7 +29,7 @@ unset -f npm >/dev/null 2>&1
 alias npm 2>/dev/null >/dev/null && unalias npm || true
 npm () {
     RP=$(realpath --relative-to="$PROJECT_ROOT" $(pwd))
-    podman run -it --rm -v "$PROJECT_ROOT":/usr/src/app -w /usr/src/app/"$RP" node:20 npm "$@"
+    podman run -it --rm --net host -v "$PROJECT_ROOT":/usr/src/app -w /usr/src/app/"$RP" node:20 npm "$@"
 }
 
 # yarn
@@ -37,7 +37,7 @@ unset -f yarn >/dev/null 2>&1
 alias yarn 2>/dev/null >/dev/null && unalias yarn || true
 yarn () {
     RP=$(realpath --relative-to="$PROJECT_ROOT" $(pwd))
-    podman run -it --rm -v "$PROJECT_ROOT":/usr/src/app -w /usr/src/app/"$RP" node:20 yarn "$@"
+    podman run -it --rm --net host -v "$PROJECT_ROOT":/usr/src/app -w /usr/src/app/"$RP" node:20 yarn "$@"
 }
 
 # psql
