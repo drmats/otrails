@@ -5,12 +5,11 @@
  * @copyright Mat. 2024-present
  */
 
-/* eslint-disable @typescript-eslint/no-empty-function */
-
 import yargs from "yargs/yargs";
 import { hideBin } from "yargs/helpers";
 
-import { gitVersion } from "~common/lib/dev";
+import { emptyObject } from "~common/lib/type";
+import { dbSize } from "~cli/actions/dbSize";
 import { hello } from "~cli/actions/hello";
 
 
@@ -21,20 +20,37 @@ import { hello } from "~cli/actions/hello";
  */
 export default function configureArgsParser (): void {
 
-    // command line option parser
+    // command line option parser - routing
     void yargs(hideBin(process.argv))
         .scriptName("otrails-cli")
+
+        // "hello world" - connection and version check
         .command(
             "hello",
             "check database connection and print versions",
-            () => {},
+            emptyObject,
             hello,
         )
+
+        // check database size
+        .command(
+            "dbSize [name]",
+            "check database size",
+            {
+                name: {
+                    type: "string",
+                    default: "otrails",
+                    describe: "database name",
+                },
+            },
+            dbSize,
+        )
+
         .strict()
         .demandCommand()
         .help()
         .wrap(90)
-        .epilog(`[${gitVersion()}] - Visit https://wchmurach.com.pl/`)
+        .epilog("Visit https://wchmurach.com.pl/")
         .argv;
 
 }

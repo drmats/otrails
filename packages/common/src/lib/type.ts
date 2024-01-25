@@ -177,6 +177,22 @@ export type ExtendedValue =
 
 
 /**
+ * Generic empty object - type.
+ */
+export type EmptyObject = Record<string, never>;
+
+
+
+
+/**
+ * Generic empty object - instance.
+ */
+export const emptyObject = {} as EmptyObject;
+
+
+
+
+/**
  * Free-form record generic type.
  */
 export type FreeFormRecord<V> = Partial<Record<string, V>>;
