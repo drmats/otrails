@@ -6,9 +6,12 @@
  * @copyright Mat. 2022-present
  */
 
+/* eslint-disable no-console */
+
 import chalk from "chalk";
 import { range } from "@xcmats/js-toolbox/array";
 import { delay } from "@xcmats/js-toolbox/async";
+import { flow } from "@xcmats/js-toolbox/func";
 import { log10 } from "@xcmats/js-toolbox/math";
 import { padLeft } from "@xcmats/js-toolbox/string";
 import { timeUnit } from "@xcmats/js-toolbox/utils";
@@ -20,6 +23,25 @@ import { timeUnit } from "@xcmats/js-toolbox/utils";
  * Unbuffered write.
  */
 export const write = process.stdout.write.bind(process.stdout);
+
+
+
+
+/**
+ * Stdout/stderr helpers.
+ */
+export const err = flow(chalk.redBright, process.stderr.write.bind(process.stderr));
+export const errnl = flow(chalk.redBright, console.error.bind(console));
+export const info = process.stdout.write.bind(process.stdout);
+export const infonl = console.info.bind(console);
+export const note = flow(chalk.gray, info);
+export const notenl = flow(chalk.gray, infonl);
+export const ok = flow(chalk.greenBright, info);
+export const oknl = flow(chalk.greenBright, infonl);
+export const shout = flow(chalk.whiteBright, info);
+export const shoutnl = flow(chalk.whiteBright, infonl);
+export const warn = flow(chalk.yellow, info);
+export const warnnl = flow(chalk.yellow, infonl);
 
 
 

@@ -15,7 +15,7 @@ Trails. Ours.
 * pull [node](https://hub.docker.com/_/node) image - follow instructions in [Containerized Nodejs](./doc/nodejs.md) document
 
 ### vs code workspace for development
-* open `.vscode/iscriversi.code-workspace`
+* open `.vscode/otrails.code-workspace`
 
 ### virtual environment
 Open terminal inside project directory and type:

@@ -1,0 +1,24 @@
+diff --git a/node_modules/pg/lib/index.js b/node_modules/pg/lib/index.js
+index 1742d16..3f2cb55 100644
+--- a/node_modules/pg/lib/index.js
++++ b/node_modules/pg/lib/index.js
+@@ -29,7 +29,8 @@ var PG = function (clientConstructor) {
+ }
+ 
+ if (typeof process.env.NODE_PG_FORCE_NATIVE !== 'undefined') {
+-  module.exports = new PG(require('./native'))
++  // module.exports = new PG(require('./native'))
++  module.exports = new PG(Client)
+ } else {
+   module.exports = new PG(Client)
+ 
+@@ -40,7 +41,8 @@ if (typeof process.env.NODE_PG_FORCE_NATIVE !== 'undefined') {
+     get() {
+       var native = null
+       try {
+-        native = new PG(require('./native'))
++        // native = new PG(require('./native'))
++        native = new PG(Client)
+       } catch (err) {
+         if (err.code !== 'MODULE_NOT_FOUND') {
+           throw err

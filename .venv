@@ -32,6 +32,14 @@ npm () {
     podman run -it --rm --net host -v "$PROJECT_ROOT":/usr/src/app -w /usr/src/app/"$RP" node:20 npm "$@"
 }
 
+# npx
+unset -f npx >/dev/null 2>&1
+alias npx 2>/dev/null >/dev/null && unalias npx || true
+npx () {
+    RP=$(realpath --relative-to="$PROJECT_ROOT" $(pwd))
+    podman run -it --rm --net host -v "$PROJECT_ROOT":/usr/src/app -w /usr/src/app/"$RP" node:20 npx "$@"
+}
+
 # yarn
 unset -f yarn >/dev/null 2>&1
 alias yarn 2>/dev/null >/dev/null && unalias yarn || true

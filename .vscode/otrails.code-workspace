@@ -5,6 +5,10 @@
             "path": "../packages/common"
         },
         {
+            "name": "cli",
+            "path": "../packages/cli"
+        },
+        {
             "name": "root",
             "path": "../"
         },

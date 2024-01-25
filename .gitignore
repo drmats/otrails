@@ -1,4 +1,5 @@
 data/pg/pgdata
 data/vars.json
 node_modules
+packages/cli/dist
 yarn-error.log

@@ -17,12 +17,14 @@
     "description": "Trails. Ours.",
 
     "devDependencies": {
+        "patch-package": "8.0.0",
         "rimraf": "3.0.2"
     },
 
     "engines": {
         "node": ">=20.0.0",
-        "npm": ">=10.0.0"
+        "npm": ">=10.0.0",
+        "yarn": ">=1.22.19 <2.0.0"
     },
 
     "homepage": "https://github.com/drmats/otrails",
@@ -49,7 +51,7 @@
         "**/@xcmats/js-toolbox": "0.14.7",
         "**/babel-plugin-module-resolver": "4.1.0",
         "**/rimraf": "3.0.2",
-        "**/typescript": "5.2.2"
+        "**/typescript": "5.3.3"
     },
 
     "scripts": {
@@ -59,14 +61,24 @@
         "clean:modules:root": "rimraf node_modules",
         "clean:modules:common": "cd ./packages/common; yarn clean:modules",
 
-        "vars": "cd ./packages/common && yarn vars",
+        "vars": "cd ./packages/common; yarn vars",
 
         "test": "yarn test:all",
-        "test:all": "yarn test:common",
+        "test:all": "yarn test:common && yarn test:cli",
         "test:common": "cd ./packages/common; yarn test",
 
         "build": "yarn build:all",
-        "build:all": "yarn test:common"
+        "build:all": "yarn test:common && yarn build:cli",
+
+        "clean:modules:cli": "cd ./packages/cli; yarn clean:modules",
+        "clean:cli": "yarn clean:dist:cli",
+        "clean:dist:cli": "cd ./packages/cli; yarn clean",
+        "test:cli": "cd ./packages/cli; yarn test",
+        "start:cli:dev": "cd ./packages/cli; yarn dev",
+        "build:cli": "cd ./packages/cli; yarn build",
+        "start:cli": "cd ./packages/cli; yarn start",
+
+        "postinstall": "patch-package"
 
     },
 
