@@ -16,12 +16,13 @@ fi
 
 # paths
 PROJECT_ROOT=$(pwd)
+VIRTUAL_ROOT="/usr/src/app"
 
 # node
 unset -f node >/dev/null 2>&1
 alias node 2>/dev/null >/dev/null && unalias node || true
 node () {
-    podman run -it --rm --net host -v $(pwd):/usr/src/app -w /usr/src/app node:20 node "$@"
+    podman run -it --rm --net host -v $(pwd):"$VIRTUAL_ROOT" -w "$VIRTUAL_ROOT" node:20 node "$@"
 }
 
 # npm
@@ -29,7 +30,7 @@ unset -f npm >/dev/null 2>&1
 alias npm 2>/dev/null >/dev/null && unalias npm || true
 npm () {
     RP=$(realpath --relative-to="$PROJECT_ROOT" $(pwd))
-    podman run -it --rm --net host -v "$PROJECT_ROOT":/usr/src/app -w /usr/src/app/"$RP" node:20 npm "$@"
+    podman run -it --rm --net host -v "$PROJECT_ROOT":"$VIRTUAL_ROOT" -w "$VIRTUAL_ROOT"/"$RP" node:20 npm "$@"
 }
 
 # npx
@@ -37,7 +38,7 @@ unset -f npx >/dev/null 2>&1
 alias npx 2>/dev/null >/dev/null && unalias npx || true
 npx () {
     RP=$(realpath --relative-to="$PROJECT_ROOT" $(pwd))
-    podman run -it --rm --net host -v "$PROJECT_ROOT":/usr/src/app -w /usr/src/app/"$RP" node:20 npx "$@"
+    podman run -it --rm --net host -v "$PROJECT_ROOT":"$VIRTUAL_ROOT" -w "$VIRTUAL_ROOT"/"$RP" node:20 npx "$@"
 }
 
 # yarn
@@ -45,7 +46,7 @@ unset -f yarn >/dev/null 2>&1
 alias yarn 2>/dev/null >/dev/null && unalias yarn || true
 yarn () {
     RP=$(realpath --relative-to="$PROJECT_ROOT" $(pwd))
-    podman run -it --rm --net host -v "$PROJECT_ROOT":/usr/src/app -w /usr/src/app/"$RP" node:20 yarn "$@"
+    podman run -it --rm --net host -v "$PROJECT_ROOT":"$VIRTUAL_ROOT" -w "$VIRTUAL_ROOT"/"$RP" node:20 yarn "$@"
 }
 
 # psql
@@ -53,6 +54,13 @@ unset -f psql >/dev/null 2>&1
 alias psql 2>/dev/null >/dev/null && unalias psql || true
 psql () {
     podman exec -it otrails-postgis psql "$@"
+}
+
+# otrails-cli
+unset -f cli >/dev/null 2>&1
+alias cli 2>/dev/null >/dev/null && unalias cli || true
+cli () {
+    node --title=otrails-cli "$VIRTUAL_ROOT"/packages/cli/dist/otrails-cli.js "$@"
 }
 
 # reset bash hash
