@@ -10,7 +10,7 @@ import { useMemory } from "~cli/index";
 import { gitAuthorDate, gitVersion } from "~common/lib/dev";
 import { indent } from "~common/lib/string";
 import { infonl, note, oknl, shoutnl } from "~common/lib/terminal";
-import { printError } from "~common/lib/errors";
+import { printError } from "~common/lib/error";
 import { name as appName, version as appVersion } from "~cli/../package.json";
 
 import gisVersionQuery from "~cli/queries/gisVersion.sql";

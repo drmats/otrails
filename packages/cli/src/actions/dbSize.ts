@@ -8,7 +8,7 @@
 import type { CliAction } from "~common/framework/actions";
 import { useMemory } from "~cli/index";
 import { infonl, note, oknl, shout, shoutnl } from "~common/lib/terminal";
-import { printError } from "~common/lib/errors";
+import { printError } from "~common/lib/error";
 
 import dbSizeQuery from "~cli/queries/dbSize.sql";
 

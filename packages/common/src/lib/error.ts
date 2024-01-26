@@ -1,7 +1,7 @@
 /**
  * Error handling.
  *
- * @module @xcmats/errors
+ * @module @xcmats/error
  * @license BSD-2-Clause
  * @copyright Mat. 2024-present
  */
