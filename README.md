@@ -1,6 +1,6 @@
 # otrails
 
-Trails. Ours.
+Trails. Open.
 
 <br />
 
@@ -35,7 +35,6 @@ Open terminal inside project directory and type:
 
 
 ## variables interface
-
 * list
     ```
     yarn vars

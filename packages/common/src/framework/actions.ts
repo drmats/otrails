@@ -26,5 +26,5 @@ export type ResponseErr = {
  * Command Line Interface action type.
  */
 export type CliAction<P extends PlainRecord = EmptyObject> = (
-    params: P,
+    args: P,
 ) => Promise<void>;

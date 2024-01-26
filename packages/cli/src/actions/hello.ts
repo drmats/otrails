@@ -1,12 +1,12 @@
 /**
- * Otrails - trails, ours.
+ * Otrails - trails, open.
  *
  * @license BSD-2-Clause
  * @copyright Mat. 2024-present
  */
 
 import type { CliAction } from "~common/framework/actions";
-import { useMemory } from "~cli/index";
+import { useMemory } from "~cli/setup/main";
 import { gitAuthorDate, gitVersion } from "~common/lib/dev";
 import { indent } from "~common/lib/string";
 import { infonl, note, oknl, shoutnl } from "~common/lib/terminal";

@@ -1,5 +1,5 @@
 /**
- * Otrails - trails, ours.
+ * Otrails - trails, open.
  *
  * @license BSD-2-Clause
  * @copyright Mat. 2024-present
@@ -7,20 +7,12 @@
 
 /* eslint-disable @typescript-eslint/no-empty-interface */
 
-import { useMemory as useBareMemory } from "mem-box";
 import { run } from "@xcmats/js-toolbox/utils";
 
-import configureDatabase from "~cli/setup/database";
-import configureVariables from "~cli/setup/vars";
 import configureArgsParser from "~cli/setup/args";
-
-
-
-
-/**
- * Type-safe instance of useMemory.
- */
-export const useMemory: (() => Ctx) = useBareMemory;
+import configureDatabase from "~cli/setup/database";
+import configureTermination from "~cli/setup/terminate";
+import configureVariables from "~cli/setup/vars";
 
 
 
@@ -36,17 +28,10 @@ run(async () => {
     // database configuration
     configureDatabase();
 
+    // termination configuration
+    configureTermination();
+
     // argument parsing configuration
-    configureArgsParser();
+    await configureArgsParser();
 
 });
-
-
-
-
-/**
- * Shared memory type augmentation.
- */
-declare global {
-    interface Ctx {}
-}

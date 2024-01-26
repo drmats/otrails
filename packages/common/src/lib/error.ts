@@ -8,7 +8,7 @@
 
 import { range } from "@xcmats/js-toolbox/array";
 
-import { err, infonl, shoutnl } from "~common/lib/terminal";
+import { err, infonl, shoutnl, warn } from "~common/lib/terminal";
 
 
 
@@ -19,7 +19,7 @@ import { err, infonl, shoutnl } from "~common/lib/terminal";
 export const printError = (ex: unknown, indent = 0): void => {
     const spaces = range(indent).map(() => "    ").join("");
 
-    if (indent === 0) err("ERROR ");
+    if (indent === 0) { infonl(); err("ERROR"); warn(": "); }
 
     if (ex instanceof AggregateError) {
         if (indent === 0) shoutnl();

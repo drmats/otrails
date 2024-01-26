@@ -1,5 +1,5 @@
 /**
- * Otrails - trails, ours.
+ * Otrails - trails, open.
  *
  * @license BSD-2-Clause
  * @copyright Mat. 2024-present

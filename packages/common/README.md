@@ -1,6 +1,6 @@
 # otrails common
 
-Trails. Ours. Common functions.
+Trails. Open. Common functions.
 
 <br />
 
@@ -8,7 +8,6 @@ Trails. Ours. Common functions.
 
 
 ## development
-
 ```
 yarn test
 ```

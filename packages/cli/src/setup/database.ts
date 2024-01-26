@@ -1,5 +1,5 @@
 /**
- * Otrails - trails, ours.
+ * Otrails - trails, open.
  *
  * @license BSD-2-Clause
  * @copyright Mat. 2024-present
@@ -14,9 +14,9 @@ import pg, {
 import { share } from "mem-box";
 import { isString } from "@xcmats/js-toolbox/type";
 
+import { useMemory } from "~cli/setup/main";
 import { buildPgConnectionString, sqlMemo } from "~common/lib/pgsql";
 import { errnl } from "~common/lib/terminal";
-import { useMemory } from "~cli/index";
 
 
 
