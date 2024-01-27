@@ -13,8 +13,8 @@
 // ...
 const
 
-    { realpathSync } = require("fs"),
-    { resolve } = require("path"),
+    { realpathSync } = require("node:fs"),
+    { resolve } = require("node:path"),
     appDirectory = realpathSync(process.cwd()),
 
     conf = {
