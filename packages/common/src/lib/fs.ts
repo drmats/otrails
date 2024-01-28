@@ -44,7 +44,7 @@ export const fsWalk = async (
     root: string,
     cb: (dir: string[], name: string) => Promise<void>,
     maxDepth = 32,
-): Promise<void> => (() => {
+): Promise<void> => {
     const aux = async (cd: string[]): Promise<void> => {
         const entries = await readdir(
             join(root, ...cd),
@@ -56,7 +56,7 @@ export const fsWalk = async (
         });
     };
     return aux([]);
-})();
+};
 
 
 

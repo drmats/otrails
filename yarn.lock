@@ -1458,10 +1458,10 @@
   resolved "https://registry.yarnpkg.com/@webpack-cli/serve/-/serve-2.0.5.tgz#325db42395cd49fe6c14057f9a900e427df8810e"
   integrity sha512-lqaoKnRYBdo1UgDX8uF24AfGMifWK19TxPmM5FHc2vAGxrJ/qtyUyFBWoY1tISZdelsQ5fBcOusifo5o5wSJxQ==
 
-"@xcmats/js-toolbox@0.14.7", "@xcmats/js-toolbox@^0.14.5":
-  version "0.14.7"
-  resolved "https://registry.yarnpkg.com/@xcmats/js-toolbox/-/js-toolbox-0.14.7.tgz#240c50368d1a7639ce0c43fc19f85869ab7eb174"
-  integrity sha512-x/lIvOA1nrgYUtdne6O1g1B0c6oQro8qeRFrCKh4E2hcsaK5KPhDVvrOSvvDSrJ5tYi/TaRd3xQwKQ1FiHb9dQ==
+"@xcmats/js-toolbox@0.15.0":
+  version "0.15.0"
+  resolved "https://registry.yarnpkg.com/@xcmats/js-toolbox/-/js-toolbox-0.15.0.tgz#ae8335c51423443df300e9824b048747fafafc23"
+  integrity sha512-ziUC/tVkbztwtddhRXXx1/O6FQw7VpJ8pR1frDGx7Q73IPLpvNYI3SgjORth+v9/2YHMNTMXs77SrnPZrZPAZQ==
 
 "@xtuc/ieee754@^1.2.0":
   version "1.2.0"
@@ -3012,7 +3012,7 @@ mem-box@1.0.11:
   resolved "https://registry.yarnpkg.com/mem-box/-/mem-box-1.0.11.tgz#1f2f6d51f9aa51902dffcde6d2ebf7eb026c6916"
   integrity sha512-n+X4ajGio2KkQpd2Ml9rmnriUzfQ5J95o+53HDAG7BSscarA9kyRhQrfUSfROQX6CpUOyJaT41eDoht2vn0q2g==
   dependencies:
-    "@xcmats/js-toolbox" "^0.14.5"
+    "@xcmats/js-toolbox" "0.15.0"
 
 merge-stream@^2.0.0:
   version "2.0.0"

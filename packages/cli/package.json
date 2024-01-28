@@ -15,7 +15,7 @@
     ],
 
     "dependencies": {
-        "@xcmats/js-toolbox": "0.14.7",
+        "@xcmats/js-toolbox": "0.15.0",
         "chalk": "4.1.2",
         "fd-slicer": "1.1.0",
         "mem-box": "1.0.11",
