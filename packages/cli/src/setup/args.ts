@@ -10,6 +10,7 @@ import { hideBin } from "yargs/helpers";
 
 import { emptyObject } from "~common/lib/type";
 import { dbSize } from "~cli/actions/dbSize";
+import { devConsole } from "~cli/actions/dev";
 import { extractGarminData } from "~cli/actions/extractGarminData";
 import { hello } from "~cli/actions/hello";
 
@@ -25,12 +26,26 @@ export default async function configureArgsParser (): Promise<void> {
     await yargs(hideBin(process.argv))
         .scriptName("otrails-cli")
 
-        // "hello world" - connection and version check
+        // "hello world" - database connection and version check
         .command(
             "hello",
-            "check database connection and print versions",
+            "database connection and versions",
             emptyObject,
             hello,
+        )
+
+        // development cli
+        .command(
+            "dev [cwd]",
+            "development console",
+            {
+                cwd: {
+                    type: "string",
+                    default: ".",
+                    describe: "working directory",
+                },
+            },
+            devConsole,
         )
 
         // check database size
