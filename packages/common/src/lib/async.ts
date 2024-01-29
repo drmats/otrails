@@ -7,7 +7,6 @@
  */
 
 import { createMutex } from "@xcmats/js-toolbox/async";
-import { timeUnit } from "@xcmats/js-toolbox/utils";
 
 
 
@@ -37,45 +36,4 @@ export const cached = <T>(f: () => Promise<T>): {
         }
     };
     return Object.assign(aux, { reset });
-};
-
-
-
-
-/**
- * Create mutex with watchdog (10 minutes by default).
- *
- * `barrier`, in contrast to `mutex`, is preventing node process from exiting.
- *
- * Example:
- * ```
- * const barrier = createBarrier<void>();
- *
- * setTimeout(() => { barrier.resolve("Released!"); }, 2000);
- *
- * await barrier.lock();
- * ```
- */
-export const createTimedBarrier = <T>(
-    releaseTimeout = 10 * timeUnit.minute,
-): ReturnType<typeof createMutex<T>> => {
-    const mutex = createMutex<T>();
-    let watchdog: ReturnType<typeof setTimeout> | undefined = undefined;
-    return {
-        ...mutex,
-        lock: () => {
-            watchdog = setTimeout(() => {
-                mutex.reject(new Error("timeout"));
-            }, releaseTimeout);
-            return mutex.lock();
-        },
-        resolve: (v) => {
-            if (watchdog) clearTimeout(watchdog);
-            return mutex.resolve(v);
-        },
-        reject: (r) => {
-            if (watchdog) clearTimeout(watchdog);
-            return mutex.reject(r);
-        },
-    };
 };

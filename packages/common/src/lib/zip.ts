@@ -1,5 +1,5 @@
 /**
- * Zip-file format tools (yauzl-based).
+ * Zip-file-format tools (yauzl-based).
  *
  * @module @xcmats/zip
  * @license BSD-2-Clause
@@ -9,9 +9,9 @@
 import { createWriteStream } from "node:fs";
 import { dirname, join } from "node:path";
 import yauzl, { type Entry, type ZipFile } from "yauzl";
+import { createTimedBarrier } from "@xcmats/js-toolbox/async";
 
 import { ensureDirectory } from "~common/lib/fs";
-import { createTimedBarrier } from "~common/lib/async";
 
 
 
@@ -40,7 +40,10 @@ export const extract = async (opts: {
         { lazyEntries: true, autoClose: true },
 
         (err, zipfile) => {
-            if (err) throw err;
+            if (err) {
+                barrier.reject(err);
+                return;
+            }
 
             zipfile.on("close", () => {
                 if (opts.onClose) opts.onClose();
@@ -60,12 +63,15 @@ export const extract = async (opts: {
 
                     ensureDirectory(dst)
                         .then(() => { zipfile.readEntry(); })
-                        .catch((e) => { throw e; });
+                        .catch(barrier.reject);
 
                 } else {
 
-                    zipfile.openReadStream(entry, (err, readStream) => {
-                        if (err) throw err;
+                    zipfile.openReadStream(entry, (streamErr, readStream) => {
+                        if (streamErr) {
+                            barrier.reject(streamErr);
+                            return;
+                        }
                         ensureDirectory(dirname(dst))
                             .then(() => {
                                 const writeStream = createWriteStream(dst);
@@ -75,7 +81,7 @@ export const extract = async (opts: {
                                 );
                                 readStream.pipe(writeStream);
                             })
-                            .catch((e) => { throw e; });
+                            .catch(barrier.reject);
                     });
 
                 }

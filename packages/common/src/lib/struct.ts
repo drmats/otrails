@@ -7,15 +7,20 @@
  */
 
 import { handleException } from "@xcmats/js-toolbox/func";
-import { dict } from "@xcmats/js-toolbox/struct";
-import { toBool, isArray, isObject, isString } from "@xcmats/js-toolbox/type";
+import { access as jsToolboxAccess, dict } from "@xcmats/js-toolbox/struct";
+import {
+    isArray,
+    isDate,
+    isObject,
+    isRegExp,
+    isString,
+    toBool,
+} from "@xcmats/js-toolbox/type";
 
 import {
     isComplexValueOrUndefined,
-    isDate,
     isPlainValue,
     isPlainValueOrUndefined,
-    isRegExp,
     isUnknownRecord,
     type ComplexValue,
     type ExtendedValue,
@@ -260,22 +265,28 @@ export const dePrefixKeys = <
  * access({ a: { b: [10, { c: 42 }] } }, ["a", "b", 1, "c"])  ===  42
  * ```
  */
-export const access = <
-    T extends ComplexRecord,
-    P extends string,
-    R extends ComplexValue,
->(o: T, path: P[] = [], def?: R): R | undefined => {
-    try {
-        return (
-            path.reduce(
-                (acc: T, p) => acc[p] as unknown as T,
-                o,
-            ) as unknown as R
-        ) ?? def;
-    } catch {
-        return def;
-    }
-};
+export const access: {
+    <
+        InputType extends ComplexRecord,
+    >(o: InputType): (
+        InputType
+    );
+    <
+        InputType extends ComplexRecord,
+        KeyType extends string,
+        OutputType extends ComplexValue,
+    >(o: InputType, path: readonly KeyType[]): (
+        OutputType | undefined
+    );
+    <
+        InputType extends ComplexRecord,
+        KeyType extends string,
+        DefaultType extends ComplexValue,
+        OutputType extends ComplexValue,
+    >(o: InputType, path: readonly KeyType[], def: DefaultType): (
+        DefaultType | OutputType
+    );
+} = jsToolboxAccess;
 
 
 

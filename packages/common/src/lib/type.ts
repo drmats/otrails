@@ -7,10 +7,15 @@
  */
 
 import {
+    type BasicData as JsToolboxBasicData,
+    isBasicData as jsToolboxIsBasicData,
+    isBasicDataOrUndefined as jsToolboxIsBasicDataOrUndefined,
+} from "@xcmats/js-toolbox/struct";
+import {
     isArray,
-    isBoolean,
-    isNumber,
+    isDate,
     isObject,
+    isRegExp,
     isString,
 } from "@xcmats/js-toolbox/type";
 
@@ -59,22 +64,6 @@ export type Opaque<Base, T> = Base & { readonly [__type]: T };
 
 
 /**
- * Date type predicate.
- */
-export const isDate = (c: unknown): c is Date => c instanceof Date;
-
-
-
-
-/**
- * RegExp type predicate.
- */
-export const isRegExp = (c: unknown): c is RegExp => c instanceof RegExp;
-
-
-
-
-/**
  * Usual key types used in Records.
  */
 export type ValidKeys = string | number | symbol;
@@ -85,10 +74,7 @@ export type ValidKeys = string | number | symbol;
 /**
  * Plain, old JS datatypes. Serializable. Non recursive type.
  */
-export type PlainValue =
-    | string
-    | number
-    | boolean;
+export type PlainValue = JsToolboxBasicData;
 
 
 
@@ -96,8 +82,7 @@ export type PlainValue =
 /**
  * Check if value is of `PlainValue` type. Non recursive check.
  */
-export const isPlainValue = (c: unknown): c is PlainValue =>
-    isString(c) || isNumber(c) || isBoolean(c);
+export const isPlainValue = jsToolboxIsBasicData;
 
 
 
@@ -106,10 +91,7 @@ export const isPlainValue = (c: unknown): c is PlainValue =>
  * Check if value is of `PlainValue` or `undefined` type.
  * Non-recursive check.
  */
-export const isPlainValueOrUndefined = (
-    c: unknown,
-): c is PlainValue | undefined =>
-    typeof c === "undefined" || isPlainValue(c);
+export const isPlainValueOrUndefined = jsToolboxIsBasicDataOrUndefined;
 
 
 
@@ -226,14 +208,6 @@ export type FreeFormRecipe<FFR> =
 export type RecursivePartial<T> = T extends Record<never, never> ? {
     [P in keyof T]?: RecursivePartial<T[P]>;
 } : Partial<T>;
-
-
-
-
-/**
- * Check if value is of `boolean` type.
- */
-export const isBool = isBoolean;
 
 
 

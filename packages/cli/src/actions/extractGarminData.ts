@@ -69,9 +69,12 @@ export const extractGarminData: CliAction<{
                     await extract({
                         source: zipFileSrc,
                         destination: zipExtractDst,
-                        onEntry: ({ fileName, entriesRead, entryCount }) => progress(
-                            entriesRead, entryCount, shorten(padRight(fileName, 60), 60),
-                        ),
+                        onEntry: ({ fileName, entriesRead, entryCount }) =>
+                            progress(
+                                entriesRead,
+                                entryCount,
+                                shorten(padRight(fileName, 60), 60),
+                            ),
                         onClose: infonl,
                     });
                     await unlink(zipFileSrc);
