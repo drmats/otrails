@@ -35,8 +35,8 @@ Trails. Open.
 
 This project relies on tools installed within containers (`node`, `yarn`,
 `postgresql`), so in order to ease the development process a python-like
-"virtualenv" script is provided, with all paths and command alias definitions
-(`bash` and `zsh` compatible).
+["virtualenv" script is provided](./.venv), with all paths and command
+alias definitions (`bash` and `zsh` compatible).
 
 Please make sure you're in the **repository root** directory and have `podman`
 command available (`podman --version` should print `podman version x.x.x`).
