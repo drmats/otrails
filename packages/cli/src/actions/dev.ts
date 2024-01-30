@@ -15,6 +15,7 @@ import * as async from "~common/lib/async";
 import * as dev from "~common/lib/dev";
 import * as error from "~common/lib/error";
 import * as fs from "~common/lib/fs";
+import * as http from "~common/lib/http";
 import * as ids from "~common/lib/ids";
 import * as pgsql from "~common/lib/pgsql";
 import * as string from "~common/lib/string";
@@ -43,8 +44,8 @@ export const startDevCli = async <A extends struct.ComplexRecord>(
         box,
         ctx,
         lib: {
-            async, dev, error, fs, ids, pgsql, string,
-            struct, terminal, type, uuid, zip,
+            async, dev, error, fs, http, ids, pgsql,
+            string, struct, terminal, type, uuid, zip,
         },
         $: augment,
     });

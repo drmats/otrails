@@ -11,6 +11,7 @@ import { takeEvery } from "@xcmats/js-toolbox/array";
 import { pipe } from "@xcmats/js-toolbox/func";
 import {
     b64enc,
+    bytesToHex,
     concatBytes,
     random,
     stringToBytes,
@@ -54,3 +55,15 @@ export const genUUID = async (
     await random(6),
 
 );
+
+
+
+
+/**
+ * Create sha256 hex-digest of string input.
+ */
+export const sha256 = (input: string): string => {
+    const byteInput = stringToBytes(input);
+    const byteHash = createHash("sha256").update(byteInput).digest();
+    return bytesToHex(byteHash);
+};

@@ -16,5 +16,6 @@ export const exportDataStructure = {
     imagesFilePattern: /^.*activityImages\.json$/,
 
     tracksDir: "DI_CONNECT/DI-Connect-Uploaded-Files/",
+    imagesDir: "_OTRAILS_IMAGES/",
 
 } as const;

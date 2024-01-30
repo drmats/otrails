@@ -5,18 +5,45 @@
  * @copyright Mat. 2024-present
  */
 
-import { readdir } from "node:fs/promises";
-import { join } from "node:path";
-import { map } from "@xcmats/js-toolbox/async";
-import { isString } from "@xcmats/js-toolbox/type";
+import { readdir, writeFile } from "node:fs/promises";
+import { extname, join } from "node:path";
+import {
+    map,
+    promisePool,
+    type PromisePoolResult,
+} from "@xcmats/js-toolbox/async";
+import { isArray, isString } from "@xcmats/js-toolbox/type";
 
 import type { CliAction } from "~common/framework/actions";
 import { exportDataStructure } from "~common/app/models/garmin";
 import { useMemory } from "~cli/setup/main";
-import { info, shoutnl } from "~common/lib/terminal";
+import {
+    createAutoSpinner,
+    info,
+    infonl,
+    oknl,
+    progress,
+    shoutnl,
+} from "~common/lib/terminal";
 import { printError } from "~common/lib/error";
 import { startDevCli } from "~cli/actions/dev";
-import { readJSON } from "~common/lib/fs";
+import type { ComplexValue } from "~common/lib/type";
+import { isPlainRecord } from "~common/lib/struct";
+import { ensureDirectory, readJSON } from "~common/lib/fs";
+import { get, collectData } from "~common/lib/http";
+import { sha256 } from "~common/lib/uuid";
+
+
+
+
+// success type
+type ImageOk = { url: string; data: Buffer };
+
+// failure type
+type ImageErr = { url: string; error: unknown };
+
+// promise pool size (request parallelization)
+const DEFAULT_POOL_SIZE = 32;
 
 
 
@@ -52,21 +79,79 @@ export const fetchImages: CliAction<{
         const fitnessDir = join(extractDir, exportDataStructure.fitnessDir);
 
         // image metadata files
-        const imageMetaFiles =
+        const imageMetaFilenames =
             (await readdir(fitnessDir))
                 .filter((f) => exportDataStructure.imagesFilePattern.test(f))
                 .map((f) => join(fitnessDir, f));
 
+        // image files destination directory
+        const imagesDir = join(extractDir, exportDataStructure.imagesDir);
+        await ensureDirectory(imagesDir);
+
+        // get-image result handler
+        const handleImageResult = async (
+            result: PromisePoolResult<ImageOk, ImageErr>,
+        ): Promise<void> => {
+            if (result.status !== "fulfilled") return;
+            const imageFilename = [
+                sha256(result.value.url),
+                extname(result.value.url),
+            ].join("");
+            return await writeFile(
+                join(imagesDir, imageFilename),
+                result.value.data,
+            );
+        };
+
         // process file-by-file
-        await map(imageMetaFiles) (async (imageMetaFileName) => {
-            info("processing: "); shoutnl(imageMetaFileName);
+        await map(imageMetaFilenames) (async (imageMetaFilename) => {
 
-            const imageMetaFile = await readJSON(imageMetaFileName);
+            info("processing: "); shoutnl(imageMetaFilename);
 
-            // start cli
+            // metadata file contents (parsed)
+            const imageMetaFile = await readJSON<ComplexValue[]>(imageMetaFilename);
+            if (!isArray(imageMetaFile)) {
+                throw new Error(`wrong structure: ${imageMetaFilename}`);
+            }
+            info("number of entries: "); shoutnl(imageMetaFile.length);
+
+            // execution pool
+            const pool = promisePool<ImageOk, ImageErr>(DEFAULT_POOL_SIZE);
+
+            // process entries
+            await map(imageMetaFile) (async (imageEntry, i) => {
+
+                // progress-bar
+                progress(i + 1, imageMetaFile.length + 1);
+
+                // data-check
+                if (!isPlainRecord(imageEntry) || !isString(imageEntry.url)) {
+                    return;
+                }
+                const url = imageEntry.url;
+
+                // schedule request and data-collecting
+                const result = await pool.exec(async () => ({
+                    url, data: await collectData(await get(url)),
+                }));
+
+                // process result (save file)
+                await handleImageResult(result);
+
+            });
+
+            // await for all entries still "in flight"
+            info(" "); const spinner = createAutoSpinner();
+            await map(await pool.finish()) (handleImageResult);
+
+            // one `imageMetaFilename` processed ok
+            spinner.dispose(); infonl(); oknl("DONE");
+
+            // start cli after each pass
             await startDevCli({
                 userShortId, fitnessDir,
-                imageMetaFiles, imageMetaFileName, imageMetaFile,
+                imageMetaFilenames, imageMetaFilename,
+                imageMetaFile,
             });
 
         });

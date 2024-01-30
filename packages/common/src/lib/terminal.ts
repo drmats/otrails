@@ -138,3 +138,22 @@ export const createSpinner = (): {
         },
     });
 };
+
+
+
+
+/**
+ * Auto-incrementing spinner.
+ */
+export const createAutoSpinner = (): {
+    dispose: () => void;
+} => {
+    const spinner = createSpinner();
+    const handle = setInterval(spinner.tick, 100);
+    return {
+        dispose: () => {
+            clearInterval(handle);
+            spinner.dispose();
+        },
+    };
+};

@@ -1,7 +1,7 @@
 /**
  * Node data utils - fs.
  *
- * @module @xcmats/node-data-utils
+ * @module @xcmats/node-data-fs-utils
  * @license BSD-2-Clause
  * @copyright Mat. 2019-present
  */
