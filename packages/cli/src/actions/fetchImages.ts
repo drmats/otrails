@@ -37,7 +37,7 @@ export const fetchImages: CliAction<{
 
         // check variables validity
         if (!isString(extractsDir)) {
-            throw new Error("Missing or malformad extract variable.");
+            throw new Error("Missing or malformed extract variable.");
         }
 
         // check arguments validity

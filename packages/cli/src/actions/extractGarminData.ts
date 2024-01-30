@@ -37,7 +37,7 @@ export const extractGarminData: CliAction<{
 
         // check variables validity
         if (!isString(exportsDir) || !isString(extractsDir)) {
-            throw new Error("Missing or malformad export/extract variables.");
+            throw new Error("Missing or malformed export/extract variables.");
         }
 
         // check arguments validity

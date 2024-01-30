@@ -37,7 +37,7 @@ export default function configureDatabase (): void {
         !isString(dbUser) || !isString(dbPass) ||
         !isString(dbHost) || !isString(dbName)
     ) {
-        errnl("Missing or malformad database configuration variables.");
+        errnl("Missing or malformed database configuration variables.");
         process.exit(1);
     }
 
