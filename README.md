@@ -134,10 +134,51 @@ is maintained in [`packages/cli/`](./packages/cli/) project directory.
 
 
 
+## variables interface
+
+For code-independent variables store (e.g. directory names, hosts, ports,
+passwords, etc.) this project uses simple `key-val` mechanism implemented as
+[small set of functions](./packages/common/scripts/vars.js) operating on
+a single **JSON** file (`data/vars.json`). These variables are meant to be
+customizable between environments and - depending on particular scenario - can
+be baked into `dist` output files during build process or read dynamically.
+
+* list all variables
+    ```
+    yarn vars
+    ```
+* add
+    ```
+    yarn vars set [KEY] [VAL]
+    ```
+* remove
+    ```
+    yarn vars del [KEY]
+    ```
+
+<br />
+
+
+
+
 ## wrap up
 
-If the development environment is set properly, then invoking `cli hello`
-command should succeed.
+1) Set up database access variables, e.g.:
+
+    ```bash
+    yarn vars set dbHost localhost:5432
+    yarn vars set dbName otrails
+    yarn vars set dbUser robot
+    yarn vars set dbPass robot
+    ```
+
+2) Either run (in separate terminal) continuous build process (`yarn dev:cli`)
+    or build once (`yarn build:cli`).
+
+3) If the development environment is set properly, then invoking `cli hello`
+    command should succeed.
+
+### example session
 
 ```
 cli hello
@@ -162,23 +203,3 @@ executing: c5fd6e9e00b3d255f642.sql
     LIBPROTOBUF: "1.3.3"
     WAGYU: "0.5.0 (Internal)"
 ```
-
-<br />
-
-
-
-
-## variables interface
-
-* list
-    ```
-    yarn vars
-    ```
-* add
-    ```
-    yarn vars set [KEY] [VAL]
-    ```
-* remove
-    ```
-    yarn vars del [KEY]
-    ```
