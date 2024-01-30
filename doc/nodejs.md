@@ -5,6 +5,22 @@
 
 
 
+## quickstart
+
+Open terminal inside **repository root**.
+
+1) pull official LTS node image
+    ```bash
+    podman pull docker.io/library/node:20
+    ```
+
+That's it. Go back to [`readme`](../README.md).
+
+<br />
+
+
+
+
 ## reset podman
 ```bash
 podman system reset

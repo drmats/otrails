@@ -5,6 +5,38 @@
 
 
 
+## quickstart
+
+Open terminal inside **repository root**.
+
+1) pull official postgis image
+    ```bash
+    podman pull docker.io/postgis/postgis
+    ```
+2) create postgis container
+    ```bash
+    podman run \
+        -e POSTGRES_USER=robot \
+        -e POSTGRES_PASSWORD=robot \
+        -e POSTGRES_DB=otrails \
+        -e PGDATA=/var/lib/postgresql/data/pgdata \
+        --name otrails-postgis \
+        -p 0.0.0.0:5432:5432 \
+        -v $(pwd)/data/pg:/var/lib/postgresql/data \
+        -d docker.io/postgis/postgis
+    ```
+3) start postgis container
+    ```bash
+    podman start otrails-postgis
+    ```
+
+That's it. Go back to [`readme`](../README.md).
+
+<br />
+
+
+
+
 ## reset podman
 ```bash
 podman system reset

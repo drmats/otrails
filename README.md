@@ -20,14 +20,11 @@ Trails. Open.
 ### containers
 
 * create and start [PostGIS](https://hub.docker.com/r/postgis/postgis)
-    container - follow a short instructions in
-    [Containerized PostgreSQL/PostGIS](./doc/postgres.md) document
+    container - follow a very short instructions in the **quickstart** section in
+    [**Containerized PostgreSQL/PostGIS**](./doc/postgres.md) document
 * pull [node](https://hub.docker.com/_/node) image - follow
-    a short instructions in [Containerized Nodejs](./doc/nodejs.md) document
-
-### vs code workspace for development
-
-* open `.vscode/otrails.code-workspace`
+    even shorter instructions in the **quickstart** section in
+    [**Containerized Nodejs**](./doc/nodejs.md) document
 
 <br />
 
@@ -88,23 +85,32 @@ yarn
 
 
 
+## vs code workspace for development
+
+Open `.vscode/otrails.code-workspace` file.
+
+<br />
+
+
+
+
 ## command line interface
+
+Basic tool for testing, prototyping, running tasks and interactive development
+is maintained in [`src/packages/cli/`](./src/packages/cli/) project directory.
 
 * continuous build (watches project files and automatically rebuild on change)
     ```
     yarn dev:cli
     ```
-
 * typecheck and lint
     ```
     yarn test:cli
     ```
-
 * production build
     ```
     yarn build:cli
     ```
-
 * running
     ```
     cli --help
