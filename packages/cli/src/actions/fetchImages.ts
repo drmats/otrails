@@ -29,7 +29,7 @@ import { printError } from "~common/lib/error";
 import { startDevCli } from "~cli/actions/dev";
 import type { ComplexValue } from "~common/lib/type";
 import { isPlainRecord } from "~common/lib/struct";
-import { ensureDirectory, readJSON } from "~common/lib/fs";
+import { ensureDirectory, isFile, readJSON } from "~common/lib/fs";
 import { get, collectData } from "~common/lib/http";
 import { sha256 } from "~common/lib/uuid";
 
@@ -44,6 +44,16 @@ type ImageErr = { url: string; error: unknown };
 
 // promise pool size (request parallelization)
 const DEFAULT_POOL_SIZE = 32;
+
+
+
+
+/**
+ * Image file naming helper.
+ */
+const imageFilename = (url: string): string => [
+    sha256(url), extname(url),
+].join("");
 
 
 
@@ -93,12 +103,8 @@ export const fetchImages: CliAction<{
             result: PromisePoolResult<ImageOk, ImageErr>,
         ): Promise<void> => {
             if (result.status !== "fulfilled") return;
-            const imageFilename = [
-                sha256(result.value.url),
-                extname(result.value.url),
-            ].join("");
             return await writeFile(
-                join(imagesDir, imageFilename),
+                join(imagesDir, imageFilename(result.value.url)),
                 result.value.data,
             );
         };
@@ -129,6 +135,11 @@ export const fetchImages: CliAction<{
                     return;
                 }
                 const url = imageEntry.url;
+
+                // file-existence check
+                if (await isFile(join(imagesDir, imageFilename(url)))) {
+                    return;
+                }
 
                 // schedule request and data-collecting
                 const result = await pool.exec(async () => ({

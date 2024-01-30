@@ -102,3 +102,17 @@ export const ensureDirectory = async (path: string): Promise<void> => {
         await mkdir(path, { recursive: true });
     }
 };
+
+
+
+
+/**
+ * Check if file exists.
+ */
+export const isFile = async (path: string): Promise<boolean> => {
+    try {
+        return (await stat(path)).isFile();
+    } catch {
+        return false;
+    }
+};
