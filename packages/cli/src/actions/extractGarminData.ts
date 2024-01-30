@@ -24,9 +24,9 @@ import { fsWalk } from "~common/lib/fs";
  * Uncompress contents of garmin export.
  */
 export const extractGarminData: CliAction<{
-    name?: string;
-    id?: string;
-}> = async ({ name, id }) => {
+    zipFileName?: string;
+    userShortId?: string;
+}> = async ({ zipFileName, userShortId }) => {
 
     const { pgp, vars } = useMemory();
 
@@ -41,16 +41,16 @@ export const extractGarminData: CliAction<{
         }
 
         // check arguments validity
-        if (!isString(name) || !isString(id)) {
-            throw new Error("Provide [name] and [id].");
+        if (!isString(zipFileName) || !isString(userShortId)) {
+            throw new Error("Provide [zipFileName] and [userShortId].");
         }
 
         // extract destination directory
-        const extractDestination = join(extractsDir, id);
+        const extractDestination = join(extractsDir, userShortId);
 
         // extract garmin export data file (zip) to `extract` directory
         await extract({
-            source: join(exportsDir, name),
+            source: join(exportsDir, zipFileName),
             destination: extractDestination,
             onEntry: ({ fileName, entriesRead, entryCount }) => progress(
                 entriesRead, entryCount, shorten(padRight(fileName, 60), 60),

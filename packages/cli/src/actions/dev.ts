@@ -28,27 +28,47 @@ import * as zip from "~common/lib/zip";
 
 
 /**
+ * Start interactive shell with augmented context.
+ */
+export const startDevCli = async <A extends struct.ComplexRecord>(
+    a?: A,
+): Promise<void> => {
+    const mutex = box.createMutex<void>();
+    const ctx = useMemory();
+    const augment = struct.isComplexRecord(a) ? a : {};
+    const replServer = repl.start({ prompt: "otrails-cli> " });
+
+    replServer.on("exit", mutex.resolve);
+    Object.assign(replServer.context, {
+        box,
+        ctx,
+        lib: {
+            async, dev, error, fs, ids, pgsql, string,
+            struct, terminal, type, uuid, zip,
+        },
+        $: augment,
+    });
+
+    return mutex.lock();
+};
+
+
+
+
+/**
  * Dev repl.
  */
 export const devConsole: CliAction<{ cwd: string }> = async ({ cwd }) => {
 
-    const ctx = useMemory();
-    const { pgp } = ctx;
+    const { pgp } = useMemory();
 
     try {
 
         // change current working directory
         process.chdir(cwd);
 
-        // start interactive shell with augmented context
-        Object.assign(repl.start({}).context, {
-            ctx,
-            lib: {
-                async, dev, error, fs, ids, pgsql, string,
-                struct, terminal, type, uuid, zip,
-            },
-            box,
-        });
+        // interactive shell
+        await startDevCli();
 
     } catch (e) {
         printError(e);
