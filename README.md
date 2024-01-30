@@ -20,10 +20,10 @@ Trails. Open.
 ### containers
 
 * create and start [PostGIS](https://hub.docker.com/r/postgis/postgis)
-    container - follow a very short instructions in the **quickstart** section in
+    container - follow a _very short_ instructions in the **quickstart** section in
     [**Containerized PostgreSQL/PostGIS**](./doc/postgres.md) document
 * pull [node](https://hub.docker.com/_/node) image - follow
-    even shorter instructions in the **quickstart** section in
+    _even shorter_ instructions in the **quickstart** section in
     [**Containerized Nodejs**](./doc/nodejs.md) document
 
 <br />
@@ -97,7 +97,7 @@ Open `.vscode/otrails.code-workspace` file.
 ## command line interface
 
 Basic tool for testing, prototyping, running tasks and interactive development
-is maintained in [`src/packages/cli/`](./src/packages/cli/) project directory.
+is maintained in [`packages/cli/`](./packages/cli/) project directory.
 
 * continuous build (watches project files and automatically rebuild on change)
     ```
