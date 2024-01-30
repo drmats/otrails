@@ -1,9 +1,9 @@
-#!/bin/bash
+#!/bin/sh
 
 # @license BSD-2-Clause
 # @copyright Mat. 2024-present
 
-# This file must be used with ". ./.venv" *from bash*.
+# This file must be used with ". ./.venv" from bash or zsh.
 
 
 
@@ -63,7 +63,7 @@ cli () {
     node --title=otrails-cli "$VIRTUAL_ROOT"/packages/cli/dist/otrails-cli.js "$@"
 }
 
-# reset bash hash
+# reset hash
 if [ -n "${BASH-}" ] || [ -n "${ZSH_VERSION-}" ]; then
     hash -r 2>/dev/null
 fi

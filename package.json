@@ -76,7 +76,7 @@
         "clean:cli": "yarn clean:dist:cli",
         "clean:dist:cli": "cd ./packages/cli; yarn clean",
         "test:cli": "cd ./packages/cli; yarn test",
-        "start:cli:dev": "cd ./packages/cli; yarn dev",
+        "dev:cli": "cd ./packages/cli; yarn dev",
         "build:cli": "cd ./packages/cli; yarn build",
         "start:cli": "cd ./packages/cli; yarn start",
         "cli": "yarn start:cli",
