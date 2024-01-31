@@ -1,0 +1,20 @@
+diff --git a/node_modules/postgres-bytea/index.js b/node_modules/postgres-bytea/index.js
+index d1107a0..2386bca 100644
+--- a/node_modules/postgres-bytea/index.js
++++ b/node_modules/postgres-bytea/index.js
+@@ -3,7 +3,7 @@
+ module.exports = function parseBytea (input) {
+   if (/^\\x/.test(input)) {
+     // new 'hex' style response (pg >9.0)
+-    return new Buffer(input.substr(2), 'hex')
++    return new Buffer.from(input.substr(2), 'hex')
+   }
+   var output = ''
+   var i = 0
+@@ -27,5 +27,5 @@ module.exports = function parseBytea (input) {
+       }
+     }
+   }
+-  return new Buffer(output, 'binary')
++  return new Buffer.from(output, 'binary')
+ }
