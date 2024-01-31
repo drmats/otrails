@@ -37,10 +37,10 @@ import { sha256 } from "~common/lib/uuid";
 
 
 // success type
-type ImageOk = { url: string; data: Buffer };
+type ImageOk = { url: string; imageId?: string; data: Buffer };
 
 // failure type
-type ImageErr = { url: string; error: unknown };
+type ImageErr = { url: string; imageId?: string; error: unknown };
 
 // promise pool size (request parallelization)
 const DEFAULT_POOL_SIZE = 32;
@@ -51,9 +51,10 @@ const DEFAULT_POOL_SIZE = 32;
 /**
  * Image file naming helper.
  */
-const imageFilename = (url: string): string => [
-    sha256(url), extname(url),
-].join("");
+const imageFilename = (url: string, imageId?: string): string =>
+    isString(imageId)
+        ? [imageId, extname(url)].join("")
+        : [sha256(url), extname(url)].join("");
 
 
 
@@ -104,7 +105,10 @@ export const fetchImages: CliAction<{
         ): Promise<void> => {
             if (result.status !== "fulfilled") return;
             return await writeFile(
-                join(imagesDir, imageFilename(result.value.url)),
+                join(
+                    imagesDir,
+                    imageFilename(result.value.url, result.value.imageId),
+                ),
                 result.value.data,
             );
         };
@@ -115,7 +119,8 @@ export const fetchImages: CliAction<{
             info("processing: "); shoutnl(imageMetaFilename);
 
             // metadata file contents (parsed)
-            const imageMetaFile = await readJSON<ComplexValue[]>(imageMetaFilename);
+            const imageMetaFile =
+                await readJSON<ComplexValue[]>(imageMetaFilename);
             if (!isArray(imageMetaFile)) {
                 throw new Error(`wrong structure: ${imageMetaFilename}`);
             }
@@ -131,19 +136,26 @@ export const fetchImages: CliAction<{
                 progress(i + 1, imageMetaFile.length + 1);
 
                 // data-check
-                if (!isPlainRecord(imageEntry) || !isString(imageEntry.url)) {
+                if (
+                    !isPlainRecord(imageEntry) ||
+                    !isString(imageEntry.url) ||
+                    !isString(imageEntry.imageId)
+                ) {
                     return;
                 }
                 const url = imageEntry.url;
+                const imageId = imageEntry.imageId;
 
                 // file-existence check
-                if (await isFile(join(imagesDir, imageFilename(url)))) {
+                if (
+                    await isFile(join(imagesDir, imageFilename(url, imageId)))
+                ) {
                     return;
                 }
 
                 // schedule request and data-collecting
                 const result = await pool.exec(async () => ({
-                    url, data: await collectData(await get(url)),
+                    url, imageId, data: await collectData(await get(url)),
                 }));
 
                 // process result (save file)
