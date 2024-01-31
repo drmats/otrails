@@ -22,6 +22,7 @@ import {
     isPlainValue,
     isPlainValueOrUndefined,
     isUnknownRecord,
+    orNull,
     type ComplexValue,
     type ExtendedValue,
     type FreeFormRecipe,
@@ -119,7 +120,7 @@ export type PlainRecipe = FreeFormRecipe<PlainRecord>;
 export const isPlainRecipe = (c: unknown): c is PlainRecipe =>
     isObject(c) && !isDate(c) && !isRegExp(c) &&
     Object.entries(c).every(
-        ([k, v]) => isString(k) && (v === null || isPlainValueOrUndefined(v)),
+        ([k, v]) => isString(k) && orNull(isPlainValueOrUndefined) (v),
     );
 
 

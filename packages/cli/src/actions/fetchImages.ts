@@ -12,10 +12,19 @@ import {
     promisePool,
     type PromisePoolResult,
 } from "@xcmats/js-toolbox/async";
-import { isArray, isString } from "@xcmats/js-toolbox/type";
+import {
+    undefinedToNull,
+    isArray,
+    isNumber,
+    isString,
+} from "@xcmats/js-toolbox/type";
 
 import type { CliAction } from "~common/framework/actions";
-import { exportDataStructure } from "~common/app/models/garmin";
+import {
+    exportDataStructure,
+    type ActivityImage,
+    isActivityImage,
+} from "~common/app/models/garmin";
 import { useMemory } from "~cli/setup/main";
 import {
     createAutoSpinner,
@@ -26,21 +35,22 @@ import {
     shoutnl,
 } from "~common/lib/terminal";
 import { printError } from "~common/lib/error";
-import { startDevCli } from "~cli/actions/dev";
 import type { ComplexValue } from "~common/lib/type";
-import { isPlainRecord } from "~common/lib/struct";
 import { ensureDirectory, isFile, readJSON } from "~common/lib/fs";
 import { get, collectData } from "~common/lib/http";
 import { sha256 } from "~common/lib/uuid";
+
+import imageDdlQuery from "~cli/queries/image.ddl.sql";
+import imageInsertQuery from "~cli/queries/image.insert.sql";
 
 
 
 
 // success type
-type ImageOk = { url: string; imageId?: string; data: Buffer };
+type ImageOk = { meta: ActivityImage; data: Buffer };
 
 // failure type
-type ImageErr = { url: string; imageId?: string; error: unknown };
+type ImageErr = { meta: ActivityImage; error: unknown };
 
 // promise pool size (request parallelization)
 const DEFAULT_POOL_SIZE = 32;
@@ -66,7 +76,7 @@ export const fetchImages: CliAction<{
     userShortId?: string;
 }> = async ({ userShortId }) => {
 
-    const { pgp, vars } = useMemory();
+    const { db, pgp, sql, vars } = useMemory();
 
     // extract process configuration variables
     const { extractsDir } = vars;
@@ -86,16 +96,19 @@ export const fetchImages: CliAction<{
         // extract directory
         const extractDir = join(extractsDir, userShortId);
 
-        // fitness directory
+        // fitness directory (inside extract directory)
         const fitnessDir = join(extractDir, exportDataStructure.fitnessDir);
 
-        // image metadata files
+        // image metadata filenames
         const imageMetaFilenames =
             (await readdir(fitnessDir))
                 .filter((f) => exportDataStructure.imagesFilePattern.test(f))
                 .map((f) => join(fitnessDir, f));
 
-        // image files destination directory
+        // ensure presence of image data table
+        await db.none(sql(imageDdlQuery));
+
+        // ensure image files destination directory
         const imagesDir = join(extractDir, exportDataStructure.imagesDir);
         await ensureDirectory(imagesDir);
 
@@ -104,10 +117,41 @@ export const fetchImages: CliAction<{
             result: PromisePoolResult<ImageOk, ImageErr>,
         ): Promise<void> => {
             if (result.status !== "fulfilled") return;
+            // insert metadata into database
+            await db.one(sql(imageInsertQuery), {
+                user_short_id: userShortId,
+                image_id: result.value.meta.imageId,
+                activity_id: result.value.meta.activityId,
+                sort_order: result.value.meta.sortOrder,
+                ...(
+                    isNumber(result.value.meta.longitude) &&
+                    result.value.meta.longitude !== 0 &&
+                    isNumber(result.value.meta.latitude) &&
+                    result.value.meta.latitude !== 0
+                        ? {
+                            position: `POINT(${
+                                result.value.meta.longitude
+                            } ${
+                                result.value.meta.latitude
+                            })`,
+                        }
+                        : { position: null }
+                ),
+                photo_date: undefinedToNull(
+                    result.value.meta.photoDate,
+                ),
+                review_status_id: undefinedToNull(
+                    result.value.meta.reviewStatusId,
+                ),
+            });
+            // store file on disk
             return await writeFile(
                 join(
                     imagesDir,
-                    imageFilename(result.value.url, result.value.imageId),
+                    imageFilename(
+                        result.value.meta.url,
+                        result.value.meta.imageId,
+                    ),
                 ),
                 result.value.data,
             );
@@ -136,29 +180,27 @@ export const fetchImages: CliAction<{
                 progress(i + 1, imageMetaFile.length + 1);
 
                 // data-check
-                if (
-                    !isPlainRecord(imageEntry) ||
-                    !isString(imageEntry.url) ||
-                    !isString(imageEntry.imageId)
-                ) {
+                if (!isActivityImage(imageEntry)) {
                     return;
                 }
-                const url = imageEntry.url;
-                const imageId = imageEntry.imageId;
 
                 // file-existence check
                 if (
-                    await isFile(join(imagesDir, imageFilename(url, imageId)))
+                    await isFile(join(
+                        imagesDir,
+                        imageFilename(imageEntry.url, imageEntry.imageId),
+                    ))
                 ) {
                     return;
                 }
 
                 // schedule request and data-collecting
                 const result = await pool.exec(async () => ({
-                    url, imageId, data: await collectData(await get(url)),
+                    meta: imageEntry,
+                    data: await collectData(await get(imageEntry.url)),
                 }));
 
-                // process result (save file)
+                // process result (store metadata in database and save file)
                 await handleImageResult(result);
 
             });
@@ -169,13 +211,6 @@ export const fetchImages: CliAction<{
 
             // one `imageMetaFilename` processed ok
             spinner.dispose(); infonl(); oknl("DONE");
-
-            // start cli after each pass
-            await startDevCli({
-                userShortId, fitnessDir,
-                imageMetaFilenames, imageMetaFilename,
-                imageMetaFile,
-            });
 
         });
 

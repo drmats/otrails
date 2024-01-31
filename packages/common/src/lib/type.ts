@@ -216,3 +216,29 @@ export type RecursivePartial<T> = T extends Record<never, never> ? {
  * Object type emulating sparse array.
  */
 export type SparseArrayLike<T> = Partial<Record<number, T>>;
+
+
+
+
+/**
+ * Meta-predicate. Gets predicate and returns augmented version
+ * alowing `undefined`.
+ */
+export const orUndefined = <T>(
+    predicate: (c: unknown) => c is T,
+): (c: unknown) => c is T | undefined => (
+    (c) => predicate(c) || typeof c === "undefined"
+) as (c: unknown) => c is T | undefined;
+
+
+
+
+/**
+ * Meta-predicate. Gets predicate and returns augmented version
+ * alowing `null`.
+ */
+export const orNull = <T>(
+    predicate: (c: unknown) => c is T,
+): (c: unknown) => c is T | null => (
+    (c) => predicate(c) || c === null
+) as (c: unknown) => c is T | null;
