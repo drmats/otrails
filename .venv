@@ -96,7 +96,7 @@ psql () {
 unset -f cli >/dev/null 2>&1
 alias cli 2>/dev/null >/dev/null && unalias cli || true
 cli () {
-    node --title=otrails-cli \
+    node --trace-deprecation --title=otrails-cli \
         "$VIRTUAL_ROOT"/packages/cli/dist/otrails-cli.js "$@"
 }
 
