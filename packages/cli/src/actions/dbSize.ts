@@ -7,7 +7,7 @@
 
 import type { CliAction } from "~common/framework/actions";
 import { useMemory } from "~cli/setup/main";
-import { infonl, note, oknl, shout, shoutnl } from "~common/lib/terminal";
+import { info, infonl, oknl, shout, shoutnl } from "~common/lib/terminal";
 import { printError } from "~common/lib/error";
 
 import dbSizeQuery from "~cli/queries/dbSize.sql";
@@ -28,16 +28,16 @@ export const dbSize: CliAction<{
 
         // database check
         infonl();
-        note("database in use: "); shoutnl(`${vars.dbHost}/${vars.dbName}`);
+        info("database in use: "); shoutnl(`${vars.dbHost}/${vars.dbName}`);
 
         // database size check
         infonl();
-        note("name: "); shout(name); note(" ");
+        info("name: "); shout(name); info(" ");
         const { size } = await db.one<{ size: string }>(
             sql(dbSizeQuery),
             { databaseName: name },
         );
-        note("size: "); oknl(size);
+        info("size: "); oknl(size);
 
         infonl();
 

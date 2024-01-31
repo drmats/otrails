@@ -47,7 +47,7 @@ import imageInsertQuery from "~cli/queries/image.insert.sql";
 
 
 // success type
-type ImageOk = { meta: ActivityImage; data: Buffer };
+type ImageOk = { meta: ActivityImage; data?: Buffer };
 
 // failure type
 type ImageErr = { meta: ActivityImage; error: unknown };
@@ -116,8 +116,11 @@ export const fetchImages: CliAction<{
         const handleImageResult = async (
             result: PromisePoolResult<ImageOk, ImageErr>,
         ): Promise<void> => {
+
+            // ignore empty results and rejections
             if (result.status !== "fulfilled") return;
-            // insert metadata into database
+
+            // insert metadata into database (ignore errors/conflicts)
             await db.one(sql(imageInsertQuery), {
                 user_short_id: userShortId,
                 image_id: result.value.meta.imageId,
@@ -143,18 +146,22 @@ export const fetchImages: CliAction<{
                 review_status_id: undefinedToNull(
                     result.value.meta.reviewStatusId,
                 ),
-            });
+            }).catch(() => { /* no-op */ });
+
             // store file on disk
-            return await writeFile(
-                join(
-                    imagesDir,
-                    imageFilename(
-                        result.value.meta.url,
-                        result.value.meta.imageId,
+            if (result.value.data) {
+                await writeFile(
+                    join(
+                        imagesDir,
+                        imageFilename(
+                            result.value.meta.url,
+                            result.value.meta.imageId,
+                        ),
                     ),
-                ),
-                result.value.data,
-            );
+                    result.value.data,
+                );
+            }
+
         };
 
         // process file-by-file
@@ -179,28 +186,28 @@ export const fetchImages: CliAction<{
                 // progress-bar
                 progress(i + 1, imageMetaFile.length + 1);
 
-                // data-check
+                // data-check (do nothing on malformed data entry)
                 if (!isActivityImage(imageEntry)) {
                     return;
                 }
 
-                // file-existence check
-                if (
-                    await isFile(join(
-                        imagesDir,
-                        imageFilename(imageEntry.url, imageEntry.imageId),
-                    ))
-                ) {
-                    return;
-                }
+                // image-file-existence check
+                const isImagePresent = await isFile(join(
+                    imagesDir,
+                    imageFilename(imageEntry.url, imageEntry.imageId),
+                ));
 
                 // schedule request and data-collecting
+                // if image-file does not exist on disk
                 const result = await pool.exec(async () => ({
                     meta: imageEntry,
-                    data: await collectData(await get(imageEntry.url)),
+                    data:
+                        !isImagePresent
+                            ? await collectData(await get(imageEntry.url))
+                            : undefined,
                 }));
 
-                // process result (store metadata in database and save file)
+                // process result (save file)
                 await handleImageResult(result);
 
             });
