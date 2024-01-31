@@ -10,9 +10,23 @@
 
 # ensure sourcing
 if [ "${BASH_SOURCE-}" = "$0" ]; then
-    echo "You must source this script: \$ . $0" >&2
+    echo "You must source this script:"
+    echo "\$ . $0" >&2
     exit 8
 fi
+
+# check coreutils dependencies
+for dependency in "pwd" "alias" "unalias" "realpath"; do
+    which $dependency > /dev/null 2>&1
+    if [[ $? -ne 0 ]]; then
+        echo "Missing dependency: $dependency"
+        echo "Please install 'coreutils'."
+        if [[ $(uname) == "Darwin" ]]; then
+            echo "brew install coreutils"
+        fi
+        return
+    fi
+done
 
 # paths
 PROJECT_ROOT=$(pwd)
@@ -22,7 +36,12 @@ VIRTUAL_ROOT="/usr/src/app"
 unset -f node >/dev/null 2>&1
 alias node 2>/dev/null >/dev/null && unalias node || true
 node () {
-    podman run -it --rm --net host -v $(pwd):"$VIRTUAL_ROOT" -w "$VIRTUAL_ROOT" node:20 node "$@"
+    podman run \
+        -it --rm \
+        --net host \
+        -v $(pwd):"$VIRTUAL_ROOT" \
+        -w "$VIRTUAL_ROOT" \
+        node:20 node "$@"
 }
 
 # npm
@@ -30,7 +49,12 @@ unset -f npm >/dev/null 2>&1
 alias npm 2>/dev/null >/dev/null && unalias npm || true
 npm () {
     RP=$(realpath --relative-to="$PROJECT_ROOT" $(pwd))
-    podman run -it --rm --net host -v "$PROJECT_ROOT":"$VIRTUAL_ROOT" -w "$VIRTUAL_ROOT"/"$RP" node:20 npm "$@"
+    podman run \
+        -it --rm \
+        --net host \
+        -v "$PROJECT_ROOT":"$VIRTUAL_ROOT" \
+        -w "$VIRTUAL_ROOT"/"$RP" \
+        node:20 npm "$@"
 }
 
 # npx
@@ -38,7 +62,12 @@ unset -f npx >/dev/null 2>&1
 alias npx 2>/dev/null >/dev/null && unalias npx || true
 npx () {
     RP=$(realpath --relative-to="$PROJECT_ROOT" $(pwd))
-    podman run -it --rm --net host -v "$PROJECT_ROOT":"$VIRTUAL_ROOT" -w "$VIRTUAL_ROOT"/"$RP" node:20 npx "$@"
+    podman run \
+        -it --rm \
+        --net host \
+        -v "$PROJECT_ROOT":"$VIRTUAL_ROOT" \
+        -w "$VIRTUAL_ROOT"/"$RP" \
+        node:20 npx "$@"
 }
 
 # yarn
@@ -46,21 +75,29 @@ unset -f yarn >/dev/null 2>&1
 alias yarn 2>/dev/null >/dev/null && unalias yarn || true
 yarn () {
     RP=$(realpath --relative-to="$PROJECT_ROOT" $(pwd))
-    podman run -it --rm --net host -v "$PROJECT_ROOT":"$VIRTUAL_ROOT" -w "$VIRTUAL_ROOT"/"$RP" node:20 yarn "$@"
+    podman run \
+        -it --rm \
+        --net host \
+        -v "$PROJECT_ROOT":"$VIRTUAL_ROOT" \
+        -w "$VIRTUAL_ROOT"/"$RP" \
+        node:20 yarn "$@"
 }
 
 # psql
 unset -f psql >/dev/null 2>&1
 alias psql 2>/dev/null >/dev/null && unalias psql || true
 psql () {
-    podman exec -it otrails-postgis psql "$@"
+    podman exec \
+        -it \
+        otrails-postgis psql "$@"
 }
 
 # otrails-cli
 unset -f cli >/dev/null 2>&1
 alias cli 2>/dev/null >/dev/null && unalias cli || true
 cli () {
-    node --title=otrails-cli "$VIRTUAL_ROOT"/packages/cli/dist/otrails-cli.js "$@"
+    node --title=otrails-cli \
+        "$VIRTUAL_ROOT"/packages/cli/dist/otrails-cli.js "$@"
 }
 
 # reset hash
