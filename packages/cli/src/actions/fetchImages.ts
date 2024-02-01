@@ -12,18 +12,14 @@ import {
     promisePool,
     type PromisePoolResult,
 } from "@xcmats/js-toolbox/async";
-import {
-    undefinedToNull,
-    isArray,
-    isNumber,
-    isString,
-} from "@xcmats/js-toolbox/type";
+import { isArray, isString } from "@xcmats/js-toolbox/type";
 
 import type { CliAction } from "~common/framework/actions";
 import {
+    activityImageToSqlParams,
     exportDataStructure,
-    type ActivityImage,
     isActivityImage,
+    type ActivityImage,
 } from "~common/app/models/garmin";
 import { useMemory } from "~cli/setup/main";
 import {
@@ -121,32 +117,10 @@ export const fetchImages: CliAction<{
             if (result.status !== "fulfilled") return;
 
             // insert metadata into database (ignore errors/conflicts)
-            await db.one(sql(imageInsertQuery), {
-                user_short_id: userShortId,
-                image_id: result.value.meta.imageId,
-                activity_id: result.value.meta.activityId,
-                sort_order: result.value.meta.sortOrder,
-                ...(
-                    isNumber(result.value.meta.longitude) &&
-                    result.value.meta.longitude !== 0 &&
-                    isNumber(result.value.meta.latitude) &&
-                    result.value.meta.latitude !== 0
-                        ? {
-                            position: `POINT(${
-                                result.value.meta.longitude
-                            } ${
-                                result.value.meta.latitude
-                            })`,
-                        }
-                        : { position: null }
-                ),
-                photo_date: undefinedToNull(
-                    result.value.meta.photoDate,
-                ),
-                review_status_id: undefinedToNull(
-                    result.value.meta.reviewStatusId,
-                ),
-            }).catch(() => { /* no-op */ });
+            await db.one(
+                sql(imageInsertQuery),
+                activityImageToSqlParams(userShortId, result.value.meta),
+            ).catch(() => { /* no-op */ });
 
             // store file on disk
             if (result.value.data) {

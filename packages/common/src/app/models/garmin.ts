@@ -71,6 +71,29 @@ export const isActivityImage = (c: unknown): c is ActivityImage =>
 
 
 /**
+ * Typescript `ActivityImage` object to SQL params conversion.
+ */
+export const activityImageToSqlParams = (
+    userShortId: string,
+    ai: ActivityImage,
+): FreeFormRecord<PlainValue | Date | null> => ({
+    user_short_id: userShortId,
+    image_id: ai.imageId,
+    activity_id: ai.activityId,
+    sort_order: ai.sortOrder,
+    position:
+        isNumber(ai.longitude) && ai.longitude !== 0 &&
+        isNumber(ai.latitude) && ai.latitude !== 0
+            ? `POINT(${ai.longitude} ${ai.latitude})`
+            : null,
+    photo_date: undefinedToNull(ai.photoDate),
+    review_status_id: undefinedToNull(ai.reviewStatusId),
+});
+
+
+
+
+/**
  * Garmin's "summarized activity" object shape.
  * No splits and no split-summaries.
  */
@@ -264,7 +287,7 @@ export const isSummarizedActivity = (c: unknown): c is SummarizedActivity =>
 
 
 /**
- * Typescript object to sql params conversion.
+ * Typescript `SummarizedActivity` object to SQL params conversion.
  */
 export const summarizedActivityToSqlParams = (
     userShortId: string,
@@ -299,7 +322,8 @@ export const summarizedActivityToSqlParams = (
     calories: undefinedToNull(sa.calories),
     bmr_calories: undefinedToNull(sa.bmrCalories),
     start_position:
-        isNumber(sa.startLongitude) && isNumber(sa.startLatitude)
+        isNumber(sa.startLongitude) && sa.startLongitude !== 0 &&
+        isNumber(sa.startLatitude) && sa.startLatitude !== 0
             ? `POINT(${sa.startLongitude} ${sa.startLatitude})`
             : null,
     aerobic_training_effect: undefinedToNull(sa.aerobicTrainingEffect),
@@ -336,7 +360,8 @@ export const summarizedActivityToSqlParams = (
     manufacturer: undefinedToNull(sa.manufacturer),
     lap_count: undefinedToNull(sa.lapCount),
     end_position:
-        isNumber(sa.endLongitude) && isNumber(sa.endLatitude)
+        isNumber(sa.endLongitude) && sa.endLongitude !== 0 &&
+        isNumber(sa.endLatitude) && sa.endLatitude !== 0
             ? `POINT(${sa.endLongitude} ${sa.endLatitude})`
             : null,
     water_estimated: undefinedToNull(sa.waterEstimated),
