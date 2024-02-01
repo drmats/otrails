@@ -51,6 +51,7 @@ const webpackAsyncConfig = async () => {
 
         externalsPresets: { node: true },
         externals: [
+            "@turf/turf",
             "yargs/yargs",
             "yargs/helpers",
             nodeExternals({

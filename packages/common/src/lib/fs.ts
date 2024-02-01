@@ -74,7 +74,7 @@ export const readAllFiles = async (
     const contentMap: Record<string, string> = {};
 
     await fsWalk(path, async (_, name) => {
-        if (name.match(nameMatch)) {
+        if (nameMatch.test(name)) {
             contentMap[name] = bytesToString(
                 await readFile(join(path, name)),
             );

@@ -7,13 +7,16 @@
 
 import repl from "node:repl";
 import * as box from "@xcmats/js-toolbox";
+import * as turf from "@turf/turf";
 
 import type { CliAction } from "~common/framework/actions";
 import { useMemory } from "~cli/setup/main";
 import { printError } from "~common/lib/error";
 import * as async from "~common/lib/async";
+import * as dayjs from "~common/lib/dayjs";
 import * as dev from "~common/lib/dev";
 import * as error from "~common/lib/error";
+import * as fit from "~common/fit/lib";
 import * as fs from "~common/lib/fs";
 import * as http from "~common/lib/http";
 import * as ids from "~common/lib/ids";
@@ -21,6 +24,7 @@ import * as pgsql from "~common/lib/pgsql";
 import * as string from "~common/lib/string";
 import * as struct from "~common/lib/struct";
 import * as terminal from "~common/lib/terminal";
+import * as time from "~common/lib/time";
 import * as type from "~common/lib/type";
 import * as uuid from "~common/lib/uuid";
 import * as zip from "~common/lib/zip";
@@ -44,9 +48,10 @@ export const startDevCli = async <A extends struct.ComplexRecord>(
         box,
         ctx,
         lib: {
-            async, dev, error, fs, http, ids, pgsql,
-            string, struct, terminal, type, uuid, zip,
+            async, dayjs, dev, error, fit, fs, http, ids, pgsql,
+            string, struct, terminal, time, type, uuid, zip,
         },
+        turf,
         $: augment,
     });
 

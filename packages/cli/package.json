@@ -15,6 +15,7 @@
     ],
 
     "dependencies": {
+        "@turf/turf": "6.5.0",
         "@xcmats/js-toolbox": "0.16.2",
         "chalk": "4.1.2",
         "fd-slicer": "1.1.0",
