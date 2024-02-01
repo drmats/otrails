@@ -33,15 +33,6 @@ done
 # modify PS1 to indicate that venv is active
 PS1="(.venv) $_ORIGINAL_PS1"
 
-# deactivate venv
-deactivate_venv() {
-    PS1="$_ORIGINAL_PS1"
-    unset _ORIGINAL_PS1
-    unset PROJECT_ROOT
-    unset VIRTUAL_ROOT
-    unset -f deactivate_venv
-}
-
 # paths
 PROJECT_ROOT=$(pwd)
 VIRTUAL_ROOT="/usr/src/app"
@@ -112,6 +103,25 @@ alias cli 2>/dev/null >/dev/null && unalias cli || true
 cli () {
     node --trace-deprecation --title=otrails-cli \
         "$VIRTUAL_ROOT"/packages/cli/dist/otrails-cli.js "$@"
+}
+
+# deactivate venv
+exit() {
+    PS1="$_ORIGINAL_PS1"
+    unset _ORIGINAL_PS1
+    unset PROJECT_ROOT
+    unset VIRTUAL_ROOT
+    unset -f node >/dev/null 2>&1
+    unset -f npm >/dev/null 2>&1
+    unset -f npx >/dev/null 2>&1
+    unset -f yarn >/dev/null 2>&1
+    unset -f psql >/dev/null 2>&1
+    unset -f cli >/dev/null 2>&1
+    unset -f exit >/dev/null 2>&1
+
+    if [ -n "${BASH-}" ] || [ -n "${ZSH_VERSION-}" ]; then
+        hash -r 2>/dev/null
+    fi
 }
 
 # reset hash
