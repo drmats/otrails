@@ -7,6 +7,8 @@
 
 
 
+# save current PS1
+_ORIGINAL_PS1="$PS1"
 
 # ensure sourcing
 if [ "${BASH_SOURCE-}" = "$0" ]; then
@@ -27,6 +29,18 @@ for dependency in "pwd" "alias" "unalias" "realpath"; do
         return
     fi
 done
+
+# modify PS1 to indicate that venv is active
+PS1="(.venv) $_ORIGINAL_PS1"
+
+# deactivate venv
+deactivate_venv() {
+    PS1="$_ORIGINAL_PS1"
+    unset _ORIGINAL_PS1
+    unset PROJECT_ROOT
+    unset VIRTUAL_ROOT
+    unset -f deactivate_venv
+}
 
 # paths
 PROJECT_ROOT=$(pwd)
