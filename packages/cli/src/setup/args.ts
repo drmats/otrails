@@ -14,6 +14,7 @@ import { devConsole } from "~cli/actions/dev";
 import { extractGarminData } from "~cli/actions/extractGarminData";
 import { fetchImages } from "~cli/actions/fetchImages";
 import { hello } from "~cli/actions/hello";
+import { processSummaries } from "~cli/actions/processSummaries";
 
 
 
@@ -83,14 +84,27 @@ export default async function configureArgsParser (): Promise<void> {
         // image retriever
         .command(
             "fetch-images [userShortId]",
-            "dfetch all export-data images",
+            "fetch all export-data images",
             {
                 userShortId: {
                     type: "string",
-                    describe: "destination subfolder",
+                    describe: "data subfolder",
                 },
             },
             fetchImages,
+        )
+
+        // summarized activities processor
+        .command(
+            "process-summaries [userShortId]",
+            "process summarized activities",
+            {
+                userShortId: {
+                    type: "string",
+                    describe: "data subfolder",
+                },
+            },
+            processSummaries,
         )
 
         .strict()

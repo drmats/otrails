@@ -24,17 +24,17 @@ CREATE TABLE IF NOT EXISTS garmin.image (
     review_status_id  INT
 );
 
-CREATE INDEX IF NOT EXISTS user_short_id_idx
+CREATE INDEX IF NOT EXISTS image_user_short_id_idx
     ON garmin.image USING btree (user_short_id);
 
 CREATE UNIQUE INDEX IF NOT EXISTS image_id_idx
     ON garmin.image USING btree (image_id);
 
-CREATE INDEX IF NOT EXISTS activity_id_idx
+CREATE INDEX IF NOT EXISTS image_activity_id_idx
     ON garmin.image USING btree (activity_id);
 
-CREATE INDEX IF NOT EXISTS position_gix
+CREATE INDEX IF NOT EXISTS image_position_gix
     ON garmin.image USING gist (position);
 
-CREATE INDEX IF NOT EXISTS photo_date_idx
+CREATE INDEX IF NOT EXISTS image_photo_date_idx
     ON garmin.image USING brin (photo_date);

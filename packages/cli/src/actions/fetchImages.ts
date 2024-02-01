@@ -175,12 +175,12 @@ export const fetchImages: CliAction<{
             if (!isArray(imageMetaFile)) {
                 throw new Error(`wrong structure: ${imageMetaFilename}`);
             }
-            info("number of entries: "); shoutnl(imageMetaFile.length);
 
             // execution pool
             const pool = promisePool<ImageOk, ImageErr>(DEFAULT_POOL_SIZE);
 
             // process entries
+            info("number of entries: "); shoutnl(imageMetaFile.length);
             await map(imageMetaFile) (async (imageEntry, i) => {
 
                 // progress-bar
