@@ -5,8 +5,6 @@
  * @copyright Mat. 2024-present
  */
 
-/* eslint-disable @typescript-eslint/no-empty-interface */
-
 import { run } from "@xcmats/js-toolbox/utils";
 
 import configureArgsParser from "~cli/setup/args";
