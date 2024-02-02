@@ -55,11 +55,13 @@ export const parseFitFile = async (path: string): Promise<FitObject> => {
 /**
  * Check if given fit activity (potentially) contain track data.
  */
-export const containData = (a?: FitActivity): a is FitActivity =>
-    typeof a !== "undefined" &&
-    isValidDate(a.timestamp) &&
-    a.sessions.length > 0 &&
-    a.events.length > 0;
+export const containData = (
+    activity?: FitActivity,
+): activity is FitActivity =>
+    typeof activity !== "undefined" &&
+    isValidDate(activity.timestamp) &&
+    activity.sessions.length > 0 &&
+    activity.events.length > 0;
 
 
 
@@ -67,10 +69,12 @@ export const containData = (a?: FitActivity): a is FitActivity =>
 /**
  * Extract very first timestamp of activity.
  */
-export const extractBeginTimestamp = (a: FitActivity): Date | undefined =>
-    a.events
-        .filter(e => e.event === "timer" && e.event_type === "start")
-        .map(e => e.timestamp)[0];
+export const extractBeginTimestamp = (
+    activity: FitActivity,
+): Date | undefined =>
+    activity.events
+        .filter((e) => e.event === "timer" && e.event_type === "start")
+        .map((e) => e.timestamp)[0];
 
 
 
