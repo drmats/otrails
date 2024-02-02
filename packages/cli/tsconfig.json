@@ -77,7 +77,8 @@
     },
 
     "include": [
-        "src/**/*",
-        "../common/src/fit/fit-file-parser.d.ts"
+        "../common/scripts/babel-plugin-import-paths.d.ts",
+        "../common/src/fit/fit-file-parser.d.ts",
+        "src/**/*"
     ]
 }
