@@ -4,6 +4,12 @@ Trails. Open.
 
 <br />
 
+<p align="center">
+    <img src="./doc/hikesAndWalks.jpg" alt="hikes-and-walks" />
+</p>
+
+<br />
+
 
 
 
@@ -203,3 +209,40 @@ executing: c5fd6e9e00b3d255f642.sql
     LIBPROTOBUF: "1.3.3"
     WAGYU: "0.5.0 (Internal)"
 ```
+
+<br />
+
+
+
+
+## how?
+
+1) [Export your data from garmin](https://www.garmin.com/en-US/account/datamanagement/exportdata/).
+
+2) Put downloaded _zip_ file into `data/exports` folder in this repository.
+
+3) Add two new _vars_:
+    ```
+    yarn vars set exportsDir data/exports
+    yarn vars set extractsDir data/garmin
+    ```
+
+4) Rebuild `cli`:
+    ```
+    yarn build:cli
+    ```
+
+5) Invoke the following `cli` commands one-by-one:
+    ```
+    cli extract-garmin-data [zipFileName] [userShortId]
+    cli fetch-images [userShortId]
+    cli process-summaries [userShortId]
+    cli process-fits [userShortId]
+    ```
+    > _(`[zipFileName]` is the name of file downloaded from garmin,_
+    > _and `[userShortId]` can be your name or nick, e.g. `bob`)_
+
+6) Install and open [pgAdmin](https://www.pgadmin.org/), connect it to
+    `otrails-postgis` database, open _Query Tool_, run
+    [hikesAndWalks.sql](./doc/hikesAndWalks.sql) example query and open
+    _Geometry Viewer_.
