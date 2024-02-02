@@ -4,9 +4,11 @@
  */
 
 import { readFile } from "node:fs/promises";
-import FitParser, { type FitObject } from "fit-file-parser";
+import FitParser, { type FitActivity, type FitObject } from "fit-file-parser";
+import { isNumber } from "@xcmats/js-toolbox/type";
 
 import { fsWalk } from "~common/lib/fs";
+import { isValidDate } from "~common/lib/time";
 
 
 
@@ -45,4 +47,56 @@ export const parseFitFile = async (path: string): Promise<FitObject> => {
             else res(data);
         });
     });
+};
+
+
+
+
+/**
+ * Check if given fit activity (potentially) contain track data.
+ */
+export const containData = (a?: FitActivity): a is FitActivity =>
+    typeof a !== "undefined" &&
+    isValidDate(a.timestamp) &&
+    a.sessions.length > 0 &&
+    a.events.length > 0;
+
+
+
+
+/**
+ * Extract very first timestamp of activity.
+ */
+export const extractBeginTimestamp = (a: FitActivity): Date | undefined =>
+    a.events
+        .filter(e => e.event === "timer" && e.event_type === "start")
+        .map(e => e.timestamp)[0];
+
+
+
+
+/**
+ * Extract array of [lon, lat] positions from activity.
+ */
+export const extractTrack = (activity: FitActivity): [number, number][] => {
+    const track: [number, number][] = [];
+
+    for (const session of activity.sessions) {
+        if (session.laps) {
+            for (const lap of session.laps) {
+                if (lap.records) {
+                    for (const r of lap.records) {
+                        if (
+                            isNumber(r.position_long) &&
+                            isNumber(r.position_lat)
+                        ) {
+                            track.push([r.position_long, r.position_lat]);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    return track;
 };

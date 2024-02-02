@@ -35,12 +35,12 @@ import * as zip from "~common/lib/zip";
 /**
  * Start interactive shell with augmented context.
  */
-export const startDevCli = async <A extends struct.ComplexRecord>(
+export const startDevCli = async <A extends type.FreeFormRecord<unknown>>(
     a?: A,
 ): Promise<void> => {
     const mutex = box.createMutex<void>();
     const ctx = useMemory();
-    const augment = struct.isComplexRecord(a) ? a : {};
+    const augment = typeof a !== "undefined" ? a : {};
     const replServer = repl.start({ prompt: "otrails-cli> " });
 
     replServer.on("exit", mutex.resolve);

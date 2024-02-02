@@ -14,6 +14,7 @@ import { devConsole } from "~cli/actions/dev";
 import { extractGarminData } from "~cli/actions/extractGarminData";
 import { fetchImages } from "~cli/actions/fetchImages";
 import { hello } from "~cli/actions/hello";
+import { processFits } from "~cli/actions/processFits";
 import { processSummaries } from "~cli/actions/processSummaries";
 
 
@@ -105,6 +106,19 @@ export default async function configureArgsParser (): Promise<void> {
                 },
             },
             processSummaries,
+        )
+
+        // fit-file activities processor
+        .command(
+            "process-fits [userShortId]",
+            "process fit-file activities",
+            {
+                userShortId: {
+                    type: "string",
+                    describe: "data subfolder",
+                },
+            },
+            processFits,
         )
 
         .strict()

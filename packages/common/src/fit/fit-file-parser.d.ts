@@ -126,7 +126,7 @@ declare module "fit-file-parser" {
         sub_sport: string;
         avg_temperature: number;
         max_temperature: number;
-        records: FitLapRecord[];
+        records?: FitLapRecord[];
     };
 
 
@@ -167,7 +167,7 @@ declare module "fit-file-parser" {
         avg_temperature: number;
         max_temperature: number;
         total_anaerobic_effect: number;
-        laps: FitLap[];
+        laps?: FitLap[];
     };
 
 
@@ -215,13 +215,13 @@ declare module "fit-file-parser" {
      * ...
      */
     export type FitActivity = {
-        timestamp: Date;
-        total_timer_time: number;
-        local_timestamp: Date;
-        num_sessions: number;
-        type: string;
-        event: string;
-        event_type: string;
+        timestamp?: Date;
+        total_timer_time?: number;
+        local_timestamp?: Date;
+        num_sessions?: number;
+        type?: string;
+        event?: string;
+        event_type?: string;
         sessions: FitSession[];
         events: FitEvent[];
         hrv: unknown[];
@@ -239,9 +239,10 @@ declare module "fit-file-parser" {
         protocolVersion: number;
         profileVersion: number;
         file_creator: { software_version: number };
-        device_settings: FitDeviceSettings;
-        user_profile: FitUserProfile;
-        zones_target: FitZonesTarget;
+        device_settings?: FitDeviceSettings;
+        user_profile?: FitUserProfile;
+        zones_target?: FitZonesTarget;
+        activity?: FitActivity;
     };
 
 
