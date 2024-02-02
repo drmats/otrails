@@ -40,22 +40,35 @@ export const readJSON: <T = ComplexRecord>(
  * Recursively walk the filesystem tree and call `cb` for each file.
  * DFS. Don't go deeper than `maxDepth` param value (default `32`).
  */
-export const fsWalk = async (
+export const fsWalk = async <T>(
     root: string,
-    cb: (dir: string[], name: string) => Promise<void>,
-    maxDepth = 32,
-): Promise<void> => {
+    cb: (dir: string[], name: string) => Promise<T>,
+    opts?: {
+        maxDepth?: number;
+        collectResults?: boolean;
+    },
+): Promise<T[]> => {
+    const result: T[] = [];
+    const maxDepth = opts?.maxDepth ?? 32;
+    const collectResults = opts?.collectResults ?? false;
+
     const aux = async (cd: string[]): Promise<void> => {
         const entries = await readdir(
             join(root, ...cd),
             { withFileTypes: true },
         );
         await map(entries) (async (e) => {
-            if (e.isFile()) await cb(cd, e.name);
+            if (e.isFile()) {
+                const r = await cb(cd, e.name);
+                if (collectResults) result.push(r);
+            }
             else if (cd.length < maxDepth) await aux([...cd, e.name]);
         });
     };
-    return aux([]);
+
+    await aux([]);
+
+    return result;
 };
 
 
@@ -79,7 +92,7 @@ export const readAllFiles = async (
                 await readFile(join(path, name)),
             );
         }
-    }, 0);
+    }, { maxDepth: 0 });
 
     return contentMap;
 };

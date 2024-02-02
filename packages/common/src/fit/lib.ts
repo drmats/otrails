@@ -18,7 +18,7 @@ export const getFitFilenames = async (path: string): Promise<string[]> => {
     const fitFilenames: string[] = [];
     await fsWalk(path, async (_, name) => {
         if (name.endsWith(".fit")) fitFilenames.push(name);
-    }, 0);
+    }, { maxDepth: 0 });
     return fitFilenames;
 };
 
