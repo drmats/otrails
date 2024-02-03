@@ -17,6 +17,7 @@ import { hello } from "~cli/actions/hello";
 import { processFits } from "~cli/actions/processFits";
 import { processSummaries } from "~cli/actions/processSummaries";
 import { processTcxes } from "~cli/actions/processTcxes";
+import { setupViews } from "~cli/actions/setupViews";
 
 
 
@@ -133,6 +134,14 @@ export default async function configureArgsParser (): Promise<void> {
                 },
             },
             processTcxes,
+        )
+
+        // database views
+        .command(
+            "setup-views",
+            "database views setup",
+            emptyObject,
+            setupViews,
         )
 
         .strict()

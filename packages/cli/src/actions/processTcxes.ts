@@ -63,7 +63,7 @@ export const processTcxes: CliAction<{
             (await getTcxFilenames(tracksDir))
                 .map((f) => join(tracksDir, f));
 
-        // // ensure the presence of simple track data table
+        // ensure the presence of simple track data table
         await db.none(sql(simpleTrackDdlQuery));
 
         // process tcx files file-by-file
