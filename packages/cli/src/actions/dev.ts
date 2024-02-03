@@ -23,6 +23,7 @@ import * as ids from "~common/lib/ids";
 import * as pgsql from "~common/lib/pgsql";
 import * as string from "~common/lib/string";
 import * as struct from "~common/lib/struct";
+import * as tcx from "~common/tcx/lib";
 import * as terminal from "~common/lib/terminal";
 import * as time from "~common/lib/time";
 import * as type from "~common/lib/type";
@@ -49,7 +50,7 @@ export const startDevCli = async <A extends type.FreeFormRecord<unknown>>(
         ctx,
         lib: {
             async, dayjs, dev, error, fit, fs, http, ids, pgsql,
-            string, struct, terminal, time, type, uuid, zip,
+            string, struct, tcx, terminal, time, type, uuid, zip,
         },
         turf,
         $: augment,

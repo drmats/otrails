@@ -15,12 +15,11 @@ import { useMemory } from "~cli/setup/main";
 import { info, infonl, oknl, progress, shoutnl } from "~common/lib/terminal";
 import { printError } from "~common/lib/error";
 import {
-    containData,
     extractBeginTimestamp,
     extractTrack,
-    getFitFilenames,
-    parseFitFile,
-} from "~common/fit/lib";
+    getTcxFilenames,
+    parseTcxFile,
+} from "~common/tcx/lib";
 
 import simpleTrackCheckQuery from "~cli/queries/simpleTrack.check.sql";
 import simpleTrackDdlQuery from "~cli/queries/simpleTrack.ddl.sql";
@@ -30,9 +29,9 @@ import simpleTrackInsertQuery from "~cli/queries/simpleTrack.insert.sql";
 
 
 /**
- * Process fit-file activities.
+ * Process tcx-file activities.
  */
-export const processFits: CliAction<{
+export const processTcxes: CliAction<{
     userShortId?: string;
 }> = async ({ userShortId }) => {
 
@@ -59,25 +58,25 @@ export const processFits: CliAction<{
         // fit-file directory (inside extract directory)
         const tracksDir = join(extractDir, exportDataStructure.tracksDir);
 
-        // fit-file activity filenames
-        const fitFilenames =
-            (await getFitFilenames(tracksDir))
+        // tcx-file activity filenames
+        const tcxFilenames =
+            (await getTcxFilenames(tracksDir))
                 .map((f) => join(tracksDir, f));
 
-        // ensure the presence of simple track data table
+        // // ensure the presence of simple track data table
         await db.none(sql(simpleTrackDdlQuery));
 
-        // process fit files file-by-file
-        info("number of fit files: "); shoutnl(fitFilenames.length);
-        await map(fitFilenames) (async (fitFilename, i) => {
+        // process tcx files file-by-file
+        info("number of tcx files: "); shoutnl(tcxFilenames.length);
+        await map(tcxFilenames) (async (tcxFilename, i) => {
 
             // progress-bar
-            progress(i + 1, fitFilenames.length + 1);
+            progress(i + 1, tcxFilenames.length + 1);
 
             try {
 
                 // filename without directory
-                const sourceName = basename(fitFilename);
+                const sourceName = basename(tcxFilename);
 
                 // check if processed file already exists in db
                 // (parsing big files is time-consuming, so we can avoid it)
@@ -90,32 +89,27 @@ export const processFits: CliAction<{
                 // skip already processed fit-files
                 if (trackFound) return;
 
-                // fit-file contents (parsed)
-                const fit = await parseFitFile(fitFilename);
-                const activity = fit.activity;
-
-                // skip "empty" (no track data) fit-files
-                if (!containData(activity)) return;
+                // tcx-file contents (parsed)
+                const tcx = await parseTcxFile(tcxFilename);
 
                 // find "start event" timestamp
-                const beginTimestamp = extractBeginTimestamp(activity);
+                const beginTimestamp = extractBeginTimestamp(tcx);
 
-                // skip fit-files without "start" event
+                // skip tcx-files without "start" event
                 if (!beginTimestamp) return;
 
-                // extract track from activity (only array of lon-lat pairs)
-                const track = extractTrack(activity);
+                // extract track from tcx object (only array of lon-lat pairs)
+                const track = extractTrack(tcx);
 
                 // skip empty tracks
                 if (track.length === 0) return;
 
-                // insert track as a linestring
                 await db.one(sql(simpleTrackInsertQuery), {
                     user_short_id: userShortId,
-                    source_type: "fit",
+                    source_type: "tcx",
                     source_name: sourceName,
-                    activity_timestamp: undefinedToNull(activity.timestamp),
-                    sport: undefinedToNull(activity.sports[0]?.sport?.toLowerCase()),
+                    activity_timestamp: undefinedToNull(tcx.timestamp),
+                    sport: tcx.sport,
                     begin_timestamp: beginTimestamp,
                     track: [
                         "LINESTRING(",

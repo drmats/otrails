@@ -67,7 +67,7 @@ export const containData = (
 
 
 /**
- * Extract very first timestamp of activity.
+ * Extract very first timestamp of fit activity.
  */
 export const extractBeginTimestamp = (
     activity: FitActivity,
@@ -80,7 +80,7 @@ export const extractBeginTimestamp = (
 
 
 /**
- * Extract array of [lon, lat] positions from activity.
+ * Extract array of [lon, lat] positions from fit activity.
  */
 export const extractTrack = (activity: FitActivity): [number, number][] => {
     const track: [number, number][] = [];

@@ -238,6 +238,7 @@ executing: c5fd6e9e00b3d255f642.sql
     cli fetch-images [userShortId]
     cli process-summaries [userShortId]
     cli process-fits [userShortId]
+    cli process-tcxes [userShortId]
     ```
     > _(`[zipFileName]` is the name of file downloaded from garmin,_
     > _and `[userShortId]` can be your name or nick, e.g. `bob`)_

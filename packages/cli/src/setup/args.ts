@@ -16,6 +16,7 @@ import { fetchImages } from "~cli/actions/fetchImages";
 import { hello } from "~cli/actions/hello";
 import { processFits } from "~cli/actions/processFits";
 import { processSummaries } from "~cli/actions/processSummaries";
+import { processTcxes } from "~cli/actions/processTcxes";
 
 
 
@@ -119,6 +120,19 @@ export default async function configureArgsParser (): Promise<void> {
                 },
             },
             processFits,
+        )
+
+        // tcx-file activities processor
+        .command(
+            "process-tcxes [userShortId]",
+            "process tcx-file activities",
+            {
+                userShortId: {
+                    type: "string",
+                    describe: "data subfolder",
+                },
+            },
+            processTcxes,
         )
 
         .strict()

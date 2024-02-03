@@ -14,13 +14,13 @@ WITH hikes_and_walks AS (
         garmin.summarized_activity.begin_timestamp AS start_timestamp,
         garmin.summarized_activity.distance / 100000 AS distance,
         garmin.summarized_activity.start_position AS start_position,
-        ST_Simplify(garmin.fit_track.track::geometry, 0.0001)::geography AS track,
+        ST_Simplify(garmin.simple_track.track::geometry, 0.0001)::geography AS track,
         garmin.summarized_activity.activity_type AS activity_type,
         garmin.summarized_activity.sport_type AS sport_type
     FROM garmin.summarized_activity
-        INNER JOIN garmin.fit_track
+        INNER JOIN garmin.simple_track
             ON garmin.summarized_activity.begin_timestamp =
-                garmin.fit_track.begin_timestamp
+                garmin.simple_track.begin_timestamp
     WHERE
         start_position IS NOT NULL AND
         (activity_type = 'hiking' OR activity_type = 'walking') AND
