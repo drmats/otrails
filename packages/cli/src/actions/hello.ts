@@ -13,8 +13,8 @@ import { info, infonl, oknl, shoutnl } from "~common/lib/terminal";
 import { printError } from "~common/lib/error";
 import { name as appName, version as appVersion } from "~cli/../package.json";
 
-import gisVersionQuery from "~cli/queries/gisVersion.sql";
-import pgVersionQuery from "~cli/queries/pgVersion.sql";
+import gisVersionQuery from "~common/app/queries/gisVersion.sql";
+import pgVersionQuery from "~common/app/queries/pgVersion.sql";
 
 
 

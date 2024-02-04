@@ -30,8 +30,8 @@ import type { ComplexValue } from "~common/lib/type";
 import { readJSON } from "~common/lib/fs";
 import { isComplexRecord } from "~common/lib/struct";
 
-import summarizedActivityDdlQuery from "~cli/queries/summarizedActivity.ddl.sql";
-import summarizedActivityInsertQuery from "~cli/queries/summarizedActivity.insert.sql";
+import summarizedActivityDdlQuery from "~common/app/queries/summarizedActivity.ddl.sql";
+import summarizedActivityInsertQuery from "~common/app/queries/summarizedActivity.insert.sql";
 
 
 

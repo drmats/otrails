@@ -22,9 +22,9 @@ import {
     parseFitFile,
 } from "~common/fit/lib";
 
-import simpleTrackCheckQuery from "~cli/queries/simpleTrack.check.sql";
-import simpleTrackDdlQuery from "~cli/queries/simpleTrack.ddl.sql";
-import simpleTrackInsertQuery from "~cli/queries/simpleTrack.insert.sql";
+import simpleTrackCheckQuery from "~common/app/queries/simpleTrack.check.sql";
+import simpleTrackDdlQuery from "~common/app/queries/simpleTrack.ddl.sql";
+import simpleTrackInsertQuery from "~common/app/queries/simpleTrack.insert.sql";
 
 
 

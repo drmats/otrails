@@ -36,8 +36,8 @@ import { ensureDirectory, isFile, readJSON } from "~common/lib/fs";
 import { get, collectData } from "~common/lib/http";
 import { sha256 } from "~common/lib/uuid";
 
-import imageDdlQuery from "~cli/queries/image.ddl.sql";
-import imageInsertQuery from "~cli/queries/image.insert.sql";
+import imageDdlQuery from "~common/app/queries/image.ddl.sql";
+import imageInsertQuery from "~common/app/queries/image.insert.sql";
 
 
 

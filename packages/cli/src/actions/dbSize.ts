@@ -10,7 +10,7 @@ import { useMemory } from "~cli/setup/main";
 import { info, infonl, oknl, shout, shoutnl } from "~common/lib/terminal";
 import { printError } from "~common/lib/error";
 
-import dbSizeQuery from "~cli/queries/dbSize.sql";
+import dbSizeQuery from "~common/app/queries/dbSize.sql";
 
 
 
