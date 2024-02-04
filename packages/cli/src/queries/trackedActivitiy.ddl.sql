@@ -37,9 +37,11 @@ CREATE VIEW garmin.tracked_activity AS (
         garmin.summarized_activity.end_position AS end_position,
         ST_Simplify(garmin.simple_track.track::geometry, 0.0001)::geography AS track
     FROM garmin.summarized_activity
-        INNER JOIN garmin.simple_track
-            ON garmin.summarized_activity.begin_timestamp =
-                garmin.simple_track.begin_timestamp
+        INNER JOIN garmin.simple_track ON
+            garmin.summarized_activity.begin_timestamp =
+                garmin.simple_track.begin_timestamp AND
+            garmin.summarized_activity.user_short_id =
+                garmin.simple_track.user_short_id
     ORDER BY garmin.summarized_activity.begin_timestamp
 );
 
