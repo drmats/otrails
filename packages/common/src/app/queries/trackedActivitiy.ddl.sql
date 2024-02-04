@@ -57,7 +57,7 @@ CREATE VIEW garmin.run AS (
         (
             activity_type = 'running' OR
             activity_type = 'trail_running'
-        ) AND distance >= 0.1
+        ) AND distance >= 100
 );
 
 
@@ -72,7 +72,7 @@ CREATE VIEW garmin.hike_or_walk AS (
         (
             activity_type = 'hiking' OR
             activity_type = 'walking'
-        ) AND distance >= 0.1
+        ) AND distance >= 100
 );
 
 
@@ -88,7 +88,7 @@ CREATE VIEW garmin.bike AS (
             activity_type = 'cycling' OR
             activity_type = 'gravel_cycling' OR
             activity_type = 'mountain_biking'
-        ) AND distance >= 0.1
+        ) AND distance >= 100
 );
 
 
@@ -107,5 +107,5 @@ CREATE VIEW garmin.other AS (
         activity_type != 'mountain_biking' AND
         activity_type != 'running' AND
         activity_type != 'trail_running' AND
-        distance >= 0.1
+        distance >= 100
 );
