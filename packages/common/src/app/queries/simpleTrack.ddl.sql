@@ -8,6 +8,7 @@
 
 -- ...
 CREATE SCHEMA IF NOT EXISTS garmin;
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
 
 
@@ -42,3 +43,9 @@ CREATE INDEX IF NOT EXISTS simple_track_begin_timestamp_idx
 
 CREATE INDEX IF NOT EXISTS simple_track_line_gix
     ON garmin.simple_track USING gist (line);
+
+CREATE UNIQUE INDEX IF NOT EXISTS simple_track_unique_line_idx
+    ON garmin.simple_track USING btree (
+        user_short_id,
+        digest(ST_AsBinary(line), 'sha256')
+    );
