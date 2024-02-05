@@ -110,19 +110,6 @@ export default async function configureArgsParser (): Promise<void> {
             processSummaries,
         )
 
-        // fit-file activities processor
-        .command(
-            "process-fits [userShortId]",
-            "process fit-file activities",
-            {
-                userShortId: {
-                    type: "string",
-                    describe: "data subfolder",
-                },
-            },
-            processFits,
-        )
-
         // tcx-file activities processor
         .command(
             "process-tcxes [userShortId]",
@@ -134,6 +121,19 @@ export default async function configureArgsParser (): Promise<void> {
                 },
             },
             processTcxes,
+        )
+
+        // fit-file activities processor
+        .command(
+            "process-fits [userShortId]",
+            "process fit-file activities",
+            {
+                userShortId: {
+                    type: "string",
+                    describe: "data subfolder",
+                },
+            },
+            processFits,
         )
 
         // database views
