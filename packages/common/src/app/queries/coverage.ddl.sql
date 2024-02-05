@@ -74,3 +74,27 @@ CREATE MATERIALIZED VIEW tiles.on_foot_mvt_coords AS (
 )
 WITH NO DATA;
 REFRESH MATERIALIZED VIEW tiles.on_foot_mvt_coords;
+
+
+
+
+DROP MATERIALIZED VIEW IF EXISTS tiles.on_foot_circle CASCADE;
+CREATE MATERIALIZED VIEW tiles.on_foot_circle AS (
+    WITH
+    mercator_track AS (
+        SELECT track_id, ST_Transform(track, 3857) AS track
+        FROM garmin.on_foot
+    ),
+    bounding_radius AS (
+        SELECT track_id, track, (ST_MinimumBoundingRadius(track)).*
+        FROM mercator_track
+    )
+    SELECT
+        track_id,
+        ST_Transform(center, 4326) AS center,
+        ST_Transform(ST_MinimumBoundingCircle(track), 4326) AS bounding,
+        radius
+    FROM bounding_radius
+)
+WITH NO DATA;
+REFRESH MATERIALIZED VIEW tiles.on_foot_circle;
