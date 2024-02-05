@@ -20,6 +20,7 @@ CREATE VIEW garmin.tracked_activity AS (
         garmin.summarized_activity.name AS name,
         garmin.summarized_activity.description AS description,
         garmin.summarized_activity.distance / 100 AS distance,
+        garmin.summarized_activity.steps AS steps,
         ((garmin.summarized_activity.duration / 1000) || ' second')::interval AS duration,
         ((garmin.summarized_activity.elapsed_duration / 1000) || ' second')::interval AS elapsed_duration,
         ((garmin.summarized_activity.moving_duration / 1000) || ' second')::interval AS moving_duration,
@@ -48,17 +49,34 @@ CREATE VIEW garmin.tracked_activity AS (
 
 
 
--- simplified geometry for all run activities no shorter than 100 m
-DROP VIEW IF EXISTS garmin.run CASCADE;
-CREATE VIEW garmin.run AS (
+-- simplified geometry for all "on foot" activities no shorter than 100 m
+DROP VIEW IF EXISTS garmin.on_foot CASCADE;
+CREATE VIEW garmin.on_foot AS (
     SELECT *
     FROM garmin.tracked_activity
     WHERE
         (
+            activity_type = 'hiking' OR
+            activity_type = 'rock_climbing' OR
+            activity_type = 'walking' OR
+            activity_type = 'casual_walking' OR
+            activity_type = 'speed_walking' OR
             activity_type = 'running' OR
             activity_type = 'trail_running'
         ) AND distance >= 100
 );
+
+
+
+
+-- "on foot" activities coverage
+DROP MATERIALIZED VIEW IF EXISTS garmin.on_foot_bounds CASCADE;
+CREATE MATERIALIZED VIEW garmin.on_foot_bounds AS (
+    SELECT ST_Union(ST_SetSRID(Box2D(track), 4326)) AS boundary
+    FROM garmin.on_foot
+)
+WITH NO DATA;
+REFRESH MATERIALIZED VIEW garmin.on_foot_bounds;
 
 
 
@@ -75,6 +93,21 @@ CREATE VIEW garmin.hike_or_walk AS (
             activity_type = 'walking' OR
             activity_type = 'casual_walking' OR
             activity_type = 'speed_walking'
+        ) AND distance >= 100
+);
+
+
+
+
+-- simplified geometry for all run activities no shorter than 100 m
+DROP VIEW IF EXISTS garmin.run CASCADE;
+CREATE VIEW garmin.run AS (
+    SELECT *
+    FROM garmin.tracked_activity
+    WHERE
+        (
+            activity_type = 'running' OR
+            activity_type = 'trail_running'
         ) AND distance >= 100
 );
 
