@@ -7,7 +7,7 @@
 
 
 -- start positions and track simplified geometry
--- for all hikes and walks no shorter than 100 m
+-- for all hikes, walks and runs no shorter than 100 m
 SELECT start_position AS geom
 FROM garmin.on_foot
 UNION ALL

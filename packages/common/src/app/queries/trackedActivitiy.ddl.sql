@@ -69,18 +69,6 @@ CREATE VIEW garmin.on_foot AS (
 
 
 
--- "on foot" activities coverage
-DROP MATERIALIZED VIEW IF EXISTS garmin.on_foot_bounds CASCADE;
-CREATE MATERIALIZED VIEW garmin.on_foot_bounds AS (
-    SELECT ST_Union(ST_SetSRID(Box2D(track), 4326)) AS boundary
-    FROM garmin.on_foot
-)
-WITH NO DATA;
-REFRESH MATERIALIZED VIEW garmin.on_foot_bounds;
-
-
-
-
 -- simplified geometry for all hikes and walks no shorter than 100 m
 DROP VIEW IF EXISTS garmin.hike_or_walk CASCADE;
 CREATE VIEW garmin.hike_or_walk AS (

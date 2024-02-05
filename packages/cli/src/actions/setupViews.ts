@@ -17,6 +17,7 @@ import {
 import { printError } from "~common/lib/error";
 
 import trackedActivityDdlQuery from "~common/app/queries/trackedActivitiy.ddl.sql";
+import coverageDdlQuery from "~common/app/queries/coverage.ddl.sql";
 
 
 
@@ -30,12 +31,19 @@ export const setupViews: CliAction = async () => {
 
     try {
 
+        let spinner;
+
         info("setting up: "); shout("views");
-        info(" "); const spinner = createAutoSpinner();
-
+        info(" "); spinner = createAutoSpinner();
         await db.none(sql(trackedActivityDdlQuery));
+        spinner.dispose(); infonl();
 
-        spinner.dispose(); infonl(); oknl("DONE");
+        info("computing: "); shout("bounds and mvt coordinates");
+        info(" "); spinner = createAutoSpinner();
+        await db.none(sql(coverageDdlQuery));
+        spinner.dispose(); infonl();
+
+        oknl("DONE");
 
     } catch (e) {
         printError(e);
