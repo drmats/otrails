@@ -117,7 +117,7 @@ export const processFits: CliAction<{
                     activity_timestamp: undefinedToNull(activity.timestamp),
                     sport: undefinedToNull(activity.sports[0]?.sport?.toLowerCase()),
                     begin_timestamp: beginTimestamp,
-                    track: [
+                    line: [
                         "LINESTRING(",
                         track.map(([lon, lat]) => `${lon} ${lat}`).join(", "),
                         ")",

@@ -15,6 +15,7 @@ CREATE SCHEMA IF NOT EXISTS garmin;
 -- ...
 CREATE TABLE IF NOT EXISTS garmin.summarized_activity (
     id                                   SERIAL           PRIMARY KEY NOT NULL,
+    created_at                           TIMESTAMPTZ      NOT NULL DEFAULT now(),
     user_short_id                        TEXT             NOT NULL,
     activity_id                          BIGINT           NOT NULL,
     name                                 TEXT             NOT NULL,
@@ -102,6 +103,9 @@ CREATE TABLE IF NOT EXISTS garmin.summarized_activity (
     atp_activity                         BOOLEAN,
     parent                               BOOLEAN
 );
+
+CREATE INDEX IF NOT EXISTS summarized_activity_created_at_idx
+    ON garmin.summarized_activity USING brin (created_at);
 
 CREATE INDEX IF NOT EXISTS summarized_activity_user_short_id_idx
     ON garmin.summarized_activity USING btree (user_short_id);

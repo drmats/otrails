@@ -14,7 +14,7 @@ INSERT INTO garmin.simple_track (
     activity_timestamp,
     sport,
     begin_timestamp,
-    track
+    line
 )
 VALUES (
     $<user_short_id>,
@@ -23,6 +23,6 @@ VALUES (
     $<activity_timestamp>,
     $<sport>,
     $<begin_timestamp>,
-    $<track>
+    $<line>
 )
 RETURNING *;

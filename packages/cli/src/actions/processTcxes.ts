@@ -111,7 +111,7 @@ export const processTcxes: CliAction<{
                     activity_timestamp: undefinedToNull(tcx.timestamp),
                     sport: tcx.sport,
                     begin_timestamp: beginTimestamp,
-                    track: [
+                    line: [
                         "LINESTRING(",
                         track.map(([lon, lat]) => `${lon} ${lat}`).join(", "),
                         ")",

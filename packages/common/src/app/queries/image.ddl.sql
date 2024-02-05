@@ -15,6 +15,7 @@ CREATE SCHEMA IF NOT EXISTS garmin;
 -- ...
 CREATE TABLE IF NOT EXISTS garmin.image (
     id                SERIAL             PRIMARY KEY NOT NULL,
+    created_at        TIMESTAMPTZ        NOT NULL DEFAULT now(),
     user_short_id     TEXT               NOT NULL,
     image_id          TEXT               NOT NULL,
     activity_id       BIGINT             NOT NULL,
@@ -23,6 +24,9 @@ CREATE TABLE IF NOT EXISTS garmin.image (
     photo_date        TIMESTAMPTZ,
     review_status_id  INT
 );
+
+CREATE INDEX IF NOT EXISTS image_created_at_idx
+    ON garmin.image USING brin (created_at);
 
 CREATE INDEX IF NOT EXISTS image_user_short_id_idx
     ON garmin.image USING btree (user_short_id);

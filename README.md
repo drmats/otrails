@@ -237,8 +237,8 @@ executing: c5fd6e9e00b3d255f642.sql
     cli extract-garmin-data [zipFileName] [userShortId]
     cli fetch-images [userShortId]
     cli process-summaries [userShortId]
-    cli process-fits [userShortId]
     cli process-tcxes [userShortId]
+    cli process-fits [userShortId]
     cli setup-views
     ```
     > _(`[zipFileName]` is the name of file downloaded from garmin,_
