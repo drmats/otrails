@@ -17,6 +17,7 @@
     "dependencies": {
         "@turf/turf": "6.5.0",
         "@xcmats/js-toolbox": "0.16.2",
+        "better-sqlite3": "9.4.0",
         "chalk": "4.1.2",
         "fd-slicer": "1.1.0",
         "mem-box": "1.1.0",
@@ -33,6 +34,7 @@
         "@babel/eslint-parser": "7.23.3",
         "@babel/preset-env": "7.23.8",
         "@babel/preset-typescript": "7.23.3",
+        "@types/better-sqlite3": "7.6.9",
         "@types/node": "20.11.6",
         "@types/yargs": "17.0.32",
         "@types/yauzl": "2.10.3",

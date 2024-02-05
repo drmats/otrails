@@ -16,6 +16,7 @@
 
     "dependencies": {
         "@xcmats/js-toolbox": "0.16.2",
+        "better-sqlite3": "9.4.0",
         "chalk": "4.1.2",
         "dayjs": "1.11.10",
         "fit-file-parser": "1.9.5",
@@ -31,6 +32,7 @@
         "@babel/eslint-parser": "7.23.3",
         "@babel/preset-env": "7.23.8",
         "@babel/preset-typescript": "7.23.3",
+        "@types/better-sqlite3": "7.6.9",
         "@types/node": "20.11.6",
         "@types/xml2js": "0.4.14",
         "@typescript-eslint/eslint-plugin": "6.19.1",
