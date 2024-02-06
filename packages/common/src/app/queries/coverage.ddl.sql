@@ -12,7 +12,7 @@ CREATE SCHEMA IF NOT EXISTS tiles;
 
 
 
--- "on foot" activities coverage
+-- "on foot" activities coverage (envelopes)
 DROP MATERIALIZED VIEW IF EXISTS tiles.on_foot_bounds CASCADE;
 CREATE MATERIALIZED VIEW tiles.on_foot_bounds AS (
     SELECT ST_Union(ST_Envelope(track)) AS boundary
@@ -20,6 +20,18 @@ CREATE MATERIALIZED VIEW tiles.on_foot_bounds AS (
 )
 WITH NO DATA;
 REFRESH MATERIALIZED VIEW tiles.on_foot_bounds;
+
+
+
+
+-- "on foot" activities detailed coverage (convex hulls)
+DROP MATERIALIZED VIEW IF EXISTS tiles.on_foot_hulls CASCADE;
+CREATE MATERIALIZED VIEW tiles.on_foot_hulls AS (
+    SELECT ST_Union(ST_ConvexHull(track)) AS hull
+    FROM garmin.on_foot
+)
+WITH NO DATA;
+REFRESH MATERIALIZED VIEW tiles.on_foot_hulls;
 
 
 
@@ -32,8 +44,8 @@ CREATE MATERIALIZED VIEW tiles.on_foot_mvt_coords AS (
     -- boundary coordinate system
     -- transformed from WGS84 to Spherical Mercator (web)
     bounds (boundary) AS (
-        SELECT ST_Transform(boundary, 3857) AS boundary
-        FROM tiles.on_foot_bounds
+        SELECT ST_Transform(hull, 3857) AS boundary
+        FROM tiles.on_foot_hulls
     ),
 
     -- coordinates of direct subtiles (one-zoom-level higher)
@@ -55,7 +67,7 @@ CREATE MATERIALIZED VIEW tiles.on_foot_mvt_coords AS (
             2 * tile_coords.y + delta.y
         FROM tile_coords CROSS JOIN delta
         WHERE
-            z <= 16 AND
+            z < 16 AND
             ST_Intersects(
                 ST_TileEnvelope(
                     z + 1,
