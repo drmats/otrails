@@ -85,6 +85,8 @@ CREATE MATERIALIZED VIEW tiles.on_foot_mvt_coords AS (
     FROM tile_coords
 )
 WITH NO DATA;
+CREATE INDEX IF NOT EXISTS on_foot_mvt_coords_envelope_gix
+    ON tiles.on_foot_mvt_coords USING gist (envelope);
 REFRESH MATERIALIZED VIEW tiles.on_foot_mvt_coords;
 
 
