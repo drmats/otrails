@@ -38,7 +38,7 @@ export const setupViews: CliAction = async () => {
         await db.none(sql(trackedActivityDdlQuery));
         spinner.dispose(); infonl();
 
-        info("computing: "); shout("bounds and mvt coordinates");
+        info("computing: "); shout("hulls, mvt coordinates and intersections");
         info(" "); spinner = createAutoSpinner();
         await db.none(sql(coverageDdlQuery));
         spinner.dispose(); infonl();
