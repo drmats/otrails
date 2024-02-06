@@ -15,7 +15,7 @@ CREATE SCHEMA IF NOT EXISTS tiles;
 -- "on foot" activities coverage
 DROP MATERIALIZED VIEW IF EXISTS tiles.on_foot_bounds CASCADE;
 CREATE MATERIALIZED VIEW tiles.on_foot_bounds AS (
-    SELECT ST_Union(ST_SetSRID(Box2D(track), 4326)) AS boundary
+    SELECT ST_Union(ST_Envelope(track)) AS boundary
     FROM garmin.on_foot
 )
 WITH NO DATA;
