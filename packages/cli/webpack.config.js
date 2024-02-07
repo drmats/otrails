@@ -52,8 +52,9 @@ const webpackAsyncConfig = async () => {
         externalsPresets: { node: true },
         externals: [
             "@turf/turf",
-            "yargs/yargs",
+            "better-sqlite3",
             "yargs/helpers",
+            "yargs/yargs",
             nodeExternals({
                 allowlist: [
                     /@xcmats\/js-toolbox(\/.*)?/,

@@ -18,6 +18,7 @@ import { processFits } from "~cli/actions/processFits";
 import { processSummaries } from "~cli/actions/processSummaries";
 import { processTcxes } from "~cli/actions/processTcxes";
 import { setupViews } from "~cli/actions/setupViews";
+import { bakeTiles } from "~cli/actions/bakeTiles";
 
 
 
@@ -142,6 +143,14 @@ export default async function configureArgsParser (): Promise<void> {
             "database views setup",
             emptyObject,
             setupViews,
+        )
+
+        // tile baker
+        .command(
+            "bake-tiles",
+            "bake zxy mbtiles file",
+            emptyObject,
+            bakeTiles,
         )
 
         .strict()

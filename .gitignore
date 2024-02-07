@@ -1,6 +1,7 @@
 data/exports/*
 data/garmin/*
 data/pg/pgdata
+data/tiles/*
 data/vars.json
 node_modules
 packages/cli/dist

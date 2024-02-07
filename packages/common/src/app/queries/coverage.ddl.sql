@@ -110,7 +110,8 @@ CREATE MATERIALIZED VIEW tile.on_foot_approx_mvt_envelope AS (
                 ST_TileEnvelope(
                     z + 1,
                     2 * tile_coords.x + delta.x,
-                    2 * tile_coords.y + delta.y
+                    2 * tile_coords.y + delta.y,
+                    margin => (128.0 / 4096)
                 ),
                 (SELECT boundary FROM bounds)
             )
@@ -120,7 +121,10 @@ CREATE MATERIALIZED VIEW tile.on_foot_approx_mvt_envelope AS (
     -- with spatial index for further querying
     SELECT
         z, x, y,
-        ST_Transform(ST_TileEnvelope(z, x, y), 4326) AS envelope
+        ST_Transform(
+            ST_TileEnvelope(z, x, y, margin => (128.0 / 4096)),
+            4326
+        ) AS envelope
     FROM tile_coords
 )
 WITH NO DATA;

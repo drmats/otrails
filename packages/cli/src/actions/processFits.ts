@@ -72,7 +72,7 @@ export const processFits: CliAction<{
         await map(fitFilenames) (async (fitFilename, i) => {
 
             // progress-bar
-            progress(i + 1, fitFilenames.length + 1);
+            progress(i + 1, fitFilenames.length);
 
             try {
 

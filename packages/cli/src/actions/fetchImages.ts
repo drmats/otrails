@@ -158,7 +158,7 @@ export const fetchImages: CliAction<{
             await map(imageMetaFile) (async (imageEntry, i) => {
 
                 // progress-bar
-                progress(i + 1, imageMetaFile.length + 1);
+                progress(i + 1, imageMetaFile.length);
 
                 // data-check (do nothing on malformed data entry)
                 if (!isActivityImage(imageEntry)) {

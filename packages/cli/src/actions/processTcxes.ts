@@ -71,7 +71,7 @@ export const processTcxes: CliAction<{
         await map(tcxFilenames) (async (tcxFilename, i) => {
 
             // progress-bar
-            progress(i + 1, tcxFilenames.length + 1);
+            progress(i + 1, tcxFilenames.length);
 
             try {
 

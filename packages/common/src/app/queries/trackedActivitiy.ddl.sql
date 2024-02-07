@@ -18,7 +18,7 @@ CREATE VIEW garmin.tracked_activity AS (
     SELECT
         garmin.simple_track.id AS track_id,
         garmin.summarized_activity.id AS summarized_activity_id,
-        garmin.summarized_activity.begin_timestamp AS start_timestamp,
+        garmin.summarized_activity.begin_timestamp AS begin_timestamp,
         garmin.summarized_activity.name AS name,
         garmin.summarized_activity.description AS description,
         garmin.summarized_activity.distance / 100 AS distance,

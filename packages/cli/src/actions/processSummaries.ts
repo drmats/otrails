@@ -118,7 +118,7 @@ export const processSummaries: CliAction<{
             await map(summarizedActivities) (async (summarizedActivity, i) => {
 
                 // progress-bar
-                progress(i + 1, summarizedActivities.length + 1);
+                progress(i + 1, summarizedActivities.length);
 
                 // data-check (do nothing on malformed data entry)
                 if (!isSummarizedActivity(summarizedActivity)) {
