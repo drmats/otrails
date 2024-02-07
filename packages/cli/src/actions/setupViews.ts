@@ -16,7 +16,7 @@ import {
 } from "~common/lib/terminal";
 import { printError } from "~common/lib/error";
 
-import trackedActivityDdlQuery from "~common/app/queries/trackedActivitiy.ddl.sql";
+import trackedActivityDdlQuery from "~common/app/queries/trackedActivity.ddl.sql";
 import coverageDdlQuery from "~common/app/queries/coverage.ddl.sql";
 
 
