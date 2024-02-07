@@ -41,12 +41,14 @@ export const ensureSchema = (db: Database): Database => db.exec(`
  */
 export const metaInserter = (
     db: Database,
-): ((meta: MBTileMeta) => MBTileMeta) =>
-    (meta) => db.prepare<MBTileMeta>(`
+): ((meta: MBTileMeta) => MBTileMeta) => {
+    const inserter = db.prepare<MBTileMeta>(`
         INSERT INTO metadata (name, value)
         VALUES ($name, $value)
         RETURNING *;
-    `).get(meta) as MBTileMeta;
+    `);
+    return (meta) => inserter.get(meta) as MBTileMeta;
+};
 
 
 
@@ -58,9 +60,11 @@ export const metaInserter = (
  */
 export const tileInserter = (
     db: Database,
-): ((tile: MBTile) => MBTile) =>
-    (tile) => db.prepare<MBTile>(`
+): ((tile: MBTile) => MBTile) => {
+    const inserter = db.prepare<MBTile>(`
         INSERT INTO tiles (zoom_level, tile_column, tile_row, tile_data)
         VALUES ($z, $x, $y, $data)
         RETURNING *;
-    `).get(zxytms(tile)) as MBTile;
+    `);
+    return (tile) => inserter.get(zxytms(tile)) as MBTile;
+};
