@@ -11,7 +11,7 @@ import { PromisePoolResult, map, promisePool } from "@xcmats/js-toolbox/async";
 import { isString } from "@xcmats/js-toolbox/type";
 
 import type { CliAction } from "~common/framework/actions";
-import { useMemory } from "~cli/setup/main";
+import { useMemory } from "~cli/setup/memory";
 import {
     createAutoSpinner,
     info,
@@ -21,6 +21,7 @@ import {
     shoutnl,
 } from "~common/lib/terminal";
 import { printError } from "~common/lib/error";
+import { setPragmas } from "~common/sqlite/lib";
 import type { MBTile, MBTileCoords } from "~common/mbtiles/type";
 import { ensureSchema, metaInserter, tileInserter } from "~common/mbtiles/lib";
 import { isoNow } from "~common/lib/time";
@@ -77,17 +78,8 @@ export const bakeTiles: CliAction = async () => {
 
         try {
 
-            // pragmas
-            const pragmas = [
-                `busy_timeout = ${5000}`,
-                `cache_size = ${2000}`,
-                `foreign_keys = ${"ON"}`,
-                `journal_mode = ${"WAL"}`,
-                `journal_size_limit = ${64 * 1024 * 1024}`,
-                `mmap_size = ${128 * 1024 * 1024}`,
-                `synchronous = ${"FULL"}`,
-            ];
-            pragmas.forEach((setter) => filedb.pragma(setter));
+            // sqlite pragmas
+            setPragmas(filedb);
 
             // mbtiles schema
             ensureSchema(filedb);

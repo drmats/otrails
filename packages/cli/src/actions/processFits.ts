@@ -11,7 +11,7 @@ import { isString, undefinedToNull } from "@xcmats/js-toolbox/type";
 
 import type { CliAction } from "~common/framework/actions";
 import { exportDataStructure } from "~common/app/models/garmin";
-import { useMemory } from "~cli/setup/main";
+import { useMemory } from "~cli/setup/memory";
 import { info, infonl, oknl, progress, shoutnl } from "~common/lib/terminal";
 import { printError } from "~common/lib/error";
 import {
@@ -45,7 +45,7 @@ export const processFits: CliAction<{
 
         // check variables validity
         if (!isString(extractsDir)) {
-            throw new Error("Missing or malformed [extract] variable.");
+            throw new Error("Missing or malformed [extractsDir] variable.");
         }
 
         // check arguments validity

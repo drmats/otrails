@@ -59,14 +59,14 @@
     "scripts": {
 
         "clean:modules": "yarn clean:modules:all",
-        "clean:modules:all": "yarn clean:modules:common && yarn clean:modules:root",
+        "clean:modules:all": "yarn clean:modules:common && yarn clean:modules:cli && yarn clean:modules:service && yarn clean:modules:root",
         "clean:modules:root": "rimraf node_modules",
         "clean:modules:common": "cd ./packages/common; yarn clean:modules",
 
         "vars": "cd ./packages/common; yarn vars",
 
         "test": "yarn test:all",
-        "test:all": "yarn test:common && yarn test:cli",
+        "test:all": "yarn test:common && yarn test:cli && yarn test:service",
         "test:common": "cd ./packages/common; yarn test",
 
         "build": "yarn build:all",
@@ -80,6 +80,14 @@
         "build:cli": "cd ./packages/cli; yarn build",
         "start:cli": "cd ./packages/cli; yarn start",
         "cli": "yarn start:cli",
+
+        "clean:modules:service": "cd ./packages/service; yarn clean:modules",
+        "clean:service": "yarn clean:dist:service",
+        "clean:dist:service": "cd ./packages/service; yarn clean",
+        "test:service": "cd ./packages/service; yarn test",
+        "start:service:dev": "cross-env-shell OTRAILS_ROOT=$(pwd) \"cd ./packages/service; yarn dev\"",
+        "build:service": "cd ./packages/service; yarn build",
+        "start:service": "cross-env-shell OTRAILS_ROOT=$(pwd) \"cd ./packages/service; yarn start\"",
 
         "postinstall": "patch-package"
 

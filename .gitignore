@@ -1,8 +1,10 @@
 data/exports/*
 data/garmin/*
 data/pg/pgdata
+data/service/*
 data/tiles/*
 data/vars.json
 node_modules
 packages/cli/dist
+packages/service/dist
 yarn-error.log

@@ -6,7 +6,7 @@
  */
 
 import { infonl, notenl, warnnl } from "~common/lib/terminal";
-import { useMemory } from "~cli/setup/main";
+import { useMemory } from "~cli/setup/memory";
 
 
 

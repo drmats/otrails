@@ -9,6 +9,10 @@
             "path": "../packages/cli"
         },
         {
+            "name": "service",
+            "path": "../packages/service"
+        },
+        {
             "name": "root",
             "path": "../"
         },

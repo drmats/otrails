@@ -6,7 +6,7 @@
  */
 
 import type { CliAction } from "~common/framework/actions";
-import { useMemory } from "~cli/setup/main";
+import { useMemory } from "~cli/setup/memory";
 import { gitAuthorDate, gitVersion } from "~common/lib/dev";
 import { indent } from "~common/lib/string";
 import { info, infonl, oknl, shoutnl } from "~common/lib/terminal";

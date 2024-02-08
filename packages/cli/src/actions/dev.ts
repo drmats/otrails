@@ -10,7 +10,7 @@ import * as box from "@xcmats/js-toolbox";
 import * as turf from "@turf/turf";
 
 import type { CliAction } from "~common/framework/actions";
-import { useMemory } from "~cli/setup/main";
+import { useMemory } from "~cli/setup/memory";
 import { printError } from "~common/lib/error";
 import * as async from "~common/lib/async";
 import * as dayjs from "~common/lib/dayjs";

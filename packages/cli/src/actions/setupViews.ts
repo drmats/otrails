@@ -6,7 +6,7 @@
  */
 
 import type { CliAction } from "~common/framework/actions";
-import { useMemory } from "~cli/setup/main";
+import { useMemory } from "~cli/setup/memory";
 import {
     createAutoSpinner,
     info,

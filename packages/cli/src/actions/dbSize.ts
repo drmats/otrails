@@ -6,7 +6,7 @@
  */
 
 import type { CliAction } from "~common/framework/actions";
-import { useMemory } from "~cli/setup/main";
+import { useMemory } from "~cli/setup/memory";
 import { info, infonl, oknl, shout, shoutnl } from "~common/lib/terminal";
 import { printError } from "~common/lib/error";
 

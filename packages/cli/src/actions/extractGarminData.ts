@@ -11,7 +11,7 @@ import { padRight, shorten } from "@xcmats/js-toolbox/string";
 import { isString } from "@xcmats/js-toolbox/type";
 
 import type { CliAction } from "~common/framework/actions";
-import { useMemory } from "~cli/setup/main";
+import { useMemory } from "~cli/setup/memory";
 import { infonl, progress } from "~common/lib/terminal";
 import { printError } from "~common/lib/error";
 import { extract } from "~common/lib/zip";
@@ -37,7 +37,9 @@ export const extractGarminData: CliAction<{
 
         // check variables validity
         if (!isString(exportsDir) || !isString(extractsDir)) {
-            throw new Error("Missing or malformed [export]/[extract] variables.");
+            throw new Error(
+                "Missing or malformed [exportsDir]/[extractsDir] variables.",
+            );
         }
 
         // check arguments validity

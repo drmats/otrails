@@ -8,6 +8,7 @@ Trails. Open. CLI.
 
 
 ## development
+
 * continuous rebuilding server (nodemon)
     ```
     yarn dev

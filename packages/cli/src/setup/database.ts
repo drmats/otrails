@@ -14,7 +14,7 @@ import pg, {
 import { share } from "mem-box";
 import { isString } from "@xcmats/js-toolbox/type";
 
-import { useMemory } from "~cli/setup/main";
+import { useMemory } from "~cli/setup/memory";
 import { buildPgConnectionString, sqlMemo } from "~common/lib/pgsql";
 import { errnl } from "~common/lib/terminal";
 

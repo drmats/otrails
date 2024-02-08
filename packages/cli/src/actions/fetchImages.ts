@@ -21,7 +21,7 @@ import {
     isActivityImage,
     type ActivityImage,
 } from "~common/app/models/garmin";
-import { useMemory } from "~cli/setup/main";
+import { useMemory } from "~cli/setup/memory";
 import {
     createAutoSpinner,
     info,
@@ -81,7 +81,7 @@ export const fetchImages: CliAction<{
 
         // check variables validity
         if (!isString(extractsDir)) {
-            throw new Error("Missing or malformed [extract] variable.");
+            throw new Error("Missing or malformed [extractsDir] variable.");
         }
 
         // check arguments validity

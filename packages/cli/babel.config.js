@@ -6,8 +6,6 @@
  * @copyright Mat. 2018-present
  */
 
-/* eslint-disable @typescript-eslint/no-var-requires */
-
 "use strict";
 
 // ...
