@@ -46,6 +46,7 @@ export const startDevCli = async <A extends type.FreeFormRecord<unknown>>(
 
     replServer.on("exit", mutex.resolve);
     Object.assign(replServer.context, {
+        $: augment,
         box,
         ctx,
         lib: {
@@ -53,7 +54,7 @@ export const startDevCli = async <A extends type.FreeFormRecord<unknown>>(
             string, struct, tcx, terminal, time, type, uuid, zip,
         },
         turf,
-        $: augment,
+        vars: ctx.vars,
     });
 
     return mutex.lock();
