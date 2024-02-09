@@ -6,6 +6,7 @@
  */
 
 import repl from "node:repl";
+import BetterSqlite3 from "better-sqlite3";
 import * as box from "@xcmats/js-toolbox";
 import * as turf from "@turf/turf";
 
@@ -20,7 +21,10 @@ import * as fit from "~common/fit/lib";
 import * as fs from "~common/lib/fs";
 import * as http from "~common/lib/http";
 import * as ids from "~common/lib/ids";
+import * as mbtilesLib from "~common/mbtiles/lib";
+import * as mbtilesMath from "~common/mbtiles/math";
 import * as pgsql from "~common/lib/pgsql";
+import * as sqlite from "~common/sqlite/lib";
 import * as string from "~common/lib/string";
 import * as struct from "~common/lib/struct";
 import * as tcx from "~common/tcx/lib";
@@ -50,9 +54,12 @@ export const startDevCli = async <A extends type.FreeFormRecord<unknown>>(
         box,
         ctx,
         lib: {
-            async, dayjs, dev, error, fit, fs, http, ids, pgsql,
-            string, struct, tcx, terminal, time, type, uuid, zip,
+            async, dayjs, dev, error, fit, fs, http, ids,
+            mbtiles: { lib: mbtilesLib, math: mbtilesMath },
+            pgsql, sqlite, string, struct, tcx, terminal,
+            time, type, uuid, zip,
         },
+        sqlite: BetterSqlite3,
         turf,
         vars: ctx.vars,
     });
