@@ -5,7 +5,7 @@
 
 import type { Database } from "better-sqlite3";
 
-import type { MBTile, MBTileMeta } from "~common/mbtiles/type";
+import type { MBTile, MBTileCoords, MBTileMeta } from "~common/mbtiles/type";
 import { zxytms } from "~common/mbtiles/math";
 
 
@@ -67,4 +67,23 @@ export const tileInserter = (
         RETURNING *;
     `);
     return (tile) => inserter.get(zxytms(tile)) as MBTile;
+};
+
+
+
+
+/**
+ * Tile getter.
+ *
+ * Accepts ZXY coords.
+ */
+export const tileGetter = (
+    db: Database,
+): ((coords: MBTileCoords) => MBTile) => {
+    const getter = db.prepare<MBTileCoords>(`
+        SELECT tile_data
+        FROM tiles
+        WHERE zoom_level = $z AND tile_column = $x AND tile_row = $y;
+    `);
+    return (coords) => getter.get(zxytms(coords)) as MBTile;
 };
