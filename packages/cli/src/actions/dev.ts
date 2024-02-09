@@ -11,28 +11,32 @@ import * as box from "@xcmats/js-toolbox";
 import * as turf from "@turf/turf";
 
 import type { CliAction } from "~common/framework/actions";
-import { useMemory } from "~cli/setup/memory";
+import type { FreeFormRecord } from "~common/lib/type";
 import { printError } from "~common/lib/error";
-import * as async from "~common/lib/async";
-import * as dayjs from "~common/lib/dayjs";
-import * as dev from "~common/lib/dev";
-import * as error from "~common/lib/error";
-import * as fit from "~common/fit/lib";
-import * as fs from "~common/lib/fs";
-import * as http from "~common/lib/http";
-import * as ids from "~common/lib/ids";
-import * as mbtilesLib from "~common/mbtiles/lib";
-import * as mbtilesMath from "~common/mbtiles/math";
-import * as pgsql from "~common/lib/pgsql";
-import * as sqlite from "~common/sqlite/lib";
-import * as string from "~common/lib/string";
-import * as struct from "~common/lib/struct";
-import * as tcx from "~common/tcx/lib";
-import * as terminal from "~common/lib/terminal";
-import * as time from "~common/lib/time";
-import * as type from "~common/lib/type";
-import * as uuid from "~common/lib/uuid";
-import * as zip from "~common/lib/zip";
+import { useMemory } from "~cli/setup/memory";
+
+import * as appModelsGarmin from "~common/app/models/garmin";
+import * as appModelsSetting from "~common/app/models/setting";
+import * as libAsync from "~common/lib/async";
+import * as libDayjs from "~common/lib/dayjs";
+import * as libDev from "~common/lib/dev";
+import * as libError from "~common/lib/error";
+import * as libFit from "~common/fit/lib";
+import * as libFs from "~common/lib/fs";
+import * as libHttp from "~common/lib/http";
+import * as libIds from "~common/lib/ids";
+import * as libMbtilesLib from "~common/mbtiles/lib";
+import * as libMbtilesMath from "~common/mbtiles/math";
+import * as libPgsql from "~common/lib/pgsql";
+import * as libSqlite from "~common/sqlite/lib";
+import * as libString from "~common/lib/string";
+import * as libStruct from "~common/lib/struct";
+import * as libTcx from "~common/tcx/lib";
+import * as libTerminal from "~common/lib/terminal";
+import * as libTime from "~common/lib/time";
+import * as libType from "~common/lib/type";
+import * as libUuid from "~common/lib/uuid";
+import * as libZip from "~common/lib/zip";
 
 
 
@@ -40,7 +44,7 @@ import * as zip from "~common/lib/zip";
 /**
  * Start interactive shell with augmented context.
  */
-export const startDevCli = async <A extends type.FreeFormRecord<unknown>>(
+export const startDevCli = async <A extends FreeFormRecord<unknown>>(
     a?: A,
 ): Promise<void> => {
     const mutex = box.createMutex<void>();
@@ -51,13 +55,21 @@ export const startDevCli = async <A extends type.FreeFormRecord<unknown>>(
     replServer.on("exit", mutex.resolve);
     Object.assign(replServer.context, {
         $: augment,
+        app: {
+            models: {
+                garmin: appModelsGarmin,
+                setting: appModelsSetting,
+            },
+        },
         box,
         ctx,
         lib: {
-            async, dayjs, dev, error, fit, fs, http, ids,
-            mbtiles: { lib: mbtilesLib, math: mbtilesMath },
-            pgsql, sqlite, string, struct, tcx, terminal,
-            time, type, uuid, zip,
+            async: libAsync, dayjs: libDayjs, dev: libDev, error: libError,
+            fit: libFit, fs: libFs, http: libHttp, ids: libIds,
+            mbtiles: { lib: libMbtilesLib, math: libMbtilesMath },
+            pgsql: libPgsql, sqlite: libSqlite, string: libString,
+            struct: libStruct, tcx: libTcx, terminal: libTerminal,
+            time: libTime, type: libType, uuid: libUuid, zip: libZip,
         },
         sqlite: BetterSqlite3,
         turf,
