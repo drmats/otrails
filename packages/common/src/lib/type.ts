@@ -221,14 +221,30 @@ export type SparseArrayLike<T> = Partial<Record<number, T>>;
 
 
 /**
+ * Type `T` or `undefined`.
+ */
+export type OrUndefined<T> = T | undefined;
+
+
+
+
+/**
  * Meta-predicate. Gets predicate and returns augmented version
  * alowing `undefined`.
  */
 export const orUndefined = <T>(
     predicate: (c: unknown) => c is T,
-): (c: unknown) => c is T | undefined => (
+): (c: unknown) => c is OrUndefined<T> => (
     (c) => predicate(c) || typeof c === "undefined"
-) as (c: unknown) => c is T | undefined;
+) as (c: unknown) => c is OrUndefined<T>;
+
+
+
+
+/**
+ * Type `T` or `null`.
+ */
+export type OrNull<T> = T | null;
 
 
 
@@ -239,6 +255,6 @@ export const orUndefined = <T>(
  */
 export const orNull = <T>(
     predicate: (c: unknown) => c is T,
-): (c: unknown) => c is T | null => (
+): (c: unknown) => c is OrNull<T> => (
     (c) => predicate(c) || c === null
-) as (c: unknown) => c is T | null;
+) as (c: unknown) => c is OrNull<T>;

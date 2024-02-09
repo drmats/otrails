@@ -89,7 +89,7 @@
         "lint": "echo \"Linting and typechecking...\"; eslint ./src/ --ext .ts && yarn type-check",
         "type-check": "tsc --noEmit",
 
-        "dev": "rimraf ./node_modules/.cache/@babel && nodemon -e js,ts --watch ./src/ ./src/index.ts --exec \"cross-env NODE_ENV=development BABEL_ENV=development babel-node --extensions \".js,.ts\" --ignore ./node_modules --inspect\"",
+        "dev": "rimraf ./node_modules/.cache/@babel && nodemon -e js,ts --watch ./src/ --watch ../common/src --watch ../../data/vars.json ./src/index.ts --exec \"cross-env NODE_ENV=development BABEL_ENV=development babel-node --extensions \".js,.ts\" --ignore ./node_modules --inspect\"",
         "build:continuous": "nodemon -e js,ts --watch ./src/ --exec \"cross-env BABEL_ENV=development webpack --progress --config=webpack.config.js\"",
 
         "build": "yarn test && cross-env BABEL_ENV=production webpack --progress --config=webpack.config.js",
