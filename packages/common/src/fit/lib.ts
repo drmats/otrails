@@ -7,7 +7,7 @@ import { readFile } from "node:fs/promises";
 import FitParser, { type FitActivity, type FitObject } from "fit-file-parser";
 import { isNumber } from "@xcmats/js-toolbox/type";
 
-import { fsWalk } from "~common/lib/fs";
+import { getExtFilenames } from "~common/lib/fs";
 import { isValidDate } from "~common/lib/time";
 
 
@@ -16,13 +16,9 @@ import { isValidDate } from "~common/lib/time";
 /**
  * Get all fit filenames from given directory.
  */
-export const getFitFilenames = async (path: string): Promise<string[]> => {
-    const fitFilenames: string[] = [];
-    await fsWalk(path, async (_, name) => {
-        if (name.endsWith(".fit")) fitFilenames.push(name);
-    }, { maxDepth: 0 });
-    return fitFilenames;
-};
+export const getFitFilenames = async (
+    path: string,
+): Promise<string[]> => getExtFilenames(path, ".fit");
 
 
 

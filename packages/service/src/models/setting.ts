@@ -15,10 +15,10 @@ import { access, isComplexRecord } from "~common/lib/struct";
 
 
 /**
- * Settings model - schema.
+ * Setting model - schema.
  */
 export const schema = () => `
-    CREATE TABLE IF NOT EXISTS settings (
+    CREATE TABLE IF NOT EXISTS setting (
         key TEXT PRIMARY KEY,
         val TEXT NOT NULL
     );
@@ -28,9 +28,9 @@ export const schema = () => `
 
 
 /**
- * Settings model (key-val).
+ * Setting model (key-val).
  */
-export default function settings (db: Database) {
+export default function setting (db: Database) {
 
     // ...
     const sql = {
@@ -38,14 +38,14 @@ export default function settings (db: Database) {
         // ...
         allSettings: () => `
             SELECT *
-            FROM settings
+            FROM setting
         `,
 
 
         // ...
         count: () => `
             SELECT count(*)
-            FROM settings
+            FROM setting
         `,
 
     } as const;
@@ -73,7 +73,7 @@ export default function settings (db: Database) {
             key: string;
             val: string;
         }>(`
-            INSERT INTO settings (key, val)
+            INSERT INTO setting (key, val)
             VALUES ($key, $val)
             ON CONFLICT (key) DO UPDATE
                 SET val = excluded.val
@@ -94,7 +94,7 @@ export default function settings (db: Database) {
         delete: db.prepare<{
             key: string;
         }>(`
-            DELETE FROM settings
+            DELETE FROM setting
             WHERE key = $key;
         `),
 

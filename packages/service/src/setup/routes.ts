@@ -9,6 +9,8 @@ import { ACTION } from "~common/app/api";
 import { useMemory } from "~service/logic/memory";
 import { apiV1 } from "~service/setup/env";
 import { hello } from "~service/actions/hello";
+import { tileGet } from "~service/actions/tileGet";
+import { tileSources } from "~service/actions/tileSources";
 
 
 
@@ -30,6 +32,18 @@ export default function configureRoutes (): void {
         .get(
             `${apiV1}${ACTION.hello}`,
             hello,
+        )
+
+        // one tile
+        .get(
+            `${apiV1}${ACTION.tileGet}`,
+            tileGet,
+        )
+
+        // list of tile sources
+        .get(
+            `${apiV1}${ACTION.tileSources}`,
+            tileSources,
         );
 
     if (firstWorker) {

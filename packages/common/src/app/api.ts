@@ -14,5 +14,7 @@
 export const ACTION = {
 
     hello: "/",
+    tileGet: "/tile/get/:name/:z/:x/:y/t.pbf",
+    tileSources: "/tile/sources/",
 
 } as const;

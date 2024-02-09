@@ -61,8 +61,12 @@ export const fsWalk = async <T>(
             if (e.isFile()) {
                 const r = await cb(cd, e.name);
                 if (collectResults) result.push(r);
+            } else if (
+                e.isDirectory() &&
+                cd.length < maxDepth
+            ) {
+                await aux([...cd, e.name]);
             }
-            else if (cd.length < maxDepth) await aux([...cd, e.name]);
         });
     };
 
@@ -128,4 +132,23 @@ export const isFile = async (path: string): Promise<boolean> => {
     } catch {
         return false;
     }
+};
+
+
+
+
+/**
+ * Get all filenames of given extension from given directory.
+ */
+export const getExtFilenames = async (
+    path: string,
+    ext: string,
+    opts?: { maxDepth?: number },
+): Promise<string[]> => {
+    const maxDepth = opts?.maxDepth ?? 0;
+    const filenames: string[] = [];
+    await fsWalk(path, async (_, name) => {
+        if (name.endsWith(ext)) filenames.push(name);
+    }, { maxDepth });
+    return filenames;
 };

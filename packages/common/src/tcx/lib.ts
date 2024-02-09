@@ -7,8 +7,12 @@ import { readFile } from "node:fs/promises";
 import { parseStringPromise } from "xml2js";
 import { isArray, isNumber, isString } from "@xcmats/js-toolbox/type";
 
-import { fsWalk } from "~common/lib/fs";
-import { isComplexRecord, type ComplexRecord, isPlainRecord } from "~common/lib/struct";
+import { getExtFilenames } from "~common/lib/fs";
+import {
+    isComplexRecord,
+    isPlainRecord,
+    type ComplexRecord,
+} from "~common/lib/struct";
 import { isValidDate } from "~common/lib/time";
 
 
@@ -17,13 +21,9 @@ import { isValidDate } from "~common/lib/time";
 /**
  * Get all tcx filenames from given directory.
  */
-export const getTcxFilenames = async (path: string): Promise<string[]> => {
-    const fitFilenames: string[] = [];
-    await fsWalk(path, async (_, name) => {
-        if (name.endsWith(".tcx")) fitFilenames.push(name);
-    }, { maxDepth: 0 });
-    return fitFilenames;
-};
+export const getTcxFilenames = async (
+    path: string,
+): Promise<string[]> => getExtFilenames(path, ".tcx");
 
 
 

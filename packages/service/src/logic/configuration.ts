@@ -5,6 +5,8 @@
  * @copyright Mat. 2024-present
  */
 
+import { timeUnit } from "@xcmats/js-toolbox/utils";
+
 import { System } from "~common/app/models/setting";
 
 
@@ -25,3 +27,11 @@ export type InitConfig = {
  * Main database file name.
  */
 export const DB_NAME = "main.sqlite";
+
+
+
+
+/**
+ * Default tile validity period.
+ */
+export const TILE_VALIDITY_PERIOD = 10 * timeUnit.minute;

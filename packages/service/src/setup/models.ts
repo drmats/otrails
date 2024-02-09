@@ -9,6 +9,7 @@ import { share } from "mem-box";
 
 import { useMemory } from "~service/logic/memory";
 import { recordKeys } from "~common/lib/struct";
+import mbtile, { schema as mbtileSchema } from "~service/models/mbtile";
 import setting, { schema as settingSchema } from "~service/models/setting";
 
 
@@ -17,15 +18,16 @@ import setting, { schema as settingSchema } from "~service/models/setting";
 /**
  * Application models configuration.
  */
-export default function configureModels (
+export default async function configureModels (
     opts?: { execSchemas?: boolean },
-): void {
+): Promise<void> {
 
     // database handle
     const { db, firstWorker, logger } = useMemory();
 
     // all schemas tree
     const schema = {
+        mbtile: mbtileSchema,
         setting: settingSchema,
     };
 
@@ -44,6 +46,7 @@ export default function configureModels (
 
     // all models tree
     const model = {
+        mbtile: await mbtile(db),
         setting: setting(db),
     };
 
@@ -63,6 +66,7 @@ export default function configureModels (
 declare global {
     interface Ctx {
         readonly model: {
+            readonly mbtile: Awaited<ReturnType<typeof mbtile>>;
             readonly setting: ReturnType<typeof setting>;
         };
     }

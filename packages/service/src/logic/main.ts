@@ -83,7 +83,7 @@ export const main = async (opts: {
     await configureDatabase();
 
     // set up data models
-    configureModels({ execSchemas: true });
+    await configureModels({ execSchemas: true });
 
     // set up CORS
     configureHeaders();

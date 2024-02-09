@@ -137,6 +137,16 @@ export const recordKeys = <Key extends ValidKeys, Value>(
 
 
 /**
+ * Properly type-casted standard `Object.values()` for typed records.
+ */
+export const recordValues = <Key extends ValidKeys, Value>(
+    record: { [K in Key]?: Value; },
+): Value[] => Object.values(record) as Value[];
+
+
+
+
+/**
  * Take the input `FreeFormRecord` and create modified output
  * according to passed `FreeFormRecipe`.
  *

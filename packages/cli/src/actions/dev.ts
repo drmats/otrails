@@ -71,7 +71,7 @@ export const startDevCli = async <A extends FreeFormRecord<unknown>>(
             struct: libStruct, tcx: libTcx, terminal: libTerminal,
             time: libTime, type: libType, uuid: libUuid, zip: libZip,
         },
-        sqlite: BetterSqlite3,
+        Sqlite: BetterSqlite3,
         turf,
         vars: ctx.vars,
     });
