@@ -69,6 +69,17 @@ export const tileJson: RequestHandler<
             return JSON.parse(`[${meta.center}]`) as number[];
         }, () => undefined);
 
+        // map version
+        const version = (() => {
+            if (isNumber(meta.version)) {
+                if (meta.version - Math.floor(meta.version) === 0)
+                    return `${meta.version}.0.0`;
+                else
+                    return `${meta.version}.0`;
+            }
+            return "1.0.0";
+        })();
+
         // where to find actual tiles?
         const tileGetPathSchema = substitute(ACTION.tileGet, {
             name, x: "{x}", y: "{y}", z: "{z}",
@@ -85,10 +96,7 @@ export const tileJson: RequestHandler<
             format: meta.format,
             bounds,
             center,
-            version:
-                isNumber(meta.version)
-                    ? `${meta.version}.0.0`
-                    : "1.0.0",
+            version,
             minzoom: meta.minzoom,
             maxzoom: meta.maxzoom,
             vector_layers:
