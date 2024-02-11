@@ -10,6 +10,7 @@ import { useMemory } from "~service/logic/memory";
 import { apiV1 } from "~service/setup/env";
 import { hello } from "~service/actions/hello";
 import { tileGet } from "~service/actions/tileGet";
+import { tileJson } from "~service/actions/tileJson";
 import { tileSources } from "~service/actions/tileSources";
 
 
@@ -38,6 +39,12 @@ export default function configureRoutes (): void {
         .get(
             `${apiV1}${ACTION.tileGet}`,
             tileGet,
+        )
+
+        // tile source schema
+        .get(
+            `${apiV1}${ACTION.tileJson}`,
+            tileJson,
         )
 
         // list of tile sources

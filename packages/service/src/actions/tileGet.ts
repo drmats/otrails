@@ -18,7 +18,7 @@ import { TILE_VALIDITY_PERIOD } from "~service/logic/configuration";
 
 
 /**
- * Get one tile by name and z-x-y coordinates.
+ * Get one tile by source name and z-x-y coordinates.
  */
 export const tileGet: RequestHandler<
     ParamsDictionary,

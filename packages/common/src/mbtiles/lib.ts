@@ -6,9 +6,17 @@
 import { join } from "node:path";
 import BetterSqlite3, { type Database } from "better-sqlite3";
 
-import type { FreeFormRecord, OrUndefined } from "~common/lib/type";
+import type {
+    ComplexValue,
+    FreeFormRecord,
+    OrUndefined,
+} from "~common/lib/type";
 import { getExtFilenames } from "~common/lib/fs";
-import { recordKeys, recordValues } from "~common/lib/struct";
+import {
+    recordKeys,
+    recordValues,
+    type ComplexRecord,
+} from "~common/lib/struct";
 import type { MBTile, MBTileCoords, MBTileMeta } from "~common/mbtiles/type";
 import { zxytms } from "~common/mbtiles/math";
 
@@ -52,6 +60,30 @@ export const metaInserter = (
         RETURNING *;
     `);
     return (meta) => inserter.get(meta) as MBTileMeta;
+};
+
+
+
+
+/**
+ * Metadata getter (all metadata in a single object).
+ */
+export const allMetaGetter = (
+    db: Database,
+): (() => ComplexRecord) => {
+    const getter = db.prepare(`
+        SELECT name, value
+        FROM metadata
+        ORDER BY name ASC;
+    `);
+    return () => {
+        const entries = getter.all() as { name: string; value: string }[];
+        return entries.reduce((acc, { name, value }) => {
+            let val: ComplexValue = value;
+            try { val = JSON.parse(value) as ComplexValue; } catch { /* no-op */ }
+            return { ...acc, [name]: val };
+        }, {});
+    };
 };
 
 
@@ -119,11 +151,13 @@ export const tileSourcesManager = async (path: string): Promise<{
     getNames: () => string[];
     get: (name: string) => Database;
     getTile: (name: string, coords: MBTileCoords) => Buffer;
+    getMeta: (name: string) => ComplexRecord;
     close: () => void;
 }> => {
     let names: FreeFormRecord<string> = {};
     let sources: FreeFormRecord<Database> = {};
     let tileGetters: FreeFormRecord<ReturnType<typeof tileGetter>> = {};
+    let metaGetters: FreeFormRecord<ReturnType<typeof allMetaGetter>> = {};
 
     // refresh map of [source name -> source path]
     const refresh = async () => {
@@ -161,11 +195,23 @@ export const tileSourcesManager = async (path: string): Promise<{
         return getTileFromSource(coords);
     };
 
+    // get metadata from source (throw if no source)
+    const getMeta = (name: string) => {
+        let getMetaFromSource = metaGetters[name];
+        if (typeof getMetaFromSource === "undefined") {
+            const source = get(name);
+            getMetaFromSource = allMetaGetter(source);
+            metaGetters[name] = getMetaFromSource;
+        }
+        return getMetaFromSource();
+    };
+
     // close all opened sources
     const close = () => {
         recordValues(sources).forEach((db) => { if (db.open) db.close(); });
         sources = {};
         tileGetters = {};
+        metaGetters = {};
     };
 
     // refresh source name -> path mapping
@@ -177,6 +223,7 @@ export const tileSourcesManager = async (path: string): Promise<{
         getNames,
         get,
         getTile,
+        getMeta,
         close,
     };
 };
