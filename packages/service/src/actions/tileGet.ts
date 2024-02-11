@@ -49,6 +49,11 @@ export const tileGet: RequestHandler<
         // try fetching tile from appropriate tilesource
         const data = model.mbtile.get(name, { z, x, y });
 
+        // try guessing if data is gzipped
+        const isCompressed =
+            data.length >= 2 &&
+            data[0] === 0x1f && data[1] === 0x8b;
+
         // all ok
         res
             .header({
@@ -57,6 +62,11 @@ export const tileGet: RequestHandler<
                 "expires": (
                     new Date(Date.now() + TILE_VALIDITY_PERIOD)
                 ).toUTCString(),
+                ...(
+                    isCompressed
+                        ? { "content-encoding": "gzip" }
+                        : {}
+                ),
             })
             .status(200)
             .send(data);
