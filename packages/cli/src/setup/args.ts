@@ -148,7 +148,7 @@ export default async function configureArgsParser (): Promise<void> {
         // tile baker
         .command(
             "bake-tiles",
-            "bake zxy mbtiles file",
+            "bake mbtiles file",
             emptyObject,
             bakeTiles,
         )

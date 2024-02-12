@@ -6,6 +6,8 @@
  */
 
 import { join } from "node:path";
+import zlib from "node:zlib";
+import { promisify } from "node:util";
 import BetterSqlite3 from "better-sqlite3";
 import { PromisePoolResult, map, promisePool } from "@xcmats/js-toolbox/async";
 import { isString } from "@xcmats/js-toolbox/type";
@@ -51,7 +53,7 @@ const DEFAULT_POOL_SIZE = 32;
 
 
 /**
- * Bake zxy mbtiles.
+ * Bake mbtiles.
  */
 export const bakeTiles: CliAction = async () => {
 
@@ -94,6 +96,7 @@ export const bakeTiles: CliAction = async () => {
             insertMeta({ name: "maxzoom", value: String(MAX_ZOOM) });
             insertMeta({ name: "generator", value: "otrails-cli" });
             insertMeta({ name: "format", value: "pbf" });
+            insertMeta({ name: "scheme", value: "tms" });
             insertMeta({
                 name: "json",
                 value: JSON.stringify({
@@ -112,6 +115,9 @@ export const bakeTiles: CliAction = async () => {
                     ],
                 }),
             });
+
+            // promisified gzip
+            const gzip = promisify(zlib.gzip);
 
             // mbtiles tile insert routine
             const insertTile = tileInserter(filedb);
@@ -154,16 +160,13 @@ export const bakeTiles: CliAction = async () => {
                             sql(mvtGetQuery), { z, x, y },
                         );
 
-                        // return merged layers
-                        return {
-                            tile: {
-                                z, x, y,
-                                data:
-                                    Buffer.concat(
-                                        tile.map(({ layer }) => layer),
-                                    ),
-                            },
-                        };
+                        // merge layers and compress
+                        const data = await gzip(
+                            Buffer.concat(tile.map(({ layer }) => layer)),
+                        );
+
+                        // return tile
+                        return { tile: { z, x, y, data } };
                     });
 
                     // process result
