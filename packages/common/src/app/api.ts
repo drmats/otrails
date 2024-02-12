@@ -14,6 +14,9 @@
 export const ACTION = {
 
     hello: "/",
+
+    static: "/static/",
+
     tileGet: "/tile/get/:name/:z/:x/:y/t.pbf",
     tileJson: "/tile/schema/:name.json",
     tileSources: "/tile/sources/",

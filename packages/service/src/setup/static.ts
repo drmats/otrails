@@ -7,7 +7,9 @@
 
 import express from "express";
 
+import { ACTION } from "~common/app/api";
 import { useMemory } from "~service/logic/memory";
+import { apiV1 } from "~service/setup/env";
 
 
 
@@ -18,12 +20,15 @@ import { useMemory } from "~service/logic/memory";
 export default function configureStatic (): void {
 
     // app objects
-    const { app, knownVars: { staticDir } } = useMemory();
+    const { app, firstWorker, knownVars: { staticDir }, logger } = useMemory();
+
+    if (firstWorker) logger.write("[static] ... ");
 
     // share static directory, no indexing, no dot-files
-    app.use("/static", express.static(staticDir, {
+    app.use(`${apiV1}${ACTION.static}`, express.static(staticDir, {
         dotfiles: "ignore",
         index: false,
     }));
 
+    if (firstWorker) logger.ok("OK");
 }
