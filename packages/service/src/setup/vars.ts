@@ -46,7 +46,7 @@ export default async function configureVariables (): Promise<void> {
                 : await readJSON(join(rootDir, VARS_DB_RELATIVE_PATH));
 
         // extract configuration variables
-        const { serviceDbDir, servicePort, tilesDir } = vars;
+        const { serviceDbDir, servicePort, staticDir, tilesDir } = vars;
 
         // check `serviceDbDir` variable validity
         if (!isString(serviceDbDir)) {
@@ -56,6 +56,11 @@ export default async function configureVariables (): Promise<void> {
         // check `servicePort` variable validity
         if (!isNumber(servicePort)) {
             throw new Error("Missing or malformed [servicePort] variable.");
+        }
+
+        // check `staticDir` variable validity
+        if (!isString(staticDir)) {
+            throw new Error("Missing or malformed [staticDir] variable.");
         }
 
         // check `tilesDir` variable validity
@@ -68,6 +73,7 @@ export default async function configureVariables (): Promise<void> {
             serviceDb: join(rootDir, serviceDbDir, DB_NAME),
             serviceDbDir: join(rootDir, serviceDbDir),
             servicePort,
+            staticDir: join(rootDir, staticDir),
             tilesDir: join(rootDir, tilesDir),
         };
 
@@ -94,6 +100,7 @@ declare global {
             serviceDb: string;
             serviceDbDir: string;
             servicePort: number;
+            staticDir: string;
             tilesDir: string;
         };
     }

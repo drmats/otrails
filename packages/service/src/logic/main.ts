@@ -27,6 +27,7 @@ import configureLogging from "~service/setup/logging";
 import configureModels from "~service/setup/models";
 import configureRedirects from "~service/setup/redirects";
 import configureRoutes from "~service/setup/routes";
+import configureStatic from "~service/setup/static";
 import configureTermination from "~service/setup/terminate";
 import configureVariables from "~service/setup/vars";
 
@@ -99,6 +100,9 @@ export const main = async (opts: {
 
     // routes configuration
     configureRoutes();
+
+    // static file sharing configuration
+    configureStatic();
 
     // catch-all route configuration
     configureCatchAll();

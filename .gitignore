@@ -2,6 +2,7 @@ data/exports/*
 data/garmin/*
 data/pg/pgdata
 data/service/*
+data/static/*
 data/tiles/*
 data/vars.json
 node_modules
