@@ -21,6 +21,7 @@
 
 * [OSM Liberty](https://github.com/maputnik/osm-liberty)
 * [OSM Liberty Topo](https://github.com/nst-guide/osm-liberty-topo)
+* [Natural Earth](https://github.com/klokantech/naturalearthtiles/tree/gh-pages/maps)
 
 <br />
 
