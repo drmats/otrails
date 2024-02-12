@@ -47,7 +47,7 @@ export const tileJson: RequestHandler<
         }
 
         // try fetching tile from appropriate tilesource
-        const meta = model.mbtile.getMeta(name);
+        const meta = model.mbtile.getAllMeta(name);
 
         // guess self origin
         // (read from vars - production/behind reverse proxy,
@@ -81,9 +81,14 @@ export const tileJson: RequestHandler<
         })();
 
         // where to find actual tiles?
-        const tileGetPathSchema = substitute(ACTION.tileGet, {
-            name, x: "{x}", y: "{y}", z: "{z}",
-        });
+        const tileGetPathSchema = substitute(
+            meta.format === "pbf"
+                ? ACTION.tileGetPbf
+                : meta.format === "webp"
+                    ? ACTION.tileGetWebp
+                    : ACTION.tileGetPng,
+            { name, x: "{x}", y: "{y}", z: "{z}" },
+        );
 
         // tilejson
         const schema = {

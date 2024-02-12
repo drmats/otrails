@@ -5,6 +5,7 @@
  * @copyright Mat. 2024-present
  */
 
+import { extname } from "node:path";
 import type { RequestHandler } from "express";
 import type { ParamsDictionary } from "express-serve-static-core";
 import { isNumber, isString } from "@xcmats/js-toolbox/type";
@@ -49,6 +50,15 @@ export const tileGet: RequestHandler<
         // try fetching tile from appropriate tilesource
         const data = model.mbtile.get(name, { z, x, y });
 
+        // obtain data format
+        const format = model.mbtile.getMeta(name, "format");
+
+        // check requested extension
+        if (extname(req.originalUrl) !== `.${format}`) {
+            errorStatus = 400;
+            throw new Error(HttpMessage.C400);
+        }
+
         // try guessing if data is gzipped
         const isCompressed =
             data.length >= 2 &&
@@ -57,7 +67,12 @@ export const tileGet: RequestHandler<
         // all ok
         res
             .header({
-                "content-type": "application/x-protobuf",
+                "content-type":
+                    format === "pbf"
+                        ? "application/x-protobuf"
+                        : format === "webp"
+                            ? "image/webp"
+                            : "image/png",
                 "cache-control": `public, max-age=${TILE_VALIDITY_PERIOD}`,
                 "expires": (
                     new Date(Date.now() + TILE_VALIDITY_PERIOD)

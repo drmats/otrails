@@ -35,9 +35,21 @@ export default function configureRoutes (): void {
             hello,
         )
 
-        // one tile
+        // one tile - pbf format
         .get(
-            `${apiV1}${ACTION.tileGet}`,
+            `${apiV1}${ACTION.tileGetPbf}`,
+            tileGet,
+        )
+
+        // one tile - webp format
+        .get(
+            `${apiV1}${ACTION.tileGetWebp}`,
+            tileGet,
+        )
+
+        // one tile - png format
+        .get(
+            `${apiV1}${ACTION.tileGetPng}`,
             tileGet,
         )
 

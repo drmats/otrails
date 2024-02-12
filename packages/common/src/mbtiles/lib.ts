@@ -66,6 +66,30 @@ export const metaInserter = (
 
 
 /**
+ * Meta getter (single entry).
+ *
+ * Accepts ZXY coords.
+ */
+export const metaGetter = (
+    db: Database,
+): ((name: string) => string | undefined) => {
+    const getter = db.prepare<{ name: string }>(`
+        SELECT value
+        FROM metadata
+        WHERE name = $name;
+    `);
+    return (name) => {
+        const meta = getter.get({
+            name,
+        }) as OrUndefined<{ value?: string }>;
+        return meta?.value;
+    };
+};
+
+
+
+
+/**
  * Metadata getter (all metadata in a single object).
  */
 export const allMetaGetter = (
@@ -151,13 +175,15 @@ export const tileSourcesManager = async (path: string): Promise<{
     getNames: () => string[];
     get: (name: string) => Database;
     getTile: (name: string, coords: MBTileCoords) => Buffer;
-    getMeta: (name: string) => ComplexRecord;
+    getMeta: (name: string, key: string) => string | undefined;
+    getAllMeta: (name: string) => ComplexRecord;
     close: () => void;
 }> => {
     let names: FreeFormRecord<string> = {};
     let sources: FreeFormRecord<Database> = {};
     let tileGetters: FreeFormRecord<ReturnType<typeof tileGetter>> = {};
-    let metaGetters: FreeFormRecord<ReturnType<typeof allMetaGetter>> = {};
+    let metaGetters: FreeFormRecord<ReturnType<typeof metaGetter>> = {};
+    let allMetaGetters: FreeFormRecord<ReturnType<typeof allMetaGetter>> = {};
 
     // refresh map of [source name -> source path]
     const refresh = async () => {
@@ -195,15 +221,26 @@ export const tileSourcesManager = async (path: string): Promise<{
         return getTileFromSource(coords);
     };
 
-    // get metadata from source (throw if no source)
-    const getMeta = (name: string) => {
+    // get single key of metadata from source (throw if no source)
+    const getMeta = (name: string, key: string) => {
         let getMetaFromSource = metaGetters[name];
         if (typeof getMetaFromSource === "undefined") {
             const source = get(name);
-            getMetaFromSource = allMetaGetter(source);
+            getMetaFromSource = metaGetter(source);
             metaGetters[name] = getMetaFromSource;
         }
-        return getMetaFromSource();
+        return getMetaFromSource(key);
+    };
+
+    // get all metadata from source (throw if no source)
+    const getAllMeta = (name: string) => {
+        let getAllMetaFromSource = allMetaGetters[name];
+        if (typeof getAllMetaFromSource === "undefined") {
+            const source = get(name);
+            getAllMetaFromSource = allMetaGetter(source);
+            allMetaGetters[name] = getAllMetaFromSource;
+        }
+        return getAllMetaFromSource();
     };
 
     // close all opened sources
@@ -212,6 +249,7 @@ export const tileSourcesManager = async (path: string): Promise<{
         sources = {};
         tileGetters = {};
         metaGetters = {};
+        allMetaGetters = {};
     };
 
     // refresh source name -> path mapping
@@ -224,6 +262,7 @@ export const tileSourcesManager = async (path: string): Promise<{
         get,
         getTile,
         getMeta,
+        getAllMeta,
         close,
     };
 };

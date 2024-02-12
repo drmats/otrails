@@ -61,6 +61,9 @@ export default async function setting (_db: Database) {
         getMeta: sources.getMeta,
 
         // ...
+        getAllMeta: sources.getAllMeta,
+
+        // ...
         closeAllSources: sources.close,
 
     } as const;
