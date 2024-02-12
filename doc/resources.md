@@ -7,6 +7,7 @@
 
 ## schemas
 
+* [Slippy Map Tilenames](https://wiki.openstreetmap.org/wiki/Slippy_map_tilenames)
 * [TileJSON](https://github.com/mapbox/tilejson-spec)
 * [Vector Tile Specification](https://github.com/mapbox/vector-tile-spec)
 * [Open vector tile schema](https://openmaptiles.org/schema/)
