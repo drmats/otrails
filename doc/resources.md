@@ -8,6 +8,7 @@
 ## schemas
 
 * [TileJSON](https://github.com/mapbox/tilejson-spec)
+* [Vector Tile Specification](https://github.com/mapbox/vector-tile-spec)
 * [Open vector tile schema](https://openmaptiles.org/schema/)
 * [MapLibre Style Spec](https://maplibre.org/maplibre-style-spec/)
 
