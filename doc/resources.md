@@ -30,6 +30,7 @@
 
 ## datasets
 
+* [OpenStreetMap Data Extracts](https://download.geofabrik.de/)
 * [Open Data Terrain Tiles](https://registry.opendata.aws/terrain-tiles/)
 * [Copernicus Digital Elevation Model](https://aws.amazon.com/marketplace/pp/prodview-yl3hc4awgb5pu)
 * [Crowdsourced Bathymetry](https://aws.amazon.com/marketplace/pp/prodview-ce3ckwt2ljfpe)
@@ -43,6 +44,16 @@
 
 * [Natural Earth Tiles](https://klokantech.github.io/naturalearthtiles/)
 * [Vector Tiles Sample](https://github.com/klokantech/vector-tiles-sample)
+
+<br />
+
+
+
+
+## fonts
+
+* [Open Map Tiles Fonts](https://github.com/kylebarron/openmaptiles-fonts)
+* [Open Font Glyphs for GL Styles](https://github.com/openmaptiles/fonts)
 
 <br />
 
