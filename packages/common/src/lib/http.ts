@@ -7,6 +7,7 @@
  */
 
 import http, {
+    type ClientRequest,
     type RequestOptions as HTTPRequestOptions,
     type IncomingMessage,
 } from "node:http";
@@ -38,6 +39,36 @@ export const parseContentLength = (cl?: string): number => {
 
 /**
  * Async HTTP(S) GET helper.
+ * Returns `{ request, response }` object.
+ */
+export async function httpGet (
+    url: string | URL,
+): Promise<{ request: ClientRequest; response: IncomingMessage }>;
+export async function httpGet (
+    url: string | URL,
+    options?: HTTPRequestOptions | HTTPSRequestOptions,
+): Promise<{ request: ClientRequest; response: IncomingMessage }>;
+export async function httpGet (
+    url: string | URL,
+    options?: HTTPRequestOptions | HTTPSRequestOptions,
+): Promise<{ request: ClientRequest; response: IncomingMessage }> {
+    const o = options ?? { "headers": { "accept": "*/*" } };
+    const mutex =
+        createMutex<{ request: ClientRequest; response: IncomingMessage }>();
+    const request: ClientRequest =
+        ((new URL(url)).protocol === "https:" ? https : http)
+            .get(url, o, (response) => mutex.resolve({ request, response }))
+            .on("timeout", mutex.reject)
+            .on("error", mutex.reject);
+    return mutex.lock();
+}
+
+
+
+
+/**
+ * Async HTTP(S) GET helper.
+ * Returns just `response`.
  */
 export async function get (
     url: string | URL,
@@ -50,14 +81,8 @@ export async function get (
     url: string | URL,
     options?: HTTPRequestOptions | HTTPSRequestOptions,
 ): Promise<IncomingMessage> {
-    const o = options ?? { "headers": { "accept": "*/*" } };
-    return new Promise(
-        (resolve, reject) =>
-            ((new URL(url)).protocol === "https:" ? https : http)
-                .get(url, o, resolve)
-                .on("timeout", reject)
-                .on("error", reject),
-    );
+    const { response } = await httpGet(url, options);
+    return response;
 }
 
 
@@ -107,7 +132,7 @@ export const getFile = async (
     options?: HTTPRequestOptions | HTTPSRequestOptions,
 ): Promise<boolean> => {
     const mutex = createMutex<boolean>();
-    const response = await get(url, options);
+    const { request, response } = await httpGet(url, options);
 
     // download
     if (response.statusCode === 200) {
@@ -115,20 +140,28 @@ export const getFile = async (
         response.pipe(fileStream);
         fileStream.on("finish", () => {
             fileStream.close(() => {
+                request.end();
                 mutex.resolve(true);
             });
         });
         return mutex.lock();
     }
 
+    let status = false;
+
     // handle redirect
-    if (
-        response.statusCode === 302 &&
-        isString(response.headers.location)
-    ) {
-        return getFile(response.headers.location, destination, options);
+    try {
+        if (
+            response.statusCode === 302 &&
+            isString(response.headers.location)
+        ) {
+            status = await getFile(
+                response.headers.location, destination, options,
+            );
+        }
+    } finally {
+        request.destroy();
     }
 
-    // failure
-    return false;
+    return status;
 };

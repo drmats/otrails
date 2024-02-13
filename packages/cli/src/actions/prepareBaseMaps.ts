@@ -60,9 +60,6 @@ export const prepareBaseMaps: CliAction = async () => {
 
         oknl("DONE");
 
-        // fix http::get()/getFile() - destroy/close request
-        setTimeout(() => process.exit(0), 500);
-
     } catch (e) {
         printError(e);
         process.exit(1);
