@@ -13,14 +13,16 @@
  */
 export const ACTION = {
 
-    hello: "/",
+    hello:          "/",
 
-    static: "/static/",
+    static:         "/static/",
 
-    tileGetPbf: "/tile/get/:name/:z/:x/:y/t.pbf",
-    tileGetPng: "/tile/get/:name/:z/:x/:y/t.png",
-    tileGetWebp: "/tile/get/:name/:z/:x/:y/t.webp",
-    tileJson: "/tile/schema/:name.json",
-    tileSources: "/tile/sources/",
+    mapStyle:       "/map/style.json",
+
+    tileGetPbf:     "/tile/get/:name/:z/:x/:y/t.pbf",
+    tileGetPng:     "/tile/get/:name/:z/:x/:y/t.png",
+    tileGetWebp:    "/tile/get/:name/:z/:x/:y/t.webp",
+    tileJson:       "/tile/schema/:name.json",
+    tileSources:    "/tile/sources/",
 
 } as const;

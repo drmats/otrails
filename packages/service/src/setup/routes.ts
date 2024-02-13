@@ -9,6 +9,7 @@ import { ACTION } from "~common/app/api";
 import { useMemory } from "~service/logic/memory";
 import { apiV1 } from "~service/setup/env";
 import { hello } from "~service/actions/hello";
+import { mapStyle } from "~service/actions/mapStyle";
 import { tileGet } from "~service/actions/tileGet";
 import { tileJson } from "~service/actions/tileJson";
 import { tileSources } from "~service/actions/tileSources";
@@ -33,6 +34,12 @@ export default function configureRoutes (): void {
         .get(
             `${apiV1}${ACTION.hello}`,
             hello,
+        )
+
+        // map style
+        .get(
+            `${apiV1}${ACTION.mapStyle}`,
+            mapStyle,
         )
 
         // one tile - pbf format
