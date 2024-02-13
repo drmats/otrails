@@ -32,6 +32,7 @@
 ## datasets
 
 * [OpenStreetMap Data Extracts](https://download.geofabrik.de/)
+* [Natural Earth Physical Vectors](https://www.naturalearthdata.com/downloads/10m-physical-vectors/)
 * [Open Data Terrain Tiles](https://registry.opendata.aws/terrain-tiles/)
 * [Copernicus Digital Elevation Model](https://aws.amazon.com/marketplace/pp/prodview-yl3hc4awgb5pu)
 * [Crowdsourced Bathymetry](https://aws.amazon.com/marketplace/pp/prodview-ce3ckwt2ljfpe)
