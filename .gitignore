@@ -9,3 +9,4 @@ node_modules
 packages/cli/dist
 packages/service/dist
 yarn-error.log
+.DS_Store
