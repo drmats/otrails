@@ -60,7 +60,7 @@ export const prepareBaseMaps: CliAction = async () => {
 
         oknl("DONE");
 
-        // fix http.get/getFile - destroy/close requrest
+        // fix http::get()/getFile() - destroy/close request
         setTimeout(() => process.exit(0), 500);
 
     } catch (e) {

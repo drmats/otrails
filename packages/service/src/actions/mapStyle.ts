@@ -177,8 +177,8 @@ const layers = [
             "line-color": "#b20",
             "line-width": [
                 "interpolate", ["linear"], ["zoom"],
-                4, 0.5,
-                8, 1,
+                4, 5,
+                8, 2,
                 12, 4,
             ],
         },
