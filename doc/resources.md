@@ -68,3 +68,4 @@
 * [QGIS](https://qgis.org/)
 * [GDAL](https://gdal.org/)
 * [maputnik](https://github.com/maplibre/maputnik)
+* [MapLibre style utilities](https://github.com/maplibre/maplibre-style-spec/)
