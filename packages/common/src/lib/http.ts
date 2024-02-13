@@ -13,7 +13,10 @@ import http, {
 import https, {
     type RequestOptions as HTTPSRequestOptions,
 } from "node:https";
+import { createWriteStream } from "node:fs";
+import { createMutex } from "@xcmats/js-toolbox/async";
 import { clamp } from "@xcmats/js-toolbox/math";
+import { isString } from "@xcmats/js-toolbox/type";
 
 
 
@@ -41,7 +44,7 @@ export async function get (
 ): Promise<IncomingMessage>;
 export async function get (
     url: string | URL,
-    options: HTTPRequestOptions | HTTPSRequestOptions,
+    options?: HTTPRequestOptions | HTTPSRequestOptions,
 ): Promise<IncomingMessage>;
 export async function get (
     url: string | URL,
@@ -91,3 +94,41 @@ export const collectData = async (
             .on("end", () => resolve(Buffer.concat(chunks)))
             .on("error", reject);
     });
+
+
+
+
+/**
+ * Download file (wget).
+ */
+export const getFile = async (
+    url: string | URL,
+    destination: string,
+    options?: HTTPRequestOptions | HTTPSRequestOptions,
+): Promise<boolean> => {
+    const mutex = createMutex<boolean>();
+    const response = await get(url, options);
+
+    // download
+    if (response.statusCode === 200) {
+        const fileStream = createWriteStream(destination);
+        response.pipe(fileStream);
+        fileStream.on("finish", () => {
+            fileStream.close(() => {
+                mutex.resolve(true);
+            });
+        });
+        return mutex.lock();
+    }
+
+    // handle redirect
+    if (
+        response.statusCode === 302 &&
+        isString(response.headers.location)
+    ) {
+        return getFile(response.headers.location, destination, options);
+    }
+
+    // failure
+    return false;
+};
