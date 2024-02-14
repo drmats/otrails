@@ -9,16 +9,17 @@ import yargs from "yargs/yargs";
 import { hideBin } from "yargs/helpers";
 
 import { emptyObject } from "~common/lib/type";
+import { bakeTiles } from "~cli/actions/bakeTiles";
 import { dbSize } from "~cli/actions/dbSize";
 import { devConsole } from "~cli/actions/dev";
 import { extractGarminData } from "~cli/actions/extractGarminData";
 import { fetchImages } from "~cli/actions/fetchImages";
 import { hello } from "~cli/actions/hello";
+import { prepareBaseMaps } from "~cli/actions/prepareBaseMaps";
 import { processFits } from "~cli/actions/processFits";
 import { processSummaries } from "~cli/actions/processSummaries";
 import { processTcxes } from "~cli/actions/processTcxes";
 import { setupViews } from "~cli/actions/setupViews";
-import { bakeTiles } from "~cli/actions/bakeTiles";
 
 
 
@@ -151,6 +152,14 @@ export default async function configureArgsParser (): Promise<void> {
             "bake mbtiles file",
             emptyObject,
             bakeTiles,
+        )
+
+        // base maps
+        .command(
+            "prepare-base-maps",
+            "prepare base maps",
+            emptyObject,
+            prepareBaseMaps,
         )
 
         .strict()

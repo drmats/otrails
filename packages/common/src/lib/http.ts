@@ -7,13 +7,17 @@
  */
 
 import http, {
+    type ClientRequest,
     type RequestOptions as HTTPRequestOptions,
     type IncomingMessage,
 } from "node:http";
 import https, {
     type RequestOptions as HTTPSRequestOptions,
 } from "node:https";
+import { createWriteStream } from "node:fs";
+import { createMutex } from "@xcmats/js-toolbox/async";
 import { clamp } from "@xcmats/js-toolbox/math";
+import { isString } from "@xcmats/js-toolbox/type";
 
 
 
@@ -35,26 +39,50 @@ export const parseContentLength = (cl?: string): number => {
 
 /**
  * Async HTTP(S) GET helper.
+ * Returns `{ request, response }` object.
+ */
+export async function httpGet (
+    url: string | URL,
+): Promise<{ request: ClientRequest; response: IncomingMessage }>;
+export async function httpGet (
+    url: string | URL,
+    options?: HTTPRequestOptions | HTTPSRequestOptions,
+): Promise<{ request: ClientRequest; response: IncomingMessage }>;
+export async function httpGet (
+    url: string | URL,
+    options?: HTTPRequestOptions | HTTPSRequestOptions,
+): Promise<{ request: ClientRequest; response: IncomingMessage }> {
+    const o = options ?? { "headers": { "accept": "*/*" } };
+    const mutex =
+        createMutex<{ request: ClientRequest; response: IncomingMessage }>();
+    const request: ClientRequest =
+        ((new URL(url)).protocol === "https:" ? https : http)
+            .get(url, o, (response) => mutex.resolve({ request, response }))
+            .on("timeout", mutex.reject)
+            .on("error", mutex.reject);
+    return mutex.lock();
+}
+
+
+
+
+/**
+ * Async HTTP(S) GET helper.
+ * Returns just `response`.
  */
 export async function get (
     url: string | URL,
 ): Promise<IncomingMessage>;
 export async function get (
     url: string | URL,
-    options: HTTPRequestOptions | HTTPSRequestOptions,
+    options?: HTTPRequestOptions | HTTPSRequestOptions,
 ): Promise<IncomingMessage>;
 export async function get (
     url: string | URL,
     options?: HTTPRequestOptions | HTTPSRequestOptions,
 ): Promise<IncomingMessage> {
-    const o = options ?? { "headers": { "accept": "*/*" } };
-    return new Promise(
-        (resolve, reject) =>
-            ((new URL(url)).protocol === "https:" ? https : http)
-                .get(url, o, resolve)
-                .on("timeout", reject)
-                .on("error", reject),
-    );
+    const { response } = await httpGet(url, options);
+    return response;
 }
 
 
@@ -91,3 +119,49 @@ export const collectData = async (
             .on("end", () => resolve(Buffer.concat(chunks)))
             .on("error", reject);
     });
+
+
+
+
+/**
+ * Download file (wget).
+ */
+export const getFile = async (
+    url: string | URL,
+    destination: string,
+    options?: HTTPRequestOptions | HTTPSRequestOptions,
+): Promise<boolean> => {
+    const mutex = createMutex<boolean>();
+    const { request, response } = await httpGet(url, options);
+
+    // download
+    if (response.statusCode === 200) {
+        const fileStream = createWriteStream(destination);
+        response.pipe(fileStream);
+        fileStream.on("finish", () => {
+            fileStream.close(() => {
+                request.end();
+                mutex.resolve(true);
+            });
+        });
+        return mutex.lock();
+    }
+
+    let status = false;
+
+    // handle redirect
+    try {
+        if (
+            response.statusCode === 302 &&
+            isString(response.headers.location)
+        ) {
+            status = await getFile(
+                response.headers.location, destination, options,
+            );
+        }
+    } finally {
+        request.destroy();
+    }
+
+    return status;
+};

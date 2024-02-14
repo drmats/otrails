@@ -1,3 +1,4 @@
+.DS_Store
 data/exports/*
 data/garmin/*
 data/pg/pgdata
@@ -9,4 +10,3 @@ node_modules
 packages/cli/dist
 packages/service/dist
 yarn-error.log
-.DS_Store
