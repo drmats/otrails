@@ -12,7 +12,7 @@ WITH
 -- requested zoom
 z (v) AS (VALUES ($<z>)),
 
--- requrested coordinate x
+-- requested coordinate x
 x (v) AS (VALUES ($<x>)),
 
 -- requested coordinate y
