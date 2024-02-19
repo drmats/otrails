@@ -1,4 +1,6 @@
-# otrails
+<img width="200" alt="Otrails logo" src="./doc/otrails.svg" />
+
+# Otrails
 
 Trails. Open.
 
