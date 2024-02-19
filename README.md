@@ -1,4 +1,6 @@
-# otrails
+<img width="200" alt="Maputnik logo" src="./doc/otrails.svg" />
+
+# Otrails
 
 Trails. Open.
 
