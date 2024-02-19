@@ -1,4 +1,4 @@
-<img width="200" alt="Maputnik logo" src="./doc/otrails.svg" />
+<img width="200" alt="Otrails logo" src="./doc/otrails.svg" />
 
 # Otrails
 
