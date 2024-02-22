@@ -1,8 +1,22 @@
-<img width="200" alt="Otrails logo" src="./doc/otrails.svg" />
-
 # Otrails
 
+<a href="https://github.com/drmats/otrails/">
+    <img
+        width="110"
+        alt="Otrails logo"
+        src="./doc/otrails.svg"
+        align="left"
+        hspace="10"
+    />
+</a>
+
 Trails. Open.
+
+Parse garmin data export files, download images, store geometries in PostGIS,
+compute occupied MVT tile coordinates, bake MVT tiles into MBTile format,
+serve multiple MBTile data sources, visualise with MapLibre and more.
+
+Hiking trails, cycling routes, running paths, multiple users - all at once.
 
 <br />
 
