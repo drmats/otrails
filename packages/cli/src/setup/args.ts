@@ -20,7 +20,7 @@ import { processFits } from "~cli/actions/processFits";
 import { processSummaries } from "~cli/actions/processSummaries";
 import { processTcxes } from "~cli/actions/processTcxes";
 import { setupViews } from "~cli/actions/setupViews";
-
+import { aggy } from "~cli/actions/aggy";
 
 
 
@@ -160,6 +160,14 @@ export default async function configureArgsParser (): Promise<void> {
             "prepare base maps",
             emptyObject,
             prepareBaseMaps,
+        )
+
+        // automator
+        .command(
+            "aggy",
+            "aggregate and automate",
+            emptyObject,
+            aggy,
         )
 
         .strict()
