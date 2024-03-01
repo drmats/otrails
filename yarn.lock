@@ -6733,10 +6733,10 @@ rechoir@^0.8.0:
   dependencies:
     resolve "^1.20.0"
 
-red-g@2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/red-g/-/red-g-2.0.1.tgz#2c620e94fc719bcf478be667f4256342a5a507e6"
-  integrity sha512-msRohDkgrHs7xFq3aCx0CzmOsBqbLGf/bf/jdyhfMdQZ2B4TAmPCVfG9b4s7jDsrM7IpSrsJXrMQS1zIHaHxyw==
+red-g@2.0.3:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/red-g/-/red-g-2.0.3.tgz#7563eec89f16d0b28c2f15f66de5113a034f32ea"
+  integrity sha512-UcAAB2MwUnW5GDfS0xitHkgDCXBAWdQzJ1c7gzu7LFpjZhaTE3xKbT8UBxeT/VvU2M30XLPc9PVxzSWqB1R4yQ==
   dependencies:
     "@xcmats/js-toolbox" ">=0.16.1 <0.20.0"
 

@@ -5,8 +5,7 @@
  * @copyright Mat. 2020-present
  */
 
-import type { Action } from "red-g";
-import { isWithPayload, sliceReducer } from "red-g";
+import { isWithPayload, sliceReducer, type Action } from "red-g";
 import { produce } from "immer";
 import { isObject, toBool } from "@xcmats/js-toolbox/type";
 
