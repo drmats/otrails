@@ -36,6 +36,7 @@ export const devConsole = (): Console => devEnv() ?
  */
 const devEnvLibs = async (): Promise<Record<string, unknown>> => ({
     async: await import("~common/lib/async"),
+    box: await import("@xcmats/js-toolbox"),
     dev: await import("~common/lib/dev"),
     ids: await import("~common/lib/ids"),
     routing: await import("~common/framework/routing"),
@@ -45,7 +46,6 @@ const devEnvLibs = async (): Promise<Record<string, unknown>> => ({
     struct: await import("~common/lib/struct"),
     time: await import("~common/lib/time"),
     timeDayjs: await import("~common/lib/dayjs"),
-    toolbox: await import("@xcmats/js-toolbox"),
     type: await import("~common/lib/type"),
 });
 

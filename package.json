@@ -50,21 +50,26 @@
     "resolutions": {
         "**/@types/node": "20.11.6",
         "**/@types/react-dom": "18.2.19",
-        "**/@types/react": "18.2.57",
+        "**/@types/react": "18.2.61",
         "**/@xcmats/js-toolbox": "0.16.4",
         "**/babel-plugin-module-resolver": "4.1.0",
         "**/fd-slicer": "1.1.0",
-        "**/rimraf": "3.0.2",
+        "**/memfs": "3.4.3",
         "**/typescript": "5.3.3",
         "**/webpack-dev-server": "4.15.1"
     },
 
     "scripts": {
 
+        "clean:all": "yarn clean:dist:all && yarn clean:modules:all",
+
         "clean:modules": "yarn clean:modules:all",
         "clean:modules:all": "yarn clean:modules:common && yarn clean:modules:cli && yarn clean:modules:service && yarn clean:modules:web && yarn clean:modules:root",
         "clean:modules:root": "rimraf node_modules",
         "clean:modules:common": "cd ./packages/common; yarn clean:modules",
+
+        "clean": "yarn clean:dist:all",
+        "clean:dist:all": "yarn clean:dist:cli && yarn clean:dist:service && yarn clean:dist:web",
 
         "vars": "cd ./packages/common; yarn vars",
 
