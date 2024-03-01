@@ -15,7 +15,7 @@
     ],
 
     "dependencies": {
-        "@xcmats/js-toolbox": "0.16.2",
+        "@xcmats/js-toolbox": "0.16.4",
         "better-sqlite3": "9.4.0",
         "chalk": "4.1.2",
         "dayjs": "1.11.10",
@@ -28,15 +28,15 @@
     "description": "Otrails - common library.",
 
     "devDependencies": {
-        "@babel/core": "7.23.7",
-        "@babel/eslint-parser": "7.23.3",
-        "@babel/preset-env": "7.23.8",
+        "@babel/core": "7.23.9",
+        "@babel/eslint-parser": "7.23.10",
+        "@babel/preset-env": "7.23.9",
         "@babel/preset-typescript": "7.23.3",
         "@types/better-sqlite3": "7.6.9",
         "@types/node": "20.11.6",
         "@types/xml2js": "0.4.14",
-        "@typescript-eslint/eslint-plugin": "6.19.1",
-        "@typescript-eslint/parser": "6.19.1",
+        "@typescript-eslint/eslint-plugin": "7.0.2",
+        "@typescript-eslint/parser": "7.0.2",
         "babel-plugin-module-resolver": "4.1.0",
         "eslint-import-resolver-alias": "1.1.2",
         "eslint-plugin-import": "2.29.1",

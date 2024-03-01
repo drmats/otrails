@@ -1,0 +1,45 @@
+/**
+ * Web reset css.
+ *
+ * @license BSD-2-Clause
+ * @copyright Mat. 2022-present
+ */
+
+@import url("fonts.css");
+
+
+
+
+html {
+    box-sizing: border-box !important;
+    font-family: "Roboto", sans-serif;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+}
+
+*, *::before, *::after {
+    box-sizing: inherit;
+}
+
+body {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+body main {
+    position: absolute !important;
+    width: 100% !important;
+    height: 100% !important;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number] {
+    appearance: textfield;
+    -moz-appearance: textfield;
+}

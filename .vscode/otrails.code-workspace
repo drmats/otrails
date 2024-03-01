@@ -5,6 +5,10 @@
             "path": "../packages/common"
         },
         {
+            "name": "web",
+            "path": "../packages/web"
+        },
+        {
             "name": "cli",
             "path": "../packages/cli"
         },

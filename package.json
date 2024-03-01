@@ -49,28 +49,31 @@
 
     "resolutions": {
         "**/@types/node": "20.11.6",
-        "**/@xcmats/js-toolbox": "0.16.2",
+        "**/@types/react-dom": "18.2.19",
+        "**/@types/react": "18.2.57",
+        "**/@xcmats/js-toolbox": "0.16.4",
         "**/babel-plugin-module-resolver": "4.1.0",
         "**/fd-slicer": "1.1.0",
         "**/rimraf": "3.0.2",
-        "**/typescript": "5.3.3"
+        "**/typescript": "5.3.3",
+        "**/webpack-dev-server": "4.15.1"
     },
 
     "scripts": {
 
         "clean:modules": "yarn clean:modules:all",
-        "clean:modules:all": "yarn clean:modules:common && yarn clean:modules:cli && yarn clean:modules:service && yarn clean:modules:root",
+        "clean:modules:all": "yarn clean:modules:common && yarn clean:modules:cli && yarn clean:modules:service && yarn clean:modules:web && yarn clean:modules:root",
         "clean:modules:root": "rimraf node_modules",
         "clean:modules:common": "cd ./packages/common; yarn clean:modules",
 
         "vars": "cd ./packages/common; yarn vars",
 
         "test": "yarn test:all",
-        "test:all": "yarn test:common && yarn test:cli && yarn test:service",
+        "test:all": "yarn test:common && yarn test:cli && yarn test:service && yarn test:web",
         "test:common": "cd ./packages/common; yarn test",
 
         "build": "yarn build:all",
-        "build:all": "yarn test:common && yarn build:cli",
+        "build:all": "yarn test:common && yarn build:cli && yarn build:service && yarn build:web",
 
         "clean:modules:cli": "cd ./packages/cli; yarn clean:modules",
         "clean:cli": "yarn clean:dist:cli",
@@ -88,6 +91,14 @@
         "start:service:dev": "cross-env-shell OTRAILS_ROOT=$(pwd) \"cd ./packages/service; yarn dev\"",
         "build:service": "cd ./packages/service; yarn build",
         "start:service": "cross-env-shell OTRAILS_ROOT=$(pwd) \"cd ./packages/service; yarn start\"",
+
+        "clean:modules:web": "cd ./packages/web; yarn clean:modules",
+        "clean:web": "yarn clean:dist:web",
+        "clean:dist:web": "cd ./packages/web; yarn clean",
+        "test:web": "cd ./packages/web; yarn test",
+        "start:web:dev": "cd ./packages/web; yarn dev",
+        "build:web": "cd ./packages/web; yarn build",
+        "start:web": "cd ./packages/web; yarn start",
 
         "postinstall": "patch-package"
 
