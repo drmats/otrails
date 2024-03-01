@@ -6,11 +6,6 @@
  */
 
 import type { ThunkType } from "~web/store/types";
-import {
-    detectClientThemeLanguage,
-    readThemePreference,
-    syncTheme,
-} from "~web/layout/thunks";
 import { inIframe } from "~web/layout/lib";
 
 
@@ -20,7 +15,7 @@ import { inIframe } from "~web/layout/lib";
  * Application init.
  */
 export const initialize = (): ThunkType =>
-    async (dispatch, _getState, { act, logger }) => {
+    async (_d, _getState, { act, logger, tnk }) => {
         // go...
         act.app.INITIALIZING();
 
@@ -28,11 +23,11 @@ export const initialize = (): ThunkType =>
         if (inIframe()) act.layout.SET_IN_IFRAME(true);
 
         // take care of color theme
-        await dispatch(readThemePreference());
-        await dispatch(syncTheme());
+        await tnk.layout.readThemePreference();
+        await tnk.layout.syncTheme();
 
         // take care of language
-        await dispatch(detectClientThemeLanguage());
+        await tnk.layout.detectClientThemeLanguage();
 
         // all done
         act.app.READY();
