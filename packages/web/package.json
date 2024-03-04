@@ -1,0 +1,127 @@
+{
+
+    "author": "Mat.",
+
+    "bugs": {
+        "url": "https://github.com/drmats/otrails/issues"
+    },
+
+    "contributors": [
+        {
+            "name": "Mat.",
+            "email": "xcmats@protonmail.com",
+            "url": "https://twitter.com/xcmats/"
+        }
+    ],
+
+    "dependencies": {
+        "@emotion/react": "11.11.4",
+        "@emotion/styled": "11.11.0",
+        "@mui/icons-material": "5.15.11",
+        "@mui/material": "5.15.11",
+        "@mui/system": "5.15.11",
+        "@redux-devtools/extension": "3.3.0",
+        "@xcmats/js-toolbox": "0.16.4",
+        "dayjs": "1.11.10",
+        "i18next": "23.10.0",
+        "immer": "10.0.3",
+        "localforage": "1.10.0",
+        "lodash.throttle": "4.1.1",
+        "maplibre-gl": "4.1.0",
+        "mem-box": "1.1.0",
+        "prop-types": "15.8.1",
+        "react-dom": "18.2.0",
+        "react-i18next": "14.0.5",
+        "react-map-gl": "7.1.7",
+        "react-redux": "9.1.0",
+        "react": "18.2.0",
+        "red-g": "2.0.3",
+        "redux-thunk": "3.1.0",
+        "redux": "5.0.1",
+        "reselect": "5.1.0"
+    },
+
+    "description": "Otrails - web.",
+
+    "devDependencies": {
+        "@babel/core": "7.24.0",
+        "@babel/eslint-parser": "7.23.10",
+        "@babel/preset-env": "7.24.0",
+        "@babel/preset-react": "7.23.3",
+        "@babel/preset-typescript": "7.23.3",
+        "@types/lodash.throttle": "4.1.9",
+        "@types/prop-types": "15.7.11",
+        "@types/react-dom": "18.2.19",
+        "@types/react": "18.2.61",
+        "@typescript-eslint/eslint-plugin": "7.1.0",
+        "@typescript-eslint/parser": "7.1.0",
+        "babel-loader": "9.1.3",
+        "babel-plugin-module-resolver": "4.1.0",
+        "css-loader": "6.10.0",
+        "eslint-import-resolver-alias": "1.1.2",
+        "eslint-plugin-import": "2.29.1",
+        "eslint-plugin-react-hooks": "4.6.0",
+        "eslint-plugin-react": "7.33.2",
+        "eslint-webpack-plugin": "4.0.1",
+        "eslint": "8.57.0",
+        "html-webpack-plugin": "5.6.0",
+        "rimraf": "3.0.2",
+        "style-loader": "3.3.4",
+        "terser-webpack-plugin": "5.3.10",
+        "typescript": "5.3.3",
+        "webpack-cli": "5.1.4",
+        "webpack-dev-server": "4.15.1",
+        "webpack": "5.90.3"
+    },
+
+    "engines": {
+        "node": ">=20.0.0",
+        "npm": ">=10.0.0",
+        "yarn": ">=1.22.19 <2.0.0"
+    },
+
+    "homepage": "https://github.com/drmats/otrails",
+
+    "keywords": [
+        "maps",
+        "web",
+        "frontend"
+    ],
+
+    "license": "BSD-2-Clause",
+
+    "name": "@xcmats/otrails-frontend",
+
+    "private": true,
+
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/drmats/otrails.git"
+    },
+
+    "scripts": {
+
+        "clean:modules": "rimraf node_modules",
+        "clean": "rimraf ./dist",
+
+        "vars": "cd ../common; yarn vars",
+
+        "test": "yarn lint",
+        "lint": "echo \"Linting and typechecking...\"; eslint ./src/ --ext .ts,.tsx && yarn type-check",
+        "type-check": "tsc --noEmit",
+
+        "dev": "webpack serve --config=webpack.config.dev.js --progress",
+        "start": "cd dist; node ../../common/scripts/http.server.js 8000",
+
+        "build": "yarn test && webpack --progress --config=webpack.config.prod.js && yarn build:prepare",
+        "build:prepare": "node ../common/scripts/prepare-frontend.js"
+
+    },
+
+    "sideEffects": false,
+
+    "type": "commonjs",
+
+    "version": "0.0.1"
+
+}

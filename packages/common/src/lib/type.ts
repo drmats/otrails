@@ -205,8 +205,8 @@ export type FreeFormRecipe<FFR> =
 /**
  * Make all properties of T and it's descendants optional.
  */
-export type RecursivePartial<T> = T extends Record<never, never> ? {
-    [P in keyof T]?: RecursivePartial<T[P]>;
+export type DeepPartial<T> = T extends Record<never, never> ? {
+    [P in keyof T]?: DeepPartial<T[P]>;
 } : Partial<T>;
 
 

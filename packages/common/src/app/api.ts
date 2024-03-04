@@ -26,3 +26,17 @@ export const ACTION = {
     tileSources:    "/tile/sources/",
 
 } as const;
+
+
+
+
+/**
+ * Web routes.
+ */
+export const SCREEN = {
+
+    landing:                   "/",
+
+    notFound:                  "/404/",
+
+} as const;

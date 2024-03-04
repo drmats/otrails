@@ -9,4 +9,5 @@ data/vars.json
 node_modules
 packages/cli/dist
 packages/service/dist
+packages/web/dist
 yarn-error.log
