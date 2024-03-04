@@ -106,10 +106,15 @@ const webpackAsyncConfig = async () => {
                     test: /\.(js|ts|jsx|tsx)$/,
                     loader: "babel-loader",
                     exclude: [
+                        /node_modules\/maplibre-gl/,
                         /node_modules\/react-dom/,
                         /node_modules\/react-redux/,
                     ],
                     sideEffects: false,
+                },
+                {
+                    test: /\.(css)$/i,
+                    use: ["style-loader", "css-loader"],
                 },
             ],
         },
