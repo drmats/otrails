@@ -28,6 +28,7 @@ export default {
     "Landing": {
         "hi": "Hello!",
         "landing_title": "trails, open",
+        "open_map": "Open map",
     },
 
 };

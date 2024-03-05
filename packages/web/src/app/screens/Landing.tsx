@@ -8,10 +8,13 @@
 import type { FC } from "react";
 import { useTranslation } from "react-i18next";
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 
+import { useSpaNavigation } from "~web/router/hooks";
 import { useDocumentTitle, useHeight, useStyles } from "~web/layout/hooks";
+import { SCREEN } from "~common/app/api";
 import { commonStyles, outerStyles } from "~web/layout/styles";
 import { sxStyles } from "~web/common/utils";
 import Centerer from "~web/layout/components/Centerer";
@@ -37,6 +40,7 @@ const createStyles = (height: number) => sxStyles({
  * Landing screen.
  */
 const LandingScreen: FC = () => {
+    const navigate = useSpaNavigation();
     const { t } = useTranslation();
     const height = useHeight();
     const sx = useStyles(createStyles, height);
@@ -68,6 +72,22 @@ const LandingScreen: FC = () => {
                         <Grid item><LanguageSwitcher /></Grid>
                         <Grid item><ThemeSwitcher /></Grid>
                     </Grid>
+                </MobilePaper>
+
+                <MobilePaper sx={sx.surface}>
+                    <Centerer>
+                        <Button
+                            variant="contained"
+                            color="secondary"
+                            size="large"
+                            onClick={() => navigate.to(
+                                SCREEN.map,
+                                { resetHash: true },
+                            )}
+                        >
+                            { t("Landing:open_map") }
+                        </Button>
+                    </Centerer>
                 </MobilePaper>
             </Box>
         </Container>

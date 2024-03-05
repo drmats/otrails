@@ -28,6 +28,7 @@ export default {
     "Landing": {
         "hi": "Cześć!",
         "landing_title": "szlaki, otwarte",
+        "open_map": "Otwórz mapę",
     },
 
 };

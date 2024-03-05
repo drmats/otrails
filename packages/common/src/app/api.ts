@@ -35,8 +35,10 @@ export const ACTION = {
  */
 export const SCREEN = {
 
-    landing:                   "/",
+    landing:    "/",
 
-    notFound:                  "/404/",
+    map:        "/map/",
+
+    notFound:   "/404/",
 
 } as const;
