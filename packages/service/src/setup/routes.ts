@@ -10,9 +10,11 @@ import { useMemory } from "~service/logic/memory";
 import { apiV1 } from "~service/setup/env";
 import { hello } from "~service/actions/hello";
 import { mapStyle } from "~service/actions/mapStyle";
+import { networkProxy } from "~service/actions/networkProxy";
 import { tileGet } from "~service/actions/tileGet";
 import { tileJson } from "~service/actions/tileJson";
 import { tileSources } from "~service/actions/tileSources";
+import { trackStyle } from "~service/actions/trackStyle";
 
 
 
@@ -40,6 +42,18 @@ export default function configureRoutes (): void {
         .get(
             `${apiV1}${ACTION.mapStyle}`,
             mapStyle,
+        )
+
+        // network proxy
+        .post(
+            `${apiV1}${ACTION.networkProxy}`,
+            networkProxy,
+        )
+
+        // one tile - jpg format
+        .get(
+            `${apiV1}${ACTION.tileGetJpg}`,
+            tileGet,
         )
 
         // one tile - pbf format
@@ -70,6 +84,12 @@ export default function configureRoutes (): void {
         .get(
             `${apiV1}${ACTION.tileSources}`,
             tileSources,
+        )
+
+        // map style - tracks only
+        .get(
+            `${apiV1}${ACTION.trackStyle}`,
+            trackStyle,
         );
 
     if (firstWorker) {

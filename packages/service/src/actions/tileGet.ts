@@ -72,7 +72,9 @@ export const tileGet: RequestHandler<
                         ? "application/x-protobuf"
                         : format === "webp"
                             ? "image/webp"
-                            : "image/png",
+                            : format === "jpg" || format === "jpeg"
+                                ? "image/jpeg"
+                                : "image/png",
                 "cache-control": `public, max-age=${TILE_VALIDITY_PERIOD}`,
                 "expires": (
                     new Date(Date.now() + TILE_VALIDITY_PERIOD)

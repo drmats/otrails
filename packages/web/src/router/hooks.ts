@@ -14,7 +14,6 @@ import type { ComplexRecord, PlainRecord } from "~common/lib/struct";
 import { stringifyQuery, substitute } from "~common/framework/routing";
 import type { StateManagement } from "~web/common/types";
 import { appMemory } from "~web/root/memory";
-import { useThunkDispatch } from "~web/store/hooks";
 import {
     selectSpaCanGoBack,
     selectSpaHash,
@@ -23,14 +22,14 @@ import {
     selectSpaRouteCache,
     selectSpaRouteState,
 } from "~web/router/selectors";
-import {
-    mergeBrowserState,
-    pushSpaHash,
-    pushSpaRoute,
-    replaceBrowserState,
-    replaceSpaHash,
-    replaceSpaRoute,
-} from "~web/router/thunks";
+
+
+
+
+/**
+ * ...
+ */
+const { tnk } = appMemory();
 
 
 
@@ -56,114 +55,114 @@ const augment = (
 /**
  * SPA router - hook interface for navigation.
  */
-export const useSpaNavigation = () => {
-    const dispatch = useThunkDispatch();
+export const useSpaNavigation = () => useMemo(() => ({
+    back: history.back.bind(history),
 
-    return useMemo(() => ({
-        back: history.back.bind(history),
+    forward: history.forward.bind(history),
 
-        forward: history.forward.bind(history),
+    go: history.go.bind(history),
 
-        go: history.go.bind(history),
-
-        to: (
-            route: string,
-            opts?: {
-                resetQuery?: boolean;
-                resetHash?: boolean;
-                query?: PlainRecord;
-                hash?: string;
-                state?: ComplexRecord;
-                params?: Partial<Record<string, string>>;
-            },
-        ) => {
-            const newState = augment(opts?.state, { inc: true });
-            void dispatch(pushSpaRoute(
-                substitute(route, opts?.params), newState,
-            ));
-            if (toBool(opts?.resetQuery) || toBool(opts?.resetHash))
-                void dispatch(replaceSpaHash("", newState));
-            else if (opts?.query)
-                void dispatch(replaceSpaHash(stringifyQuery(opts.query), newState));
-            else if (opts?.hash)
-                void dispatch(replaceSpaHash(opts.hash, newState));
+    to: (
+        route: string,
+        opts?: {
+            resetQuery?: boolean;
+            resetHash?: boolean;
+            query?: PlainRecord;
+            hash?: string;
+            state?: ComplexRecord;
+            params?: Partial<Record<string, string>>;
         },
+    ) => {
+        const newState = augment(opts?.state, { inc: true });
+        void tnk.router.pushSpaRoute(
+            substitute(route, opts?.params), newState,
+        );
+        if (toBool(opts?.resetQuery) || toBool(opts?.resetHash))
+            void tnk.router.replaceSpaHash("", newState);
+        else if (opts?.query)
+            void tnk.router.replaceSpaHash(
+                stringifyQuery(opts.query), newState,
+            );
+        else if (opts?.hash)
+            void tnk.router.replaceSpaHash(opts.hash, newState);
+    },
 
-        replace: (
-            route: string,
-            opts?: {
-                resetQuery?: boolean;
-                resetHash?: boolean;
-                query?: PlainRecord;
-                hash?: string;
-                state?: ComplexRecord;
-                params?: Partial<Record<string, string>>;
-            },
-        ) => {
-            const newState = augment(opts?.state);
-            void dispatch(replaceSpaRoute(
-                substitute(route, opts?.params), newState,
-            ));
-            if (toBool(opts?.resetQuery) || toBool(opts?.resetHash))
-                void dispatch(replaceSpaHash("", newState));
-            else if (opts?.query)
-                void dispatch(replaceSpaHash(stringifyQuery(opts.query), newState));
-            else if (opts?.hash)
-                void dispatch(replaceSpaHash(opts.hash, newState));
+    replace: (
+        route: string,
+        opts?: {
+            resetQuery?: boolean;
+            resetHash?: boolean;
+            query?: PlainRecord;
+            hash?: string;
+            state?: ComplexRecord;
+            params?: Partial<Record<string, string>>;
         },
+    ) => {
+        const newState = augment(opts?.state);
+        void tnk.router.replaceSpaRoute(
+            substitute(route, opts?.params), newState,
+        );
+        if (toBool(opts?.resetQuery) || toBool(opts?.resetHash))
+            void tnk.router.replaceSpaHash("", newState);
+        else if (opts?.query)
+            void tnk.router.replaceSpaHash(
+                stringifyQuery(opts.query), newState,
+            );
+        else if (opts?.hash)
+            void tnk.router.replaceSpaHash(opts.hash, newState);
+    },
 
-        replaceState: (opts?: { state?: ComplexRecord; cache?: boolean }) => {
-            void dispatch(replaceBrowserState(
-                augment(opts?.state), { cache: opts?.cache },
-            ));
-        },
+    replaceState: (opts?: { state?: ComplexRecord; cache?: boolean }) => {
+        void tnk.router.replaceBrowserState(
+            augment(opts?.state), { cache: opts?.cache },
+        );
+    },
 
-        mergeState: (opts: { state: ComplexRecord; cache?: boolean }) => {
-            void dispatch(mergeBrowserState(
-                augment(opts.state), { cache: opts.cache },
-            ));
-        },
+    mergeState: (opts: { state: ComplexRecord; cache?: boolean }) => {
+        void tnk.router.mergeBrowserState(
+            augment(opts.state), { cache: opts.cache },
+        );
+    },
 
-        pushQuery: (
-            query: PlainRecord,
-            opts?: { state?: ComplexRecord },
-        ) => {
-            const newState = augment(opts?.state, { inc: true });
-            void dispatch(pushSpaHash(stringifyQuery(query), newState));
-        },
+    pushQuery: (
+        query: PlainRecord,
+        opts?: { state?: ComplexRecord },
+    ) => {
+        const newState = augment(opts?.state, { inc: true });
+        void tnk.router.pushSpaHash(stringifyQuery(query), newState);
+    },
 
-        replaceQuery: (
-            query: PlainRecord,
-            opts?: { state?: ComplexRecord },
-        ) => {
-            const newState = augment(opts?.state);
-            void dispatch(replaceSpaHash(stringifyQuery(query), newState));
-        },
+    replaceQuery: (
+        query: PlainRecord,
+        opts?: { state?: ComplexRecord },
+    ) => {
+        const newState = augment(opts?.state);
+        void tnk.router.replaceSpaHash(stringifyQuery(query), newState);
+    },
 
-        resetQuery: () => void dispatch(replaceSpaHash("")),
+    resetQuery: () => void tnk.router.replaceSpaHash(""),
 
-        pushHash: (
-            hash: string,
-            opts?: { state?: ComplexRecord },
-        ) => {
-            const newState = augment(opts?.state, { inc: true });
-            void dispatch(pushSpaHash(hash, newState));
-        },
+    pushHash: (
+        hash: string,
+        opts?: { state?: ComplexRecord },
+    ) => {
+        const newState = augment(opts?.state, { inc: true });
+        void tnk.router.pushSpaHash(hash, newState);
+    },
 
-        replaceHash: (
-            hash: string,
-            opts?: { state?: ComplexRecord },
-        ) => {
-            const newState = augment(opts?.state);
-            void dispatch(replaceSpaHash(hash, newState));
-        },
+    replaceHash: (
+        hash: string,
+        opts?: { state?: ComplexRecord },
+    ) => {
+        const newState = augment(opts?.state);
+        void tnk.router.replaceSpaHash(hash, newState);
+    },
 
-        resetHash: () => void dispatch(replaceSpaHash("")),
+    resetHash: () => void tnk.router.replaceSpaHash(""),
 
-        historyLength: () => history.length,
+    historyLength: () => history.length,
 
-    }), []);
-};
+}), []);
 
 
 

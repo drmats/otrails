@@ -11,6 +11,10 @@
  */
 export default {
 
+    "BasicMap": {
+        "title": "map",
+    },
+
     "Common": {
         "language_en": "English",
         "language_pl": "Polski",
@@ -28,6 +32,11 @@ export default {
     "Landing": {
         "hi": "Hello!",
         "landing_title": "trails, open",
+        "open_map": "Open map",
+    },
+
+    "TileSourceSelect": {
+        "label": "Map type",
     },
 
 };

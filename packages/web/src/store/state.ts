@@ -29,6 +29,11 @@ export const overrides: DeepPartial<RootState> = {
         themeLanguage: undefined,
     },
 
+    map: {
+        ready: false,
+        tileSourceIndex: 0,
+    },
+
     network: {
         connections: 0,
     },

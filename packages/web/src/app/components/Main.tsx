@@ -24,6 +24,7 @@ import ErrorScreen from "~web/layout/screens/Error";
 
 const LandingScreen = lazy(() => import("~web/app/screens/Landing"));
 const Layout = lazy(() => import("~web/app/components/Layout"));
+const BasicMap = lazy(() => import("~web/map/screens/BasicMap"));
 
 
 
@@ -84,6 +85,11 @@ export const App: FC = () => {
                         <LandingScreen />
                     </Layout>
                 </HeroBack>
+            ),
+            [SCREEN.map]: () => (
+                <Layout showControls={false}>
+                    <BasicMap />
+                </Layout>
             ),
         };
     }, []);

@@ -19,11 +19,16 @@ export const ACTION = {
 
     mapStyle:       "/map/style.json",
 
+    networkProxy:   "/network/proxy/",
+
+    tileGetJpg:     "/tile/get/:name/:z/:x/:y/t.jpg",
     tileGetPbf:     "/tile/get/:name/:z/:x/:y/t.pbf",
     tileGetPng:     "/tile/get/:name/:z/:x/:y/t.png",
     tileGetWebp:    "/tile/get/:name/:z/:x/:y/t.webp",
     tileJson:       "/tile/schema/:name.json",
     tileSources:    "/tile/sources/",
+
+    trackStyle:     "/map/tracks.json",
 
 } as const;
 
@@ -35,8 +40,10 @@ export const ACTION = {
  */
 export const SCREEN = {
 
-    landing:                   "/",
+    landing:    "/",
 
-    notFound:                  "/404/",
+    map:        "/map/",
+
+    notFound:   "/404/",
 
 } as const;
