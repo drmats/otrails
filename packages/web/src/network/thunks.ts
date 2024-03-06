@@ -6,6 +6,8 @@
 import { isObject } from "@xcmats/js-toolbox/type";
 
 import type { ThunkType } from "~web/store/types";
+import type { ComplexRecord } from "~common/lib/struct";
+import { ACTION } from "~common/app/api";
 import { JSON_FETCH_HEADERS } from "~web/network/constants";
 import { selectBackendLocation } from "~web/network/selectors";
 import { selectThemeLanguage } from "~web/layout/selectors";
@@ -87,4 +89,20 @@ export const jsonRequest = (
             if (response.ok) return {};
             else throw new Error(response.statusText);
         }
+    };
+
+
+
+
+/**
+ * CORS proxy request.
+ */
+export const proxiedRequest = (
+    opts: { url: string },
+): ThunkType<Promise<ComplexRecord>> =>
+    async (dispatch) => {
+        return await dispatch(jsonRequest(
+            ACTION.networkProxy,
+            { method: "POST", body: opts },
+        )) as ComplexRecord;
     };

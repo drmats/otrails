@@ -61,6 +61,7 @@ export const TileSourceSelect: FC = () => {
                 label={t("TileSourceSelect:label")}
                 value={String(tileSourceIndex)}
                 onChange={handleChange}
+                size="small"
             >
                 { tileSources.map((ts, i) => (
                     <MenuItem key={`${ts.label}-${i}`} value={i}>

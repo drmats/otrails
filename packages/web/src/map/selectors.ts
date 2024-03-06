@@ -22,17 +22,20 @@ export const selectMapReady = (s: RootState) => s.map.ready;
 
 export const selectTileSourceIndex = (s: RootState) => s.map.tileSourceIndex;
 
+export const selectRawTileSource = createSelector(
+    [selectTileSourceIndex],
+    (tileSourceIndex) => tileSources[tileSourceIndex],
+);
+
 export const selectTileSource = createSelector(
-    [selectTileSourceIndex, selectBackendLocation],
-    (tileSourceIndex, backendLocation) => {
-        const rawTileSource = tileSources[tileSourceIndex];
-        return rawTileSource.url.startsWith("http")
+    [selectRawTileSource, selectBackendLocation],
+    (rawTileSource, backendLocation) =>
+        rawTileSource.url.startsWith("http")
             ? rawTileSource
             : {
                 ...rawTileSource,
                 url: `${backendLocation}${rawTileSource.url}`,
-            };
-    },
+            },
 );
 
 export const selectViewport = (s: RootState) => s.map.viewport;

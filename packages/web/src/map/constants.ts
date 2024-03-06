@@ -7,6 +7,7 @@
 
 import type { TileSource } from "~web/map/types";
 import { ThemeVariant } from "~common/framework/theme";
+import { ACTION } from "~common/app/api";
 
 
 
@@ -16,8 +17,8 @@ import { ThemeVariant } from "~common/framework/theme";
  */
 export const tileSources: TileSource[] = [
     {
-        label: "Otrails main",
-        url: "/map/style.json",
+        label: "Otrails map",
+        url: ACTION.mapStyle,
         themeVariant: ThemeVariant.LIGHT,
     },
     {

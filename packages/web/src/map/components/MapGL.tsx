@@ -9,20 +9,24 @@ import {
     type FC,
     useCallback,
     useEffect,
+    useMemo,
     useRef,
+    useState,
 } from "react";
 import { useSelector } from "react-redux";
-import type { MapLibreEvent } from "maplibre-gl";
+import type { MapLibreEvent, StyleSpecification } from "maplibre-gl";
 import ReactMapGL, {
     type MapRef,
     type ViewStateChangeEvent,
 } from "react-map-gl/maplibre";
 
+import { ACTION } from "~common/app/api";
 import {
-    selectTileSource,
+    selectRawTileSource,
     selectViewport,
 } from "~web/map/selectors";
 import { appMemory } from "~web/root/memory";
+import { mergeMapStyles } from "~web/map/lib";
 import MapContent from "~web/map/components/MapContent";
 
 import "maplibre-gl/dist/maplibre-gl.css";
@@ -33,7 +37,7 @@ import "maplibre-gl/dist/maplibre-gl.css";
 /**
  * ...
  */
-const { act, mut } = appMemory();
+const { act, mut, tnk } = appMemory();
 
 
 
@@ -43,10 +47,59 @@ const { act, mut } = appMemory();
  */
 const MapGL: FC = () => {
 
-    // ...
+    // map reference and viewport status
     const mapRef = useRef<MapRef | null>(null);
     const viewport = useSelector(selectViewport);
-    const { url: mapStyle } = useSelector(selectTileSource);
+
+    // otrails tracks
+    const [trackStyle, setTrackStyle] =
+        useState<StyleSpecification | undefined>(undefined);
+    const getTrackStyle = useCallback(async () => {
+        setTrackStyle(
+            await tnk.network.jsonRequest(
+                ACTION.trackStyle,
+            ) as StyleSpecification,
+        );
+    }, []);
+
+    // base map
+    const { url: baseStyleSource } = useSelector(selectRawTileSource);
+    const [baseStyle, setBaseStyle] =
+        useState<StyleSpecification | undefined>(undefined);
+    const getBaseStyle = useCallback(async () => {
+        try {
+            setBaseStyle(
+                baseStyleSource.startsWith("/")
+                    ? await tnk.network.jsonRequest(
+                        baseStyleSource,
+                    ) as StyleSpecification
+                    : await tnk.network.proxiedRequest({
+                        url: baseStyleSource,
+                    }) as StyleSpecification,
+            );
+        } catch {
+            setBaseStyle(undefined);
+        }
+    }, [baseStyleSource]);
+    useEffect(() => { void getBaseStyle(); }, [getBaseStyle]);
+
+    // merged map (tracks over base map)
+    const mapStyle = useMemo<StyleSpecification | undefined>(() => {
+        if (baseStyle && trackStyle) {
+            return mergeMapStyles(baseStyle, trackStyle);
+        }
+        if (trackStyle) return trackStyle;
+        return undefined;
+    }, [baseStyle, trackStyle]);
+
+    // initialize / destroy
+    useEffect(() => {
+        void getTrackStyle();
+        return () => {
+            act.map.SET_READY(false);
+            delete mut.map;
+        };
+    }, [getTrackStyle, mapRef]);
 
     // ...
     const onMapLoad = useCallback(() => {
@@ -66,14 +119,6 @@ const MapGL: FC = () => {
     const onMapResize = useCallback((e: MapLibreEvent) => {
         act.map.SET_DIMENSIONS(e.target.getCanvas());
     }, []);
-
-    // ...
-    useEffect(() => {
-        return () => {
-            act.map.SET_READY(false);
-            delete mut.map;
-        };
-    }, [mapRef]);
 
     return (
         <ReactMapGL

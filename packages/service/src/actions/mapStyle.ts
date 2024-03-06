@@ -10,7 +10,6 @@ import type { ParamsDictionary } from "express-serve-static-core";
 import { isString } from "@xcmats/js-toolbox/type";
 
 import type { ResponseErr } from "~common/framework/actions";
-import { lex } from "~common/lib/sort";
 import type { ComplexRecord } from "~common/lib/struct";
 import { substitute } from "~common/framework/routing";
 import { useMemory } from "~service/logic/memory";
@@ -162,43 +161,13 @@ const layers = [
             ],
         },
     },
-    {
-        "id": "track",
-        "type": "line",
-        "source": "tracks",
-        "source-layer": "track",
-        "layout": {
-            "line-cap": "round",
-            "line-join": "round",
-            "visibility": "visible",
-        },
-        "paint": {
-            "line-blur": 2,
-            "line-color": "#b20",
-            "line-width": [
-                "interpolate", ["linear"], ["zoom"],
-                2, 16,
-                3, 14,
-                4, 13,
-                5, 11,
-                6, 9,
-                7, 7,
-                8, 6,
-                9, 5,
-                10, 3,
-                11, 2, 
-                12, 1,
-            ],
-        },
-        "interactive": true,
-    },
 ];
 
 
 
 
 /**
- * Get map style. Otrails dev. Base.
+ * Get map style. Otrails. Base.
  */
 export const mapStyle: RequestHandler<
     ParamsDictionary,
@@ -222,16 +191,8 @@ export const mapStyle: RequestHandler<
         // all available tile source names
         const tileSourceNames = model.mbtile.getSourceNames();
 
-        // fresh track-tile source (newest one)
-        const trackTileSourceName: string | undefined =
-            tileSourceNames
-                .filter((n) => /^otrails-.*/.test(n))
-                .sort(lex)
-                .toReversed()[0];
-
         // check if all required tile sources are present
         if (
-            !isString(trackTileSourceName) ||
             !tileSourceNames.includes("natural_earth_2_shaded_relief.raster") ||
             !tileSourceNames.includes("natural_earth.vector")
         ) {
@@ -241,16 +202,6 @@ export const mapStyle: RequestHandler<
 
         // tile sources (dynamic)
         const sources = {
-            tracks: {
-                url: [
-                    selfOrigin,
-                    substitute(
-                        ACTION.tileJson,
-                        { name: trackTileSourceName },
-                    ),
-                ].join(""),
-                type: "vector",
-            },
             natural_earth_shaded_relief: {
                 tiles: [
                     [
@@ -293,7 +244,7 @@ export const mapStyle: RequestHandler<
         // map style - root
         const style = {
             version: 8,
-            name: "Otrails development map",
+            name: "Otrails base map",
             bearing: 0,
             center: [49.9055, 13.5086],
             pitch: 0,

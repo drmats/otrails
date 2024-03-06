@@ -67,6 +67,36 @@ export async function httpGet (
 
 
 /**
+ * Async HTTP(S) GET helper with automatic redirect (302) handling.
+ * Returns `{ request, response }` object.
+ */
+export const httpGetHandleRedirect = async (
+    url: string | URL,
+    options?: HTTPRequestOptions | HTTPSRequestOptions,
+): Promise<{ request: ClientRequest; response: IncomingMessage }> => {
+    const { request, response } = await httpGet(url, options);
+
+    // handle redirect
+    if (
+        response.statusCode === 302 &&
+        isString(response.headers.location)
+    ) {
+        try {
+            return await httpGetHandleRedirect(
+                response.headers.location, options,
+            );
+        } finally {
+            request.destroy();
+        }
+    }
+
+    return { request, response };
+};
+
+
+
+
+/**
  * Async HTTP(S) GET helper.
  * Returns just `response`.
  */
@@ -132,7 +162,7 @@ export const getFile = async (
     options?: HTTPRequestOptions | HTTPSRequestOptions,
 ): Promise<boolean> => {
     const mutex = createMutex<boolean>();
-    const { request, response } = await httpGet(url, options);
+    const { request, response } = await httpGetHandleRedirect(url, options);
 
     // download
     if (response.statusCode === 200) {
@@ -147,21 +177,5 @@ export const getFile = async (
         return mutex.lock();
     }
 
-    let status = false;
-
-    // handle redirect
-    try {
-        if (
-            response.statusCode === 302 &&
-            isString(response.headers.location)
-        ) {
-            status = await getFile(
-                response.headers.location, destination, options,
-            );
-        }
-    } finally {
-        request.destroy();
-    }
-
-    return status;
+    return false;
 };

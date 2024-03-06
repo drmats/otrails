@@ -5,8 +5,6 @@
  * @copyright Mat. 2020-present
  */
 
-import type { MapViewport } from "~web/map/types";
-
 
 
 
@@ -28,7 +26,7 @@ export default {
         longitude: 19.85,
         pitch: 0,
         zoom: 5,
-    } as MapViewport,
+    },
 
     // viewport dimensions
     dimensions: {
