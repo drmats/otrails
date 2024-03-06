@@ -28,8 +28,8 @@ export default sliceReducer(initState) ((slice) => slice
     }))
 
     // set map tilesource
-    .handle(act.SET_TILESOURCE, (state, { tilesource }) => ({
-        ...state, tilesource,
+    .handle(act.SET_TILESOURCE_INDEX, (state, { tileSourceIndex }) => ({
+        ...state, tileSourceIndex,
     }))
 
     // set map viewport

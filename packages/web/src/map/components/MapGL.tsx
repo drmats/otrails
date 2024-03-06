@@ -19,7 +19,7 @@ import ReactMapGL, {
 } from "react-map-gl/maplibre";
 
 import {
-    selectTilesource,
+    selectTileSource,
     selectViewport,
 } from "~web/map/selectors";
 import { appMemory } from "~web/root/memory";
@@ -46,7 +46,7 @@ const MapGL: FC = () => {
     // ...
     const mapRef = useRef<MapRef | null>(null);
     const viewport = useSelector(selectViewport);
-    const { url: mapStyle } = useSelector(selectTilesource);
+    const { url: mapStyle } = useSelector(selectTileSource);
 
     // ...
     const onMapLoad = useCallback(() => {

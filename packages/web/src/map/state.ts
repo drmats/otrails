@@ -6,7 +6,6 @@
  */
 
 import type { MapViewport } from "~web/map/types";
-import { tileSources } from "~web/map/constants";
 
 
 
@@ -20,7 +19,7 @@ export default {
     ready: false,
 
     // what's the tilesource (map style)?
-    tilesource: tileSources[0],
+    tileSourceIndex: 0,
 
     // viewport state
     viewport: {

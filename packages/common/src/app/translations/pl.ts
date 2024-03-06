@@ -11,6 +11,10 @@
  */
 export default {
 
+    "BasicMap": {
+        "title": "mapa",
+    },
+
     "Common": {
         "language_en": "English",
         "language_pl": "Polski",
@@ -29,6 +33,10 @@ export default {
         "hi": "Cześć!",
         "landing_title": "szlaki, otwarte",
         "open_map": "Otwórz mapę",
+    },
+
+    "TileSourceSelect": {
+        "label": "Rodzaj mapy",
     },
 
 };

@@ -24,7 +24,7 @@ import ErrorScreen from "~web/layout/screens/Error";
 
 const LandingScreen = lazy(() => import("~web/app/screens/Landing"));
 const Layout = lazy(() => import("~web/app/components/Layout"));
-const MapGL = lazy(() => import("~web/map/components/MapGL"));
+const BasicMap = lazy(() => import("~web/map/screens/BasicMap"));
 
 
 
@@ -88,7 +88,7 @@ export const App: FC = () => {
             ),
             [SCREEN.map]: () => (
                 <Layout showControls={false}>
-                    <MapGL />
+                    <BasicMap />
                 </Layout>
             ),
         };

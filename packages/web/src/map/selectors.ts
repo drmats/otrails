@@ -11,25 +11,28 @@ import { createSelector } from "reselect";
 
 import type { RootState } from "~web/store/types";
 import { selectBackendLocation } from "~web/network/selectors";
+import { tileSources } from "~web/map/constants";
 
 
 
 
 export const selectDimensions = (s: RootState) => s.map.dimensions;
 
-export const selectReady = (s: RootState) => s.map.ready;
+export const selectMapReady = (s: RootState) => s.map.ready;
 
-export const selectRawTilesource = (s: RootState) => s.map.tilesource;
+export const selectTileSourceIndex = (s: RootState) => s.map.tileSourceIndex;
 
-export const selectTilesource = createSelector(
-    [selectRawTilesource, selectBackendLocation],
-    (rawTilesource, backendLocation) =>
-        rawTilesource.url.startsWith("http")
-            ? rawTilesource
+export const selectTileSource = createSelector(
+    [selectTileSourceIndex, selectBackendLocation],
+    (tileSourceIndex, backendLocation) => {
+        const rawTileSource = tileSources[tileSourceIndex];
+        return rawTileSource.url.startsWith("http")
+            ? rawTileSource
             : {
-                ...rawTilesource,
-                url: `${backendLocation}${rawTilesource.url}`,
-            },
+                ...rawTileSource,
+                url: `${backendLocation}${rawTileSource.url}`,
+            };
+    },
 );
 
 export const selectViewport = (s: RootState) => s.map.viewport;
