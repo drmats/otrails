@@ -15,6 +15,7 @@ import { devConsole } from "~cli/actions/dev";
 import { extractGarminData } from "~cli/actions/extractGarminData";
 import { fetchImages } from "~cli/actions/fetchImages";
 import { hello } from "~cli/actions/hello";
+import { initProxyTiles } from "~cli/actions/initProxyTiles";
 import { prepareBaseMaps } from "~cli/actions/prepareBaseMaps";
 import { processFits } from "~cli/actions/processFits";
 import { processSummaries } from "~cli/actions/processSummaries";
@@ -160,6 +161,23 @@ export default async function configureArgsParser (): Promise<void> {
             "prepare base maps",
             emptyObject,
             prepareBaseMaps,
+        )
+
+        // tile proxy
+        .command(
+            "init-proxy-tiles [name] [url]",
+            "initialize tile proxy",
+            {
+                name: {
+                    type: "string",
+                    describe: "tileset name",
+                },
+                url: {
+                    type: "string",
+                    describe: "original tile source url (scheme)",
+                },
+            },
+            initProxyTiles,
         )
 
         .strict()

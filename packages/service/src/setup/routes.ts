@@ -9,6 +9,7 @@ import { ACTION } from "~common/app/api";
 import { useMemory } from "~service/logic/memory";
 import { apiV1 } from "~service/setup/env";
 import { hello } from "~service/actions/hello";
+import { mapRasterStyle } from "~service/actions/mapRasterStyle";
 import { mapStyle } from "~service/actions/mapStyle";
 import { networkProxy } from "~service/actions/networkProxy";
 import { tileGet } from "~service/actions/tileGet";
@@ -36,6 +37,12 @@ export default function configureRoutes (): void {
         .get(
             `${apiV1}${ACTION.hello}`,
             hello,
+        )
+
+        // map raster style
+        .get(
+            `${apiV1}${ACTION.mapRasterStyle}`,
+            mapRasterStyle,
         )
 
         // map style

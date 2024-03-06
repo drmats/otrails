@@ -14,6 +14,8 @@ import type { ResponseErr } from "~common/framework/actions";
 import { HttpMessage } from "~common/framework/http";
 import { useMemory } from "~service/logic/memory";
 import { TILE_VALIDITY_PERIOD } from "~service/logic/configuration";
+import { browserRequestHeaders, collectData, httpGet } from "~common/lib/http";
+import { tileInserter } from "~common/mbtiles/lib";
 
 
 
@@ -48,7 +50,7 @@ export const tileGet: RequestHandler<
         }
 
         // try fetching tile from appropriate tilesource
-        const data = model.mbtile.get(name, { z, x, y });
+        let data = model.mbtile.get(name, { z, x, y });
 
         // obtain data format
         const format = model.mbtile.getMeta(name, "format");
@@ -57,6 +59,51 @@ export const tileGet: RequestHandler<
         if (extname(req.originalUrl) !== `.${format}`) {
             errorStatus = 400;
             throw new Error(HttpMessage.C400);
+        }
+
+        // raster format and no data - special case (proxy?)
+        if (format !== "pbf" && data.length === 0) {
+            const proxyUrl = model.mbtile.getMeta(name, "x-proxied-url");
+
+            // respond with 404 for no-proxied raster tiles
+            if (!isString(proxyUrl)) {
+                errorStatus = 404;
+                throw new Error(HttpMessage.C404);
+            }
+
+            // fetch tile from remote resource
+            const {
+                request: tileRequest,
+                response: tileResponse,
+            } = await httpGet(
+                proxyUrl
+                    .replaceAll("{x}", String(x))
+                    .replaceAll("{y}", String(y))
+                    .replaceAll("{z}", String(z)),
+                {
+                    // pretend firefox
+                    headers: browserRequestHeaders(),
+                },
+            );
+
+            // check response code
+            if (tileResponse.statusCode !== 200) {
+                tileRequest.destroy();
+                errorStatus = 404;
+                throw new Error(HttpMessage.C404);
+            }
+
+            // fetch tile data
+            data = await collectData(tileResponse);
+
+            // check length
+            if (data.length === 0) {
+                errorStatus = 404;
+                throw new Error(HttpMessage.C404);
+            }
+
+            // insert tile to db
+            tileInserter(model.mbtile.getSource(name))({ x, y, z, data });
         }
 
         // try guessing if data is gzipped
