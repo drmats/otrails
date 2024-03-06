@@ -13,8 +13,11 @@ import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 
 import { appMemory } from "~web/root/memory";
-import { tileSources } from "~web/map/constants";
-import { selectMapReady, selectTileSourceIndex } from "~web/map/selectors";
+import {
+    selectMapReady,
+    selectTileSources,
+    selectTileSourceIndex,
+} from "~web/map/selectors";
 import { useStyles } from "~web/layout/hooks";
 import { sxStyles } from "~web/common/utils";
 
@@ -47,28 +50,31 @@ export const TileSourceSelect: FC = () => {
     const sx = useStyles(createStyles);
 
     const mapReady = useSelector(selectMapReady);
+    const tileSources = useSelector(selectTileSources);
     const tileSourceIndex = useSelector(selectTileSourceIndex);
 
     const handleChange = useCallback((e: SelectChangeEvent) => {
-        if (isNumber(e.target.value))
+        if (isNumber(e.target.value)) {
             act.map.SET_TILESOURCE_INDEX(e.target.value);
+        }
     }, []);
 
-    return mapReady ? (
+    return (
         <FormControl sx={sx.formControl} size="small">
-            <InputLabel>{ t("TileSourceSelect:label") }</InputLabel>
+            <InputLabel>{ t("TileSource:label") }</InputLabel>
             <Select
-                label={t("TileSourceSelect:label")}
+                label={t("TileSource:label")}
                 value={String(tileSourceIndex)}
                 onChange={handleChange}
                 size="small"
+                disabled={!mapReady}
             >
                 { tileSources.map((ts, i) => (
                     <MenuItem key={`${ts.label}-${i}`} value={i}>
-                        { ts.label }
+                        { t(`TileSource:l_${ts.label}`) }
                     </MenuItem>
                 )) }
             </Select>
         </FormControl>
-    ) : null;
+    );
 };

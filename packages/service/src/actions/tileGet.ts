@@ -80,10 +80,8 @@ export const tileGet: RequestHandler<
                     .replaceAll("{x}", String(x))
                     .replaceAll("{y}", String(y))
                     .replaceAll("{z}", String(z)),
-                {
-                    // pretend firefox
-                    headers: browserRequestHeaders(),
-                },
+                // pretend firefox
+                { headers: browserRequestHeaders() },
             );
 
             // check response code
@@ -102,8 +100,8 @@ export const tileGet: RequestHandler<
                 throw new Error(HttpMessage.C404);
             }
 
-            // insert tile to db
-            tileInserter(model.mbtile.getSource(name))({ x, y, z, data });
+            // insert tile into db
+            tileInserter(model.mbtile.getSource(name))({ z, x, y, data });
         }
 
         // try guessing if data is gzipped

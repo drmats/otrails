@@ -16,7 +16,7 @@ import { useMemory } from "~service/logic/memory";
 
 
 /**
- * List all available tile source names.
+ * List all available tile sources (names and formats).
  */
 export const tileSources: RequestHandler<
     ParamsDictionary,

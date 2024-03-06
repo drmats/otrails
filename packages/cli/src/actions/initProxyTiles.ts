@@ -129,7 +129,7 @@ export const initProxyTiles: CliAction<{
             insertMeta({ name: "x-proxied-url", value: url });
 
             // insert first tile
-            tileInserter(filedb)({ x: 0, y: 0, z: 0, data: firstTileData });
+            tileInserter(filedb)({ z: 0, x: 0, y: 0, data: firstTileData });
 
             // all done
             info(`${name}.mbtiles (${format}) initialized `);

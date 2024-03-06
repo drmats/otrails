@@ -65,7 +65,10 @@ const MapGL: FC = () => {
 
 
     // base map
-    const { url: baseStyleSource } = useSelector(selectRawTileSource);
+    const {
+        url: baseStyleSource,
+        themeVariant,
+    } = useSelector(selectRawTileSource);
     const [baseStyle, setBaseStyle] =
         useState<StyleSpecification | undefined>(undefined);
     const getBaseStyle = useCallback(async () => {
@@ -83,7 +86,11 @@ const MapGL: FC = () => {
             setBaseStyle(undefined);
         }
     }, [baseStyleSource]);
-    useEffect(() => { void getBaseStyle(); }, [getBaseStyle]);
+    useEffect(() => {
+        void getBaseStyle().then(() => {
+            act.layout.SET_THEME(themeVariant);
+        });
+    }, [getBaseStyle, themeVariant]);
 
 
     // merged map (tracks over base map)
@@ -102,6 +109,7 @@ const MapGL: FC = () => {
         return () => {
             act.map.SET_READY(false);
             delete mut.map;
+            void tnk.layout.syncTheme();
         };
     }, [getTrackStyle, mapRef]);
 

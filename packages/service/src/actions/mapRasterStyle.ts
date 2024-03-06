@@ -62,7 +62,7 @@ export const mapRasterStyle: RequestHandler<
             const format = model.mbtile.getMeta(n, "format") ?? "unknown";
             return (
                 format === "jpg" || format === "jpeg" ||
-                format === "png" || format === "webm"
+                format === "png" || format === "webp"
             );
         });
 

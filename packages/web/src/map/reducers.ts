@@ -27,7 +27,12 @@ export default sliceReducer(initState) ((slice) => slice
         ...state, ready,
     }))
 
-    // set map tilesource
+    // set map tilesources
+    .handle(act.SET_TILESOURCES, (state, { tileSources }) => ({
+        ...state, tileSources,
+    }))
+
+    // set map tilesource index
     .handle(act.SET_TILESOURCE_INDEX, (state, { tileSourceIndex }) => ({
         ...state, tileSourceIndex,
     }))

@@ -5,6 +5,8 @@
  * @copyright Mat. 2020-present
  */
 
+import { tileSources } from "~web/map/constants";
+
 
 
 
@@ -16,7 +18,10 @@ export default {
     // is map loaded and ready?
     ready: false,
 
-    // what's the tilesource (map style)?
+    // all tilesources
+    tileSources,
+
+    // what's the current tilesource (map style)?
     tileSourceIndex: 0,
 
     // viewport state
