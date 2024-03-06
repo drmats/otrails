@@ -50,6 +50,12 @@ export default function configureRoutes (): void {
             networkProxy,
         )
 
+        // one tile - jpg format
+        .get(
+            `${apiV1}${ACTION.tileGetJpg}`,
+            tileGet,
+        )
+
         // one tile - pbf format
         .get(
             `${apiV1}${ACTION.tileGetPbf}`,

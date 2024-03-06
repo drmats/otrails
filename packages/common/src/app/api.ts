@@ -21,6 +21,7 @@ export const ACTION = {
 
     networkProxy:   "/network/proxy/",
 
+    tileGetJpg:     "/tile/get/:name/:z/:x/:y/t.jpg",
     tileGetPbf:     "/tile/get/:name/:z/:x/:y/t.pbf",
     tileGetPng:     "/tile/get/:name/:z/:x/:y/t.png",
     tileGetWebp:    "/tile/get/:name/:z/:x/:y/t.webp",
