@@ -11,7 +11,8 @@ import { isString } from "@xcmats/js-toolbox/type";
 
 import type { CliAction } from "~common/framework/actions";
 import { useMemory } from "~cli/setup/memory";
-import { info, oknl } from "~common/lib/terminal";
+import { info, infonl, oknl, shout } from "~common/lib/terminal";
+import { isFile } from "~common/lib/fs";
 import { printError } from "~common/lib/error";
 import { setPragmas } from "~common/sqlite/lib";
 import { ensureSchema, metaInserter, tileInserter } from "~common/mbtiles/lib";
@@ -34,7 +35,7 @@ export const initProxyTiles: CliAction<{
     url?: string;
 }> = async ({ name, url }) => {
 
-    const { pgp, vars } = useMemory();
+    const { vars } = useMemory();
 
     // extract process configuration variables
     const { tilesDir } = vars;
@@ -49,6 +50,19 @@ export const initProxyTiles: CliAction<{
         // check arguments existence
         if (!isString(name) || !isString(url)) {
             throw new Error("Provide [name] and [url].");
+        }
+
+        // mbtiles destination file name
+        const target = join(
+            tilesDir,
+            `${name}.mbtiles`,
+        );
+
+        // don't do anything if taget file already exists
+        if (await isFile(target)) {
+            shout(`${name}.mbtiles`);
+            infonl(" already exists.");
+            return;
         }
 
         // check url validity
@@ -97,12 +111,6 @@ export const initProxyTiles: CliAction<{
         // fetch tile [0, 0, 0] data
         const firstTileData = await collectData(firstTileResponse);
 
-        // mbtiles destination file name
-        const target = join(
-            tilesDir,
-            `${name}.mbtiles`,
-        );
-
         // mbtiles destination database
         const filedb = new BetterSqlite3(target);
 
@@ -132,7 +140,8 @@ export const initProxyTiles: CliAction<{
             tileInserter(filedb)({ z: 0, x: 0, y: 0, data: firstTileData });
 
             // all done
-            info(`${name}.mbtiles (${format}) initialized `);
+            shout(`${name}.mbtiles (${format})`);
+            info(" initialized ");
             oknl("OK");
 
         } finally {
@@ -144,6 +153,6 @@ export const initProxyTiles: CliAction<{
         process.exit(1);
     }
 
-    return pgp.end();
+    return;
 
 };

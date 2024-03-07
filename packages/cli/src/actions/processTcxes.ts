@@ -35,7 +35,7 @@ export const processTcxes: CliAction<{
     userShortId?: string;
 }> = async ({ userShortId }) => {
 
-    const { db, pgp, sql, vars } = useMemory();
+    const { db, sql, vars } = useMemory();
 
     // extract process configuration variables
     const { extractsDir } = vars;
@@ -131,6 +131,6 @@ export const processTcxes: CliAction<{
         process.exit(1);
     }
 
-    return pgp.end();
+    return;
 
 };

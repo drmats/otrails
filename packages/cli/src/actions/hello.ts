@@ -36,7 +36,7 @@ const kvMatch = (input: string, k: string): string | undefined => {
  */
 export const hello: CliAction = async () => {
 
-    const { db, pgp, sql, vars } = useMemory();
+    const { db, sql, vars } = useMemory();
 
     try {
 
@@ -77,6 +77,6 @@ export const hello: CliAction = async () => {
         process.exit(1);
     }
 
-    return pgp.end();
+    return;
 
 };

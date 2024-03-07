@@ -28,7 +28,7 @@ export const extractGarminData: CliAction<{
     userShortId?: string;
 }> = async ({ zipFileName, userShortId }) => {
 
-    const { pgp, vars } = useMemory();
+    const { vars } = useMemory();
 
     // extract process configuration variables
     const { exportsDir, extractsDir } = vars;
@@ -89,6 +89,6 @@ export const extractGarminData: CliAction<{
         process.exit(1);
     }
 
-    return pgp.end();
+    return;
 
 };

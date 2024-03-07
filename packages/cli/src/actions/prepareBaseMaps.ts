@@ -28,7 +28,7 @@ import { printError } from "~common/lib/error";
  */
 export const prepareBaseMaps: CliAction = async () => {
 
-    const { pgp, vars } = useMemory();
+    const { vars } = useMemory();
 
     // extract process configuration variables
     const { tilesDir } = vars;
@@ -65,6 +65,6 @@ export const prepareBaseMaps: CliAction = async () => {
         process.exit(1);
     }
 
-    return pgp.end();
+    return;
 
 };

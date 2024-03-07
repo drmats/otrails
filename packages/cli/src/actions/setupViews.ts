@@ -27,7 +27,7 @@ import coverageDdlQuery from "~common/app/queries/coverage.ddl.sql";
  */
 export const setupViews: CliAction = async () => {
 
-    const { db, pgp, sql } = useMemory();
+    const { db, sql } = useMemory();
 
     try {
 
@@ -50,6 +50,6 @@ export const setupViews: CliAction = async () => {
         process.exit(1);
     }
 
-    return pgp.end();
+    return;
 
 };
