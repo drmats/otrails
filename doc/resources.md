@@ -47,6 +47,12 @@
 * [Natural Earth Tiles](https://klokantech.github.io/naturalearthtiles/)
 * [Vector Tiles Sample](https://github.com/klokantech/vector-tiles-sample)
 
+### osm raster basemap
+
+```
+cli init-proxy-tiles open-street-map.raster "https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+```
+
 <br />
 
 
