@@ -49,6 +49,9 @@ export default async function setting (_db: Database) {
         getSourceNames: sources.getNames,
 
         // ...
+        getSource: sources.get,
+
+        // ...
         refreshSources: async (): Promise<string[]> => {
             await sources.refresh();
             return sources.getNames();

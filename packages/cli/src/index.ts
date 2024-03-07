@@ -8,6 +8,7 @@
 import { run } from "@xcmats/js-toolbox/utils";
 
 import configureArgsParser from "~cli/setup/args";
+import configureCleanup from "~cli/setup/cleanup";
 import configureDatabase from "~cli/setup/database";
 import configureTermination from "~cli/setup/terminate";
 import configureVariables from "~cli/setup/vars";
@@ -31,5 +32,8 @@ run(async () => {
 
     // argument parsing configuration
     await configureArgsParser();
+
+    // cleanup
+    configureCleanup();
 
 });

@@ -22,7 +22,7 @@ export const dbSize: CliAction<{
     name: string;
 }> = async ({ name }) => {
 
-    const { db, pgp, sql, vars } = useMemory();
+    const { db, sql, vars } = useMemory();
 
     try {
 
@@ -46,6 +46,6 @@ export const dbSize: CliAction<{
         process.exit(1);
     }
 
-    return pgp.end();
+    return;
 
 };

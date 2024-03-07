@@ -11,7 +11,6 @@ import { createSelector } from "reselect";
 
 import type { RootState } from "~web/store/types";
 import { selectBackendLocation } from "~web/network/selectors";
-import { tileSources } from "~web/map/constants";
 
 
 
@@ -20,11 +19,13 @@ export const selectDimensions = (s: RootState) => s.map.dimensions;
 
 export const selectMapReady = (s: RootState) => s.map.ready;
 
+export const selectTileSources = (s: RootState) => s.map.tileSources;
+
 export const selectTileSourceIndex = (s: RootState) => s.map.tileSourceIndex;
 
 export const selectRawTileSource = createSelector(
-    [selectTileSourceIndex],
-    (tileSourceIndex) => tileSources[tileSourceIndex],
+    [selectTileSources, selectTileSourceIndex],
+    (tileSources, tileSourceIndex) => tileSources[tileSourceIndex],
 );
 
 export const selectTileSource = createSelector(

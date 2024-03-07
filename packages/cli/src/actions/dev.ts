@@ -87,8 +87,6 @@ export const startDevCli = async <A extends FreeFormRecord<unknown>>(
  */
 export const devConsole: CliAction<{ cwd: string }> = async ({ cwd }) => {
 
-    const { pgp } = useMemory();
-
     try {
 
         // change current working directory
@@ -102,6 +100,6 @@ export const devConsole: CliAction<{ cwd: string }> = async ({ cwd }) => {
         process.exit(1);
     }
 
-    return pgp.end();
+    return;
 
 };

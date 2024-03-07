@@ -17,6 +17,7 @@ export const ACTION = {
 
     static:         "/static/",
 
+    mapRasterStyle: "/map/raster/:name/style.json",
     mapStyle:       "/map/style.json",
 
     networkProxy:   "/network/proxy/",

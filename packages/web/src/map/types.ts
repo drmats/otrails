@@ -13,13 +13,13 @@ import { ThemeVariant } from "~common/framework/theme";
 /**
  * Map viewport state.
  */
-export interface MapViewport {
+export type MapViewport = {
     bearing: number;
     latitude: number;
     longitude: number;
     pitch: number;
     zoom: number;
-}
+};
 
 
 
@@ -27,10 +27,10 @@ export interface MapViewport {
 /**
  * Map dimensions.
  */
-export interface MapDimensions {
+export type MapDimensions = {
     width: number;
     height: number;
-}
+};
 
 
 
@@ -38,8 +38,8 @@ export interface MapDimensions {
 /**
  * Map style source.
  */
-export interface TileSource {
+export type TileSource = {
     label: string;
     url: string;
     themeVariant: ThemeVariant;
-}
+};

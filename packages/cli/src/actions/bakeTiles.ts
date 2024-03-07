@@ -57,7 +57,7 @@ const DEFAULT_POOL_SIZE = 32;
  */
 export const bakeTiles: CliAction = async () => {
 
-    const { db, pgp, sql, vars } = useMemory();
+    const { db, sql, vars } = useMemory();
 
     // extract process configuration variables
     const { tilesDir } = vars;
@@ -194,6 +194,6 @@ export const bakeTiles: CliAction = async () => {
         process.exit(1);
     }
 
-    return pgp.end();
+    return;
 
 };

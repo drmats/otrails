@@ -7,6 +7,10 @@
 
 import type { ThunkType } from "~web/store/types";
 import { inIframe } from "~web/layout/lib";
+import { tileSources } from "~web/map/constants";
+import { substitute } from "~common/framework/routing";
+import { ThemeVariant } from "~common/framework/theme";
+import { ACTION } from "~common/app/api";
 
 
 
@@ -28,6 +32,22 @@ export const initialize = (): ThunkType =>
 
         // take care of language
         await tnk.layout.detectClientThemeLanguage();
+
+        // add all available tilesources
+        act.map.SET_TILESOURCES(
+            tileSources.concat(
+                (await tnk.map.tileRasterSources()).map((trs) => ({
+                    label: trs,
+                    url: substitute(ACTION.mapRasterStyle, {
+                        name: trs,
+                    }),
+                    themeVariant:
+                        trs.includes("dark")
+                            ? ThemeVariant.DARK
+                            : ThemeVariant.LIGHT,
+                })),
+            ),
+        );
 
         // all done
         act.app.READY();

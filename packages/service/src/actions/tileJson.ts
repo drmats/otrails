@@ -86,7 +86,9 @@ export const tileJson: RequestHandler<
                 ? ACTION.tileGetPbf
                 : meta.format === "webp"
                     ? ACTION.tileGetWebp
-                    : ACTION.tileGetPng,
+                    : meta.format === "jpg" || meta.format === "jpeg"
+                        ? ACTION.tileGetJpg
+                        : ACTION.tileGetPng,
             { name, x: "{x}", y: "{y}", z: "{z}" },
         );
 

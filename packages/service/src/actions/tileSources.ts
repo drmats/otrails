@@ -9,18 +9,18 @@ import type { RequestHandler } from "express";
 import type { ParamsDictionary } from "express-serve-static-core";
 
 import type { ResponseErr } from "~common/framework/actions";
-import type { TileSourceNamesResponseOk } from "~common/app/actions/tile";
+import type { TileSourcesResponseOk } from "~common/app/actions/tile";
 import { useMemory } from "~service/logic/memory";
 
 
 
 
 /**
- * List all available tile source names.
+ * List all available tile sources (names and formats).
  */
 export const tileSources: RequestHandler<
     ParamsDictionary,
-    TileSourceNamesResponseOk | ResponseErr
+    TileSourcesResponseOk | ResponseErr
 > = async (_req, res, next) => {
 
     const { model } = useMemory();
@@ -31,7 +31,10 @@ export const tileSources: RequestHandler<
 
         // all ok
         res.status(200).send({
-            names: model.mbtile.getSourceNames(),
+            sources: model.mbtile.getSourceNames().map((name) => ({
+                name,
+                format: model.mbtile.getMeta(name, "format") ?? "unknown",
+            })),
         });
 
     } catch (e) {

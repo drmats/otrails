@@ -97,7 +97,7 @@
         "build": "yarn test && cross-env BABEL_ENV=production webpack --progress --config=webpack.config.js",
 
         "cli": "yarn start",
-        "start": "node --title=otrails-cli ./dist/otrails-cli.js"
+        "start": "cd ../.. && node --title=otrails-cli ./packages/cli/dist/otrails-cli.js"
 
     },
 

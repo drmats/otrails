@@ -51,6 +51,7 @@ const MapGL: FC = () => {
     const mapRef = useRef<MapRef | null>(null);
     const viewport = useSelector(selectViewport);
 
+
     // otrails tracks
     const [trackStyle, setTrackStyle] =
         useState<StyleSpecification | undefined>(undefined);
@@ -62,8 +63,12 @@ const MapGL: FC = () => {
         );
     }, []);
 
+
     // base map
-    const { url: baseStyleSource } = useSelector(selectRawTileSource);
+    const {
+        url: baseStyleSource,
+        themeVariant,
+    } = useSelector(selectRawTileSource);
     const [baseStyle, setBaseStyle] =
         useState<StyleSpecification | undefined>(undefined);
     const getBaseStyle = useCallback(async () => {
@@ -81,7 +86,12 @@ const MapGL: FC = () => {
             setBaseStyle(undefined);
         }
     }, [baseStyleSource]);
-    useEffect(() => { void getBaseStyle(); }, [getBaseStyle]);
+    useEffect(() => {
+        void getBaseStyle().then(() => {
+            act.layout.SET_THEME(themeVariant);
+        });
+    }, [getBaseStyle, themeVariant]);
+
 
     // merged map (tracks over base map)
     const mapStyle = useMemo<StyleSpecification | undefined>(() => {
@@ -92,14 +102,17 @@ const MapGL: FC = () => {
         return undefined;
     }, [baseStyle, trackStyle]);
 
+
     // initialize / destroy
     useEffect(() => {
         void getTrackStyle();
         return () => {
             act.map.SET_READY(false);
             delete mut.map;
+            void tnk.layout.syncTheme();
         };
     }, [getTrackStyle, mapRef]);
+
 
     // ...
     const onMapLoad = useCallback(() => {
@@ -110,15 +123,18 @@ const MapGL: FC = () => {
         act.map.SET_READY(true);
     }, [mapRef]);
 
+
     // ...
     const onMapMove = useCallback((e: ViewStateChangeEvent) => {
         act.map.SET_VIEWPORT(e.viewState);
     }, []);
 
+
     // ...
     const onMapResize = useCallback((e: MapLibreEvent) => {
         act.map.SET_DIMENSIONS(e.target.getCanvas());
     }, []);
+
 
     return (
         <ReactMapGL

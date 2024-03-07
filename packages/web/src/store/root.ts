@@ -17,6 +17,7 @@ import * as layoutThunks from "~web/layout/thunks";
 
 import mapActions from "~web/map/actions";
 import mapReducers from "~web/map/reducers";
+import * as mapThunks from "~web/map/thunks";
 
 import networkActions from "~web/network/actions";
 import networkReducers from "~web/network/reducers";
@@ -63,6 +64,7 @@ export const rootReducer = combineReducers({
 export const thunk = {
     app: appThunks,
     layout: layoutThunks,
+    map: mapThunks,
     network: networkThunks,
     router: routerThunks,
 } as const;

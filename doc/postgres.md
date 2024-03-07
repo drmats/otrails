@@ -25,7 +25,7 @@ Open terminal inside **repository root**.
         -v $(pwd)/data/pg:/var/lib/postgresql/data \
         -d docker.io/postgis/postgis
     ```
-    
+
     On __MacOS__ set the user namespace mode for the container to `keep-id`
     in order to map the current __MacOS__ user to the same UID within the
     container:
@@ -48,7 +48,7 @@ Open terminal inside **repository root**.
     podman start otrails-postgis
     ```
 
-That's it. Go back to [`readme`](../README.md).
+That's it. Go back to [`intro`](./intro.md).
 
 <br />
 

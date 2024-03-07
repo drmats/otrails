@@ -17,17 +17,17 @@ import { ACTION } from "~common/app/api";
  */
 export const tileSources: TileSource[] = [
     {
-        label: "Otrails map",
+        label: "otrails",
         url: ACTION.mapStyle,
         themeVariant: ThemeVariant.LIGHT,
     },
     {
-        label: "Natural Earth vector",
+        label: "ne_vector",
         url: "https://klokantech.github.io/naturalearthtiles/maps/natural_earth.vector.json",
         themeVariant: ThemeVariant.LIGHT,
     },
     {
-        label: "MapLibre demo tiles",
+        label: "maplibre_demo",
         url: "https://demotiles.maplibre.org/style.json",
         themeVariant: ThemeVariant.LIGHT,
     },
