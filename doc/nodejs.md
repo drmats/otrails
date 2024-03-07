@@ -14,7 +14,7 @@ Open terminal inside **repository root**.
     podman pull docker.io/library/node:20
     ```
 
-That's it. Go back to [`readme`](../README.md).
+That's it. Go back to [`intro`](./intro.md).
 
 <br />
 

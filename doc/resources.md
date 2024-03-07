@@ -1,4 +1,4 @@
-# useful resources, specs and docs
+# Uuseful Resources, Specs and Docs
 
 <br />
 
