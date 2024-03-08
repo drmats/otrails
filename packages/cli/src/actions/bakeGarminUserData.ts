@@ -24,7 +24,7 @@ import { prepareBaseMaps } from "~cli/actions/prepareBaseMaps";
 export const bakeGarminUserData: CliAction<{
     zipFileName?: string;
     userShortId?: string;
-}> = async ({zipFileName, userShortId}) => {
+}> = async ({ zipFileName, userShortId }) => {
 
     try {
 
