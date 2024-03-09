@@ -82,9 +82,9 @@ yarn () {
     RP=$(realpath --relative-to="$PROJECT_ROOT" $(pwd))
     podman run \
         -it --rm \
+        --net host \
         -v "$PROJECT_ROOT":"$VIRTUAL_ROOT" \
         -w "$VIRTUAL_ROOT"/"$RP" \
-        -p 0.0.0.0:7777:7777 \
         node:20 yarn "$@"
 }
 
