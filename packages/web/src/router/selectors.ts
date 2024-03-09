@@ -12,7 +12,7 @@ import { isNumber, isString } from "@xcmats/js-toolbox/type";
 
 import type { RootState } from "~web/store/types";
 import { access, type ComplexRecord } from "~common/lib/struct";
-import { hashToSpaRoute } from "~web/router/functions";
+import { hashToSpaRoute } from "~web/router/lib";
 import {
     getAllRoutes,
     matchRoute,

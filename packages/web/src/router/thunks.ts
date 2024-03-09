@@ -6,7 +6,7 @@
 import type { ComplexRecord } from "~common/lib/struct";
 import type { ThunkType } from "~web/store/types";
 import { SPA_HASH_SEPARATOR } from "~web/router/constants";
-import { formatRoute } from "~web/router/functions";
+import { formatRoute } from "~web/router/lib";
 import {
     selectBrowserHash,
     selectRawSpaRoute,
