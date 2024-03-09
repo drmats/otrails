@@ -3,11 +3,22 @@
  * @copyright Mat. 2024-present
  */
 
-import type { FC } from "react";
+import { type FC, useEffect } from "react";
+import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
+import { isNumber, isString } from "@xcmats/js-toolbox/type";
 
 import MapGL from "~web/map/components/MapGL";
+import { appMemory } from "~web/root/memory";
+import { useIncomingSpaQuery, useSpaNavigation } from "~web/router/hooks";
+import { selectTileSourceIndex, selectViewport } from "~web/map/selectors";
 import { useDocumentTitle, useStyles } from "~web/layout/hooks";
+import {
+    coordsToMapViewport,
+    stringToCoords,
+    throttledTileSourceIndexHashUpdate,
+    throttledViewportHashUpdate,
+} from "~web/map/lib";
 import { sxStyles } from "~web/common/utils";
 import MobilePaper from "~web/common/components/MobilePaper";
 import { TileSourceSelect } from "~web/map/components/TileSourceSelect";
@@ -32,11 +43,53 @@ const createStyles = () => sxStyles({
 /**
  * ...
  */
+const { act, tnk } = appMemory();
+
+
+
+
+/**
+ * ...
+ */
 const BasicMap: FC = () => {
+    const navigate = useSpaNavigation();
     const { t } = useTranslation();
     const sx = useStyles(createStyles);
 
     useDocumentTitle(t("BasicMap:title"), true);
+
+    // handle manual address-bar changes (and initial link-parsing)
+    const inQuery = useIncomingSpaQuery();
+    useEffect(() => {
+        if (isString(inQuery.p)) {
+            try {
+                void tnk.map.setViewport(
+                    coordsToMapViewport(stringToCoords(inQuery.p)),
+                );
+            } catch { /* no-op */ }
+        }
+        if (isNumber(inQuery.m)) {
+            act.map.SET_TILESOURCE_INDEX(inQuery.m);
+        }
+    }, [inQuery]);
+
+    // reflect map state in address-bar query
+    const viewport = useSelector(selectViewport);
+    useEffect(() => {
+        throttledViewportHashUpdate(
+            (p) => navigate.replaceQuery((c) => ({ ...c, p })),
+            viewport,
+        );
+    }, [viewport]);
+
+    // reflect base map selection (tile source) in address-bar query
+    const tileSourceIndex = useSelector(selectTileSourceIndex);
+    useEffect(() => {
+        throttledTileSourceIndexHashUpdate(
+            (m) => navigate.replaceQuery((c) => ({ ...c, m })),
+            tileSourceIndex,
+        );
+    }, [tileSourceIndex]);
 
     return (
         <>

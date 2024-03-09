@@ -7,14 +7,28 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useSelector } from "react-redux";
-import { isFunction, isObject, toBool } from "@xcmats/js-toolbox/type";
+import {
+    isFunction,
+    isObject,
+    isString,
+    toBool,
+} from "@xcmats/js-toolbox/type";
 
 import type { ComplexValue } from "~common/lib/type";
-import type { ComplexRecord, PlainRecord } from "~common/lib/struct";
-import { stringifyQuery, substitute } from "~common/framework/routing";
+import {
+    isPlainRecord,
+    type ComplexRecord,
+    type PlainRecord,
+} from "~common/lib/struct";
+import {
+    parseQueryString,
+    stringifyQuery,
+    substitute,
+} from "~common/framework/routing";
 import type { StateManagement } from "~web/common/types";
 import { appMemory } from "~web/root/memory";
 import {
+    selectIncomingSpaQueryMapping,
     selectSpaCanGoBack,
     selectSpaHash,
     selectSpaQueryMapping,
@@ -29,7 +43,7 @@ import {
 /**
  * ...
  */
-const { tnk } = appMemory();
+const { tnk, store } = appMemory();
 
 
 
@@ -56,12 +70,17 @@ const augment = (
  * SPA router - hook interface for navigation.
  */
 export const useSpaNavigation = () => useMemo(() => ({
+
+    // ...
     back: history.back.bind(history),
 
+    // ...
     forward: history.forward.bind(history),
 
+    // ...
     go: history.go.bind(history),
 
+    // ...
     to: (
         route: string,
         opts?: {
@@ -87,6 +106,7 @@ export const useSpaNavigation = () => useMemo(() => ({
             void tnk.router.replaceSpaHash(opts.hash, newState);
     },
 
+    // ...
     replace: (
         route: string,
         opts?: {
@@ -112,36 +132,21 @@ export const useSpaNavigation = () => useMemo(() => ({
             void tnk.router.replaceSpaHash(opts.hash, newState);
     },
 
+    // ...
     replaceState: (opts?: { state?: ComplexRecord; cache?: boolean }) => {
         void tnk.router.replaceBrowserState(
             augment(opts?.state), { cache: opts?.cache },
         );
     },
 
+    // ...
     mergeState: (opts: { state: ComplexRecord; cache?: boolean }) => {
         void tnk.router.mergeBrowserState(
             augment(opts.state), { cache: opts.cache },
         );
     },
 
-    pushQuery: (
-        query: PlainRecord,
-        opts?: { state?: ComplexRecord },
-    ) => {
-        const newState = augment(opts?.state, { inc: true });
-        void tnk.router.pushSpaHash(stringifyQuery(query), newState);
-    },
-
-    replaceQuery: (
-        query: PlainRecord,
-        opts?: { state?: ComplexRecord },
-    ) => {
-        const newState = augment(opts?.state);
-        void tnk.router.replaceSpaHash(stringifyQuery(query), newState);
-    },
-
-    resetQuery: () => void tnk.router.replaceSpaHash(""),
-
+    // ...
     pushHash: (
         hash: string,
         opts?: { state?: ComplexRecord },
@@ -150,16 +155,56 @@ export const useSpaNavigation = () => useMemo(() => ({
         void tnk.router.pushSpaHash(hash, newState);
     },
 
+    // ...
     replaceHash: (
-        hash: string,
+        hash: string | ((current: string) => string),
         opts?: { state?: ComplexRecord },
     ) => {
         const newState = augment(opts?.state);
-        void tnk.router.replaceSpaHash(hash, newState);
+        if (isString(hash)) {
+            void tnk.router.replaceSpaHash(hash, newState);
+        } else {
+            void tnk.router.replaceSpaHash(
+                hash(selectSpaHash(store.getState())),
+                newState,
+            );
+        }
     },
 
+    // ...
     resetHash: () => void tnk.router.replaceSpaHash(""),
 
+    // ...
+    pushQuery: (
+        query: PlainRecord,
+        opts?: { state?: ComplexRecord },
+    ) => {
+        const newState = augment(opts?.state, { inc: true });
+        void tnk.router.pushSpaHash(stringifyQuery(query), newState);
+    },
+
+    // ...
+    replaceQuery: (
+        query: PlainRecord | ((current: PlainRecord) => PlainRecord),
+        opts?: { state?: ComplexRecord },
+    ) => {
+        const newState = augment(opts?.state);
+        if (isPlainRecord(query)) {
+            void tnk.router.replaceSpaHash(stringifyQuery(query), newState);
+        } else {
+            void tnk.router.replaceSpaHash(
+                stringifyQuery(
+                    query(parseQueryString(selectSpaHash(store.getState()))),
+                ),
+                newState,
+            );
+        }
+    },
+
+    // ...
+    resetQuery: () => void tnk.router.replaceSpaHash(""),
+
+    // ...
     historyLength: () => history.length,
 
 }), []);
@@ -177,6 +222,24 @@ export const useSpaRoute = () => {
 
     return useMemo(() => ({ ...route, hash, query }), [hash, query, route]);
 };
+
+
+
+
+/**
+ * SPA router - hook interface for parsed query string.
+ */
+export const useSpaQuery = () => useSelector(selectSpaQueryMapping);
+
+
+
+
+/**
+ * SPA router - hook interface for parsed query string
+ * (manual address bar change).
+ */
+export const useIncomingSpaQuery = () =>
+    useSelector(selectIncomingSpaQueryMapping);
 
 
 

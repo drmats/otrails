@@ -18,8 +18,11 @@ export default {
     // parametrized routes prefix tree
     tree: makeEmptyRTree() as RTree,
 
-    // url hash (basic SPA routing)
+    // url hash (SPA routing)
     hash: "",
+
+    // url hash - manual address bar changes / last user input
+    incomingHash: "",
 
     // route state (serialized)
     routeState: "",

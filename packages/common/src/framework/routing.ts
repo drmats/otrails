@@ -437,6 +437,8 @@ export const parseQueryString = (
     const fieldSep = opts?.fieldSep ?? "=";
     let decodedQueryString = "";
 
+    if (queryString === "") return {};
+
     try {
         decodedQueryString =
             opts?.omitDecoding

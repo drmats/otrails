@@ -21,6 +21,8 @@ export enum RouterActionType {
 
     SET_HASH = "Router/SET_HASH",
 
+    SET_INCOMING_HASH = "Router/SET_INCOMING_HASH",
+
     SET_ROUTE_STATE = "Router/SET_ROUTE_STATE",
 
     RESET_CACHE = "Router/RESET_CACHE",
@@ -38,6 +40,8 @@ export default actionCreators(RouterActionType, {
     SET_TREE: (routes: string[]) => ({ routes }),
 
     SET_HASH: (hash: string) => ({ hash }),
+
+    SET_INCOMING_HASH: (hash: string) => ({ hash }),
 
     SET_ROUTE_STATE: (routeState?: ComplexRecord, route?: string) => ({
         route, routeState,

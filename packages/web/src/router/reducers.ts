@@ -32,6 +32,11 @@ export default sliceReducer(initState) ((slice) => slice
         draft.hash = hash;
     }))
 
+    // incoming url hash handling (manual address bar changes)
+    .handle(act.SET_INCOMING_HASH, produce((draft, { hash }) => {
+        draft.incomingHash = hash;
+    }))
+
     // url state and cache handling
     .handle(act.SET_ROUTE_STATE, produce((draft, { route, routeState }) => {
         const stateString = JSON.stringify(routeState);

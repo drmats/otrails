@@ -33,8 +33,13 @@ export default sliceReducer(initState) ((slice) => slice
     }))
 
     // set map tilesource index
-    .handle(act.SET_TILESOURCE_INDEX, (state, { tileSourceIndex }) => ({
-        ...state, tileSourceIndex,
+    .handle(act.SET_TILESOURCE_INDEX, produce((draft, { tileSourceIndex }) => {
+        if (tileSourceIndex < 0)
+            draft.tileSourceIndex = 0;
+        else if (tileSourceIndex >= draft.tileSources.length)
+            draft.tileSourceIndex = draft.tileSources.length - 1;
+        else
+            draft.tileSourceIndex = tileSourceIndex;
     }))
 
     // set map viewport

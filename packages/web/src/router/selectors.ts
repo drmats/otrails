@@ -50,6 +50,17 @@ export const selectBrowserHash = (s: RootState) => s.router.hash;
 
 
 /**
+ * This selector triggers changes only when browser hash has been
+ * manually changed in address bar by user. It is not reflecting changes
+ * to url state done from within application thus in most cases it will contain
+ * a different value than `router.hash`.
+ */
+export const selectIncomingBrowserHash = (s: RootState) => s.router.incomingHash;
+
+
+
+
+/**
  * ...
  */
 export const selectRawSpaRoute = createSelector(
@@ -92,9 +103,31 @@ export const selectSpaHash = createSelector(
 /**
  * ...
  */
+export const selectIncomingSpaHash = createSelector(
+    [selectIncomingBrowserHash],
+    (incomingBrowserHash) => last(hashToSpaRoute(incomingBrowserHash)),
+);
+
+
+
+
+/**
+ * ...
+ */
 export const selectSpaQueryMapping = createSelector(
     [selectSpaHash],
     (spaHash) => parseQueryString(spaHash),
+);
+
+
+
+
+/**
+ * ...
+ */
+export const selectIncomingSpaQueryMapping = createSelector(
+    [selectIncomingSpaHash],
+    (incomingSpaHash) => parseQueryString(incomingSpaHash),
 );
 
 

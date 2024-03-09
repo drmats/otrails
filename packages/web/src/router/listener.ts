@@ -28,6 +28,7 @@ const setupListener: ThunkType<void> = (_d, getState, { act, mut }) => {
             (hash: string) => hash.startsWith("#") ? tail(hash) : hash,
             (browserHash: string) => {
                 act.router.SET_HASH(browserHash);
+                act.router.SET_INCOMING_HASH(browserHash);
                 return browserHash;
             },
         ) as string;

@@ -71,3 +71,12 @@ export const indent = (
     const indentation = range(level).map(() => symbol).join("");
     return input.split("\n").map((line) => `${indentation}${line}`).join("\n");
 };
+
+
+
+
+/**
+ * Format input number as string with desired precision.
+ */
+export const format = (input: number, precision = 4): string =>
+    input.toFixed(precision);

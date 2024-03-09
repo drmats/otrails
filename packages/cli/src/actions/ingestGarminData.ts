@@ -26,13 +26,16 @@ export const ingestGarminData: CliAction<{
 }> = async ({ zipFileName, userShortId }) => {
 
     try {
+
         await extractGarminData({ zipFileName, userShortId });
         await fetchImages({ userShortId });
         await processSummaries({ userShortId });
         await processTcxes({ userShortId });
         await processFits({ userShortId });
+
         infonl();
         oknl("ALL DONE");
+
     } catch (e) {
         printError(e);
         process.exit(1);

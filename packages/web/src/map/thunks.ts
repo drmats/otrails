@@ -7,6 +7,7 @@
 
 import type { ThunkType } from "~web/store/types";
 import type { TileSourcesResponseOk } from "~common/app/actions/tile";
+import type { MapViewport } from "~web/map/types";
 import { ACTION } from "~common/app/api";
 
 
@@ -36,4 +37,17 @@ export const tileRasterSources = (): ThunkType<Promise<string[]>> =>
                 ts.format === "png" || ts.format === "webp"
             ))
             .map((ts) => ts.name);
+    };
+
+
+
+
+/**
+ * Set map viewport, but first stop all eventual map animations.
+ */
+export const setViewport = (viewport: Partial<MapViewport>): ThunkType =>
+    async (_d, _getState, { act, mut }) => {
+        const map = mut?.map?.getMap();
+        if (map) { map.stop(); }
+        setTimeout(() => { act.map.SET_VIEWPORT(viewport); }, 100);
     };
