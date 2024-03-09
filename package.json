@@ -113,6 +113,11 @@
 
     "workspaces": [
         "packages/*"
-    ]
+    ],
+    
+    "volta": {
+        "node": "20.11.0",
+        "yarn": "1.22.19"
+    }
 
 }

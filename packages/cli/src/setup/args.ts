@@ -22,7 +22,7 @@ import { processFits } from "~cli/actions/processFits";
 import { processSummaries } from "~cli/actions/processSummaries";
 import { processTcxes } from "~cli/actions/processTcxes";
 import { setupViews } from "~cli/actions/setupViews";
-
+import { ingestGarminData } from "~cli/actions/ingestGarminData";
 
 
 
@@ -162,6 +162,23 @@ export default async function configureArgsParser (): Promise<void> {
             "prepare base maps",
             emptyObject,
             prepareBaseMaps,
+        )
+
+        // automator
+        .command(
+            "ingest-garmin-data [zipFileName] [userShortId]",
+            "ingest garmin user data",
+            {
+                zipFileName: {
+                    type: "string",
+                    describe: "garmin data export zip",
+                },
+                userShortId: {
+                    type: "string",
+                    describe: "destination subfolder",
+                },
+            },
+            ingestGarminData,
         )
 
         // tile proxy (single)
