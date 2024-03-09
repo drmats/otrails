@@ -5,18 +5,19 @@
  * @copyright Mat. syntaxval. 2024-present
  */
 
-import type { CliAction } from "~common/framework/actions";
-import { info, infonl, oknl } from "~common/lib/terminal";
-import { printError } from "~common/lib/error";
 import { isString } from "@xcmats/js-toolbox/type";
+
+import type { CliAction } from "~common/framework/actions";
+import { printError } from "~common/lib/error";
+import { info, infonl, oknl } from "~common/lib/terminal";
+import { bakeTiles } from "~cli/actions/bakeTiles";
 import { extractGarminData } from "~cli/actions/extractGarminData";
 import { fetchImages } from "~cli/actions/fetchImages";
+import { prepareBaseMaps } from "~cli/actions/prepareBaseMaps";
+import { processFits } from "~cli/actions/processFits";
 import { processSummaries } from "~cli/actions/processSummaries";
 import { processTcxes } from "~cli/actions/processTcxes";
-import { processFits } from "~cli/actions/processFits";
 import { setupViews } from "~cli/actions/setupViews";
-import { bakeTiles } from "~cli/actions/bakeTiles";
-import { prepareBaseMaps } from "~cli/actions/prepareBaseMaps";
 
 /**
  * Aggregate all Garmin user data processing actions.
