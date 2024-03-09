@@ -27,6 +27,20 @@
 <br />
 
 
+## a note on macos
+
+Running containers on Apple Silicon architecture can be problematic, in particular
+due to its slowness. As an alternative for local development and for `node`
+frontend/backend dev only, you can setup your environment using
+[Volta](https://volta.sh/).
+`package.json` already contains required `node` and `yarn` versions. In most cases,
+Volta will do the heavy lifting for you.
+
+Volta will read the `package.json` file: and see the `volta` key along with `node` version.
+If you don't already have the required version installed, it will automatically download
+and install it for you. Volta will manage the switch: Once you're in the project
+directory, Volta will seamlessly switch your active `node` version to the one specified
+in the package.json.
 
 
 ## virtual environment
