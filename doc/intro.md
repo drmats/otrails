@@ -26,7 +26,6 @@
 
 <br />
 
-
 ## a note on macos
 
 Running containers on Apple Silicon architecture can be problematic, in particular
@@ -42,6 +41,7 @@ and install it for you. Volta will manage the switch: Once you're in the project
 directory, Volta will seamlessly switch your active `node` version to the one specified
 in the package.json.
 
+<br />
 
 ## virtual environment
 
