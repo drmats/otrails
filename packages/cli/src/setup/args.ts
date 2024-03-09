@@ -22,7 +22,7 @@ import { processFits } from "~cli/actions/processFits";
 import { processSummaries } from "~cli/actions/processSummaries";
 import { processTcxes } from "~cli/actions/processTcxes";
 import { setupViews } from "~cli/actions/setupViews";
-import { bakeGarminUserData } from "~cli/actions/bakeGarminUserData";
+import { ingestGarminData } from "~cli/actions/ingestGarminData";
 
 
 
@@ -166,8 +166,8 @@ export default async function configureArgsParser (): Promise<void> {
 
         // automator
         .command(
-            "bake-garmin-user-data [zipFileName] [userShortId]",
-            "process and bake tiles with garmin user data",
+            "ingest-garmin-data [zipFileName] [userShortId]",
+            "ingest garmin user data",
             {
                 zipFileName: {
                     type: "string",
@@ -178,7 +178,7 @@ export default async function configureArgsParser (): Promise<void> {
                     describe: "destination subfolder",
                 },
             },
-            bakeGarminUserData,
+            ingestGarminData,
         )
 
         // tile proxy (single)
