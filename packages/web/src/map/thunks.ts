@@ -45,9 +45,16 @@ export const tileRasterSources = (): ThunkType<Promise<string[]>> =>
 /**
  * Set map viewport, but first stop all eventual map animations.
  */
-export const setViewport = (viewport: Partial<MapViewport>): ThunkType =>
+export const setViewport = (
+    viewport: Partial<MapViewport>,
+    settingViewportProgress?: (s: boolean) => void,
+): ThunkType =>
     async (_d, _getState, { act, mut }) => {
+        if (settingViewportProgress) settingViewportProgress(true);
         const map = mut?.map?.getMap();
         if (map) { map.stop(); }
-        setTimeout(() => { act.map.SET_VIEWPORT(viewport); }, 100);
+        setTimeout(() => {
+            act.map.SET_VIEWPORT(viewport);
+            if (settingViewportProgress) settingViewportProgress(false);
+        }, 100);
     };

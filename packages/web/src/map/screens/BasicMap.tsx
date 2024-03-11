@@ -3,7 +3,7 @@
  * @copyright Mat. 2024-present
  */
 
-import { type FC, useEffect } from "react";
+import { type FC, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { isNumber, isString } from "@xcmats/js-toolbox/type";
@@ -58,13 +58,21 @@ const BasicMap: FC = () => {
 
     useDocumentTitle(t("BasicMap:title"), true);
 
-    // handle manual address-bar changes (and initial link-parsing)
+
+    // ...
     const inQuery = useIncomingSpaQuery();
+    const viewport = useSelector(selectViewport);
+    const settingViewportProgress = useRef(false);
+    const tileSourceIndex = useSelector(selectTileSourceIndex);
+
+
+    // handle manual address-bar changes (and initial link-parsing)
     useEffect(() => {
         if (isString(inQuery.p)) {
             try {
                 void tnk.map.setViewport(
                     coordsToMapViewport(stringToCoords(inQuery.p)),
+                    (state) => { settingViewportProgress.current = state; },
                 );
             } catch { /* no-op */ }
         }
@@ -74,22 +82,23 @@ const BasicMap: FC = () => {
     }, [inQuery]);
 
     // reflect map state in address-bar query
-    const viewport = useSelector(selectViewport);
     useEffect(() => {
-        throttledViewportHashUpdate(
-            (p) => navigate.replaceQuery((c) => ({ ...c, p })),
-            viewport,
-        );
+        if (!settingViewportProgress.current) {
+            throttledViewportHashUpdate(
+                (p) => navigate.replaceQuery((c) => ({ ...c, p })),
+                viewport,
+            );
+        }
     }, [viewport]);
 
     // reflect base map selection (tile source) in address-bar query
-    const tileSourceIndex = useSelector(selectTileSourceIndex);
     useEffect(() => {
         throttledTileSourceIndexHashUpdate(
             (m) => navigate.replaceQuery((c) => ({ ...c, m })),
             tileSourceIndex,
         );
     }, [tileSourceIndex]);
+
 
     return (
         <>
