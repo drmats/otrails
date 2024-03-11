@@ -14,8 +14,15 @@ import {
     useState,
 } from "react";
 import { useSelector } from "react-redux";
-import type { MapLibreEvent, StyleSpecification } from "maplibre-gl";
+import type {
+    LngLat,
+    MapGeoJSONFeature,
+    MapLibreEvent,
+    Point,
+    StyleSpecification,
+} from "maplibre-gl";
 import ReactMapGL, {
+    type MapLayerMouseEvent,
     type MapRef,
     type ViewStateChangeEvent,
 } from "react-map-gl/maplibre";
@@ -52,15 +59,20 @@ const MapGL: FC = () => {
     const viewport = useSelector(selectViewport);
 
 
+    // interactive layers
+    const [interactiveLayers, setInteractiveLayers] = useState<string[]>([]);
+
+
     // otrails tracks
     const [trackStyle, setTrackStyle] =
         useState<StyleSpecification | undefined>(undefined);
     const getTrackStyle = useCallback(async () => {
-        setTrackStyle(
+        const trackStyle =
             await tnk.network.jsonRequest(
                 ACTION.trackStyle,
-            ) as StyleSpecification,
-        );
+            ) as StyleSpecification;
+        setTrackStyle(trackStyle);
+        setInteractiveLayers(trackStyle.layers.map(({ id }) => id));
     }, []);
 
 
@@ -136,14 +148,26 @@ const MapGL: FC = () => {
     }, []);
 
 
+    // ...
+    const onMapClick = useCallback((e: MapLayerMouseEvent) => {
+        mut.selection = {
+            lngLat: e.lngLat,
+            point: e.point,
+            features: e.features,
+        };
+    }, []);
+
+
     return (
         <ReactMapGL
             attributionControl={false}
+            interactiveLayerIds={interactiveLayers}
             {...{
                 mapStyle,
                 minZoom: 1,
                 maxZoom: 22,
             }}
+            onClick={onMapClick}
             onLoad={onMapLoad}
             onMove={onMapMove}
             onResize={onMapResize}
@@ -173,6 +197,11 @@ declare global {
      */
     interface Mut {
         map?: MapRef;
+        selection?: {
+            point: Point;
+            lngLat: LngLat;
+            features?: MapGeoJSONFeature[];
+        };
     }
 
 }
