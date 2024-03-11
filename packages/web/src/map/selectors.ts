@@ -23,6 +23,11 @@ export const selectTileSources = (s: RootState) => s.map.tileSources;
 
 export const selectTileSourceIndex = (s: RootState) => s.map.tileSourceIndex;
 
+export const selectMaxTileSourceIndex = createSelector(
+    [selectTileSources],
+    (tileSources) => tileSources.length - 1,
+);
+
 export const selectRawTileSource = createSelector(
     [selectTileSources, selectTileSourceIndex],
     (tileSources, tileSourceIndex) => tileSources[tileSourceIndex],

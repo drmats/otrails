@@ -10,11 +10,20 @@ import { isNumber, isString } from "@xcmats/js-toolbox/type";
 
 import MapGL from "~web/map/components/MapGL";
 import { appMemory } from "~web/root/memory";
-import { useIncomingSpaQuery, useSpaNavigation } from "~web/router/hooks";
-import { selectTileSourceIndex, selectViewport } from "~web/map/selectors";
+import { useSpaNavigation } from "~web/router/hooks";
 import { useDocumentTitle, useStyles } from "~web/layout/hooks";
 import {
+    selectMaxTileSourceIndex,
+    selectTileSourceIndex,
+    selectViewport,
+} from "~web/map/selectors";
+import {
+    selectIncomingBrowserHashChange,
+    selectIncomingSpaQueryMapping,
+} from "~web/router/selectors";
+import {
     coordsToMapViewport,
+    mapViewportToString,
     stringToCoords,
     throttledTileSourceIndexHashUpdate,
     throttledViewportHashUpdate,
@@ -43,7 +52,7 @@ const createStyles = () => sxStyles({
 /**
  * ...
  */
-const { act, tnk } = appMemory();
+const { store, tnk } = appMemory();
 
 
 
@@ -60,26 +69,50 @@ const BasicMap: FC = () => {
 
 
     // ...
-    const inQuery = useIncomingSpaQuery();
+    const inQueryChange = useSelector(selectIncomingBrowserHashChange);
     const viewport = useSelector(selectViewport);
     const settingViewportProgress = useRef(false);
     const tileSourceIndex = useSelector(selectTileSourceIndex);
+    const settingTileSourceIndexProgress = useRef(false);
 
 
     // handle manual address-bar changes (and initial link-parsing)
     useEffect(() => {
+        const state = store.getState();
+        const inQuery = selectIncomingSpaQueryMapping(state);
+
+        let isPositionValid = false;
         if (isString(inQuery.p)) {
             try {
                 void tnk.map.setViewport(
                     coordsToMapViewport(stringToCoords(inQuery.p)),
                     (state) => { settingViewportProgress.current = state; },
                 );
+                isPositionValid = true;
             } catch { /* no-op */ }
         }
-        if (isNumber(inQuery.m)) {
-            act.map.SET_TILESOURCE_INDEX(inQuery.m);
+        if (!isPositionValid) {
+            navigate.replaceQuery((c) => ({
+                ...c, p: mapViewportToString(selectViewport(state)),
+            }));
         }
-    }, [inQuery]);
+
+        if (
+            isNumber(inQuery.m) &&
+            inQuery.m >= 0 &&
+            inQuery.m <= selectMaxTileSourceIndex(state)
+        ) {
+            void tnk.map.setTileSourceIndex(
+                inQuery.m,
+                (state) => { settingTileSourceIndexProgress.current = state; },
+            );
+        } else {
+            navigate.replaceQuery((c) => ({
+                ...c, m: selectTileSourceIndex(state),
+            }));
+        }
+    }, [inQueryChange]);
+
 
     // reflect map state in address-bar query
     useEffect(() => {
@@ -91,12 +124,15 @@ const BasicMap: FC = () => {
         }
     }, [viewport]);
 
+
     // reflect base map selection (tile source) in address-bar query
     useEffect(() => {
-        throttledTileSourceIndexHashUpdate(
-            (m) => navigate.replaceQuery((c) => ({ ...c, m })),
-            tileSourceIndex,
-        );
+        if (!settingTileSourceIndexProgress.current) {
+            throttledTileSourceIndexHashUpdate(
+                (m) => navigate.replaceQuery((c) => ({ ...c, m })),
+                tileSourceIndex,
+            );
+        }
     }, [tileSourceIndex]);
 
 

@@ -55,7 +55,18 @@ export const selectBrowserHash = (s: RootState) => s.router.hash;
  * to url state done from within application thus in most cases it will contain
  * a different value than `router.hash`.
  */
-export const selectIncomingBrowserHash = (s: RootState) => s.router.incomingHash;
+export const selectIncomingBrowserHash = (s: RootState) =>
+    s.router.incomingHash;
+
+
+
+
+/**
+ * Manual user interaction with browser hash detection. Changes always
+ * (even if user typed-in exactly the same values).
+ */
+export const selectIncomingBrowserHashChange = (s: RootState) =>
+    s.router.incomingHashChange;
 
 
 

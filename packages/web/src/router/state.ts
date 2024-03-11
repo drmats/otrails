@@ -24,6 +24,9 @@ export default {
     // url hash - manual address bar changes / last user input
     incomingHash: "",
 
+    // url hash - timestamp of last user interaction
+    incomingHashChange: 0,
+
     // route state (serialized)
     routeState: "",
 

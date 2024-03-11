@@ -37,6 +37,11 @@ export default sliceReducer(initState) ((slice) => slice
         draft.incomingHash = hash;
     }))
 
+    // incoming url hash handling change
+    .handle(act.SET_INCOMING_HASH_CHANGE, produce((draft, { ts }) => {
+        draft.incomingHashChange = ts;
+    }))
+
     // url state and cache handling
     .handle(act.SET_ROUTE_STATE, produce((draft, { route, routeState }) => {
         const stateString = JSON.stringify(routeState);

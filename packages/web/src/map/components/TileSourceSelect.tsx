@@ -27,7 +27,7 @@ import { sxStyles } from "~web/common/utils";
 /**
  * ...
  */
-const { act } = appMemory();
+const { tnk } = appMemory();
 
 
 
@@ -55,7 +55,7 @@ export const TileSourceSelect: FC = () => {
 
     const handleChange = useCallback((e: SelectChangeEvent) => {
         if (isNumber(e.target.value)) {
-            act.map.SET_TILESOURCE_INDEX(e.target.value);
+            void tnk.map.setTileSourceIndex(e.target.value);
         }
     }, []);
 

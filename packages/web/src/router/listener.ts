@@ -29,6 +29,7 @@ const setupListener: ThunkType<void> = (_d, getState, { act, mut }) => {
             (browserHash: string) => {
                 act.router.SET_HASH(browserHash);
                 act.router.SET_INCOMING_HASH(browserHash);
+                act.router.SET_INCOMING_HASH_CHANGE(Date.now());
                 return browserHash;
             },
         ) as string;
