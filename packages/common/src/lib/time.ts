@@ -20,6 +20,14 @@ export const isoToTimestamp = (iso: string): number => new Date(iso).getTime();
 
 
 /**
+ * Convert unix epoch timestamp to ISO string ('%Y-%m-%dT%H:%M:%fZ').
+ */
+export const timestampToIso = (ts: number): string => new Date(ts).toJSON();
+
+
+
+
+/**
  * Return ISO 8601 representation of "now".
  */
 export const isoNow = (): string => (new Date()).toJSON();

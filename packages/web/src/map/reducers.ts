@@ -55,6 +55,11 @@ export default sliceReducer(initState) ((slice) => slice
     .handle(act.SET_DIMENSIONS, produce((draft, { dimensions }) => {
         if (dimensions.height) draft.dimensions.height = dimensions.height;
         if (dimensions.width) draft.dimensions.width = dimensions.width;
+    }))
+
+    // set map selection
+    .handle(act.SET_SELECTION, (state, { selection }) => ({
+        ...state, selection,
     })),
 
 );

@@ -6,6 +6,7 @@
  */
 
 import { ThemeVariant } from "~common/framework/theme";
+import type { PlainRecord } from "~common/lib/struct";
 
 
 
@@ -42,4 +43,20 @@ export type TileSource = {
     label: string;
     url: string;
     themeVariant: ThemeVariant;
+};
+
+
+
+
+/**
+ * Active map selection.
+ */
+export type MapSelection = {
+    point: [number, number];
+    lngLat: [number, number];
+    features: {
+        id?: number | string;
+        properties: PlainRecord;
+    }[];
+    timestamp: number;
 };

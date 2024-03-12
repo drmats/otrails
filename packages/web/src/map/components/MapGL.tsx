@@ -151,10 +151,20 @@ const MapGL: FC = () => {
     // ...
     const onMapClick = useCallback((e: MapLayerMouseEvent) => {
         mut.selection = {
-            lngLat: e.lngLat,
             point: e.point,
+            lngLat: e.lngLat,
             features: e.features,
         };
+        act.map.SET_SELECTION({
+            point: [e.point.x, e.point.y],
+            lngLat: [e.lngLat.lng, e.lngLat.lat],
+            features: e.features
+                ? e.features.map(
+                    (f) => ({ id: f.id, properties: f.properties }),
+                )
+                : [],
+            timestamp: Date.now(),
+        });
     }, []);
 
 

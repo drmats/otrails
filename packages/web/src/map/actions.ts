@@ -7,7 +7,12 @@
 
 import { actionCreators } from "red-g";
 
-import type { MapDimensions, MapViewport, TileSource } from "~web/map/types";
+import type {
+    MapDimensions,
+    MapSelection,
+    MapViewport,
+    TileSource,
+} from "~web/map/types";
 
 
 
@@ -23,6 +28,7 @@ export enum MapActionType {
     SET_TILESOURCE_INDEX = "Map/SET_TILESOURCE_INDEX",
     SET_VIEWPORT = "Map/SET_VIEWPORT",
     SET_DIMENSIONS = "Map/SET_DIMENSIONS",
+    SET_SELECTION = "Map/SET_SELECTION",
 
 }
 
@@ -39,5 +45,6 @@ export default actionCreators(MapActionType, {
     SET_TILESOURCE_INDEX: (tileSourceIndex: number) => ({ tileSourceIndex }),
     SET_VIEWPORT: (viewport: Partial<MapViewport>) => ({ viewport }),
     SET_DIMENSIONS: (dimensions: Partial<MapDimensions>) => ({ dimensions }),
+    SET_SELECTION: (selection?: MapSelection) => ({ selection }),
 
 });

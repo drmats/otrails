@@ -11,7 +11,7 @@ import { isNumber, isString } from "@xcmats/js-toolbox/type";
 import MapGL from "~web/map/components/MapGL";
 import { appMemory } from "~web/root/memory";
 import { useSpaNavigation } from "~web/router/hooks";
-import { useDocumentTitle, useStyles } from "~web/layout/hooks";
+import { useDimensions, useDocumentTitle, useStyles } from "~web/layout/hooks";
 import {
     selectMaxTileSourceIndex,
     selectTileSourceIndex,
@@ -31,6 +31,7 @@ import {
 import { sxStyles } from "~web/common/utils";
 import MobilePaper from "~web/common/components/MobilePaper";
 import { TileSourceSelect } from "~web/map/components/TileSourceSelect";
+import { MapSelectionInspect } from "~web/map/components/MapSelectionInspect";
 
 
 
@@ -38,11 +39,20 @@ import { TileSourceSelect } from "~web/map/components/TileSourceSelect";
 /**
  * ...
  */
-const createStyles = () => sxStyles({
-    controlSurface: {
+const createStyles = (width: number) => sxStyles({
+    tileSourceSurface: {
         position: "fixed",
         right: "10px",
         bottom: "10px",
+    },
+
+    mapSelectionSurface: {
+        position: "fixed",
+        right: "10px",
+        top: "10px",
+        maxWidth: width >= 400 ? "380px" : `${width - 20}px`,
+        maxHeight: "640px",
+        p: 1,
     },
 });
 
@@ -63,7 +73,8 @@ const { store, tnk } = appMemory();
 const BasicMap: FC = () => {
     const navigate = useSpaNavigation();
     const { t } = useTranslation();
-    const sx = useStyles(createStyles);
+    const { width } = useDimensions();
+    const sx = useStyles(createStyles, width);
 
     useDocumentTitle(t("BasicMap:title"), true);
 
@@ -139,7 +150,10 @@ const BasicMap: FC = () => {
     return (
         <>
             <MapGL />
-            <MobilePaper sx={sx.controlSurface}>
+            <MobilePaper sx={sx.mapSelectionSurface}>
+                <MapSelectionInspect />
+            </MobilePaper>
+            <MobilePaper sx={sx.tileSourceSurface}>
                 <TileSourceSelect />
             </MobilePaper>
         </>

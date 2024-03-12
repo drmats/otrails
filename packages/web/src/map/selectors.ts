@@ -45,3 +45,5 @@ export const selectTileSource = createSelector(
 );
 
 export const selectViewport = (s: RootState) => s.map.viewport;
+
+export const selectSelection = (s: RootState) => s.map.selection;

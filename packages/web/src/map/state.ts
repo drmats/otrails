@@ -6,6 +6,7 @@
  */
 
 import { tileSources } from "~web/map/constants";
+import type { MapSelection } from "~web/map/types";
 
 
 
@@ -38,5 +39,8 @@ export default {
         width: 0,
         height: 0,
     },
+
+    // active map selection
+    selection: undefined as MapSelection | undefined,
 
 };
