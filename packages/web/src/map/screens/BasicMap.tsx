@@ -40,12 +40,6 @@ import { MapSelectionInspect } from "~web/map/components/MapSelectionInspect";
  * ...
  */
 const createStyles = (width: number) => sxStyles({
-    tileSourceSurface: {
-        position: "fixed",
-        right: "10px",
-        bottom: "10px",
-    },
-
     mapSelectionSurface: {
         position: "fixed",
         right: "10px",
@@ -53,6 +47,11 @@ const createStyles = (width: number) => sxStyles({
         maxWidth: width >= 400 ? "380px" : `${width - 20}px`,
         maxHeight: "640px",
         p: 1,
+    },
+    tileSourceSurface: {
+        position: "fixed",
+        right: "10px",
+        bottom: "10px",
     },
 });
 
