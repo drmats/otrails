@@ -45,11 +45,14 @@ track_geometries AS (
             10
         ) AS mvtgeom,
         garmin.simple_track.id AS track_id,
-        garmin.simple_track.sport AS sport,
-        garmin.simple_track.user_short_id AS user_short_id,
-        garmin.simple_track.begin_timestamp::text AS begin_timestamp
-    FROM garmin.simple_track INNER JOIN intersections
-        ON garmin.simple_track.id = intersections.track_id
+        garmin.tracked_activity.activity_type AS activity_type,
+        garmin.tracked_activity.user_short_id AS user_short_id,
+        garmin.tracked_activity.begin_timestamp::text AS begin_timestamp
+    FROM garmin.simple_track
+        INNER JOIN intersections
+            ON garmin.simple_track.id = intersections.track_id
+        INNER JOIN garmin.tracked_activity
+            ON garmin.simple_track.id = garmin.tracked_activity.track_id
 )
 
 -- binary tile

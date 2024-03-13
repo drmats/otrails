@@ -86,7 +86,7 @@ export const bakeTiles: CliAction = async () => {
             // mbtiles schema
             ensureSchema(filedb);
             const insertMeta = metaInserter(filedb);
-            insertMeta({ name: "name", value: "otrails-hiketiles" });
+            insertMeta({ name: "name", value: "otrails-tracktiles" });
             insertMeta({ name: "description", value: "https://wchmurach.com.pl/" });
             insertMeta({ name: "version", value: "1" });
             insertMeta({ name: "type", value: "overlay" });
@@ -102,15 +102,15 @@ export const bakeTiles: CliAction = async () => {
                 value: JSON.stringify({
                     vector_layers: [
                         {
+                            "id": "track",
+                            "description": "Recorded track.",
                             "minzoom": 0,
                             "maxzoom": MAX_ZOOM,
                             "fields": {
-                                "sport": "String",
+                                "activity_type": "String",
                                 "user_short_id": "String",
                                 "begin_timestamp": "String",
                             },
-                            "id": "track",
-                            "description": "Recorded hike.",
                         },
                     ],
                 }),

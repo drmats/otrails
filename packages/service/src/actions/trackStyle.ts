@@ -11,7 +11,8 @@ import { isString } from "@xcmats/js-toolbox/type";
 
 import type { ResponseErr } from "~common/framework/actions";
 import { lex } from "~common/lib/sort";
-import type { ComplexRecord } from "~common/lib/struct";
+import { deepMerge, type ComplexRecord } from "~common/lib/struct";
+import { hfid } from "~common/lib/ids";
 import { substitute } from "~common/framework/routing";
 import { useMemory } from "~service/logic/memory";
 import { TILE_VALIDITY_PERIOD } from "~service/logic/configuration";
@@ -24,11 +25,26 @@ import { ACTION } from "~common/app/api";
 /**
  * ...
  */
-const trackLayoutStyle = {
-    "line-cap": "round",
-    "line-join": "round",
-    "visibility": "visible",
-};
+const layerBase = () => ({
+    "id": hfid(),
+    "type": "line",
+    "source": "tracks",
+    "source-layer": "track",
+    "layout": {
+        "line-cap": "round",
+        "line-join": "round",
+        "visibility": "visible",
+    },
+    "paint": {
+        "line-blur": 2,
+        "line-width": [
+            "interpolate", ["linear"], ["zoom"],
+            6, 6,
+            9, 5,
+        ],
+    },
+    "interactive": true,
+});
 
 
 
@@ -36,14 +52,14 @@ const trackLayoutStyle = {
 /**
  * ...
  */
-const trackPaintStyle = {
-    "line-blur": 2,
-    "line-width": [
-        "interpolate", ["linear"], ["zoom"],
-        6, 6,
-        9, 5,
-    ],
-};
+const propFilter = (
+    op: "any" | "all",
+    prop: string,
+    vals: (number | string)[],
+) => [
+    op,
+    ...vals.map((v) => ["==", ["get", prop], v]),
+];
 
 
 
@@ -52,58 +68,34 @@ const trackPaintStyle = {
  * ...
  */
 const layers = [
-    {
+
+    // runs
+    deepMerge(layerBase(), {
         "id": "running",
-        "type": "line",
-        "source": "tracks",
-        "source-layer": "track",
-        "filter": [
-            "any",
-            ["==", ["get", "sport"], "running"],
-            ["==", ["get", "sport"], "trail_running"],
-        ],
-        "layout": trackLayoutStyle,
-        "paint": {
-            "line-color": "#D38E00AA",
-            ...trackPaintStyle,
-        },
-        "interactive": true,
-    },
-    {
+        "filter": propFilter(
+            "any", "activity_type", ["running", "trail_running"],
+        ),
+        "paint": { "line-color": "#DEB100AA" },
+    }, { allowGrowth: true }),
+
+    // walks
+    deepMerge(layerBase(), {
         "id": "walking",
-        "type": "line",
-        "source": "tracks",
-        "source-layer": "track",
-        "filter": [
-            "any",
-            ["==", ["get", "sport"], "walking"],
-            ["==", ["get", "sport"], "casual_walking"],
-            ["==", ["get", "sport"], "speed_walking"],
-        ],
-        "layout": trackLayoutStyle,
-        "paint": {
-            "line-color": "#BE4400AA",
-            ...trackPaintStyle,
-        },
-        "interactive": true,
-    },
-    {
+        "filter": propFilter(
+            "any", "activity_type", ["walking", "casual_walking", "speed_walking"],
+        ),
+        "paint": { "line-color": "#D85E00AA" },
+    }, { allowGrowth: true }),
+
+    // hikes
+    deepMerge(layerBase(), {
         "id": "hiking",
-        "type": "line",
-        "source": "tracks",
-        "source-layer": "track",
-        "filter": [
-            "any",
-            ["==", ["get", "sport"], "hiking"],
-            ["==", ["get", "sport"], "rock_climbing"],
-        ],
-        "layout": trackLayoutStyle,
-        "paint": {
-            "line-color": "#BE005BAA",
-            ...trackPaintStyle,
-        },
-        "interactive": true,
-    },
+        "filter": propFilter(
+            "any", "activity_type", ["hiking", "rock_climbing"],
+        ),
+        "paint": { "line-color": "#B90025AA" },
+    }, { allowGrowth: true }),
+
 ];
 
 
