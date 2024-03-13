@@ -23,6 +23,7 @@ import { processFits } from "~cli/actions/processFits";
 import { processSummaries } from "~cli/actions/processSummaries";
 import { processTcxes } from "~cli/actions/processTcxes";
 import { setupViews } from "~cli/actions/setupViews";
+import { wipeAllData } from "~cli/actions/wipeAllData";
 
 
 
@@ -70,6 +71,14 @@ export default async function configureArgsParser (): Promise<void> {
                 },
             },
             dbSize,
+        )
+
+        // wipe all postgis data
+        .command(
+            "wipe-all-data",
+            "wipe all data from postgis database",
+            emptyObject,
+            wipeAllData,
         )
 
         // export contents of garmin data export zip to id-subfolder
