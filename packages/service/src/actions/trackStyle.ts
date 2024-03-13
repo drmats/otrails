@@ -73,16 +73,28 @@ const layers = [
     deepMerge(layerBase(), {
         "id": "running",
         "filter": propFilter(
-            "any", "activity_type", ["running", "trail_running"],
+            "any", "activity_type",
+            ["running", "trail_running"],
         ),
         "paint": { "line-color": "#DEB100AA" },
+    }, { allowGrowth: true }),
+
+    // bikes
+    deepMerge(layerBase(), {
+        "id": "biking",
+        "filter": propFilter(
+            "any", "activity_type",
+            ["cycling", "road_biking", "gravel_cycling", "mountain_biking"],
+        ),
+        "paint": { "line-color": "#0E9800AA" },
     }, { allowGrowth: true }),
 
     // walks
     deepMerge(layerBase(), {
         "id": "walking",
         "filter": propFilter(
-            "any", "activity_type", ["walking", "casual_walking", "speed_walking"],
+            "any", "activity_type",
+            ["walking", "casual_walking", "speed_walking"],
         ),
         "paint": { "line-color": "#D85E00AA" },
     }, { allowGrowth: true }),
@@ -91,9 +103,23 @@ const layers = [
     deepMerge(layerBase(), {
         "id": "hiking",
         "filter": propFilter(
-            "any", "activity_type", ["hiking", "rock_climbing"],
+            "any", "activity_type",
+            ["hiking", "rock_climbing"],
         ),
         "paint": { "line-color": "#B90025AA" },
+    }, { allowGrowth: true }),
+
+    // water sports
+    deepMerge(layerBase(), {
+        "id": "watering",
+        "filter": propFilter(
+            "any", "activity_type",
+            [
+                "kayaking_v2", "open_water_swimming", "rowing_v2",
+                "sailing_v2", "whitewater_rafting_kayaking",
+            ],
+        ),
+        "paint": { "line-color": "#002795AA" },
     }, { allowGrowth: true }),
 
 ];

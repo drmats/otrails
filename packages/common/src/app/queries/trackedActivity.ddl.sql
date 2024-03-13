@@ -50,26 +50,6 @@ CREATE VIEW garmin.tracked_activity AS (
 
 
 
--- simplified geometry for all "on foot" activities no shorter than 100 m
-DROP VIEW IF EXISTS garmin.on_foot CASCADE;
-CREATE VIEW garmin.on_foot AS (
-    SELECT *
-    FROM garmin.tracked_activity
-    WHERE
-        (
-            activity_type = 'hiking' OR
-            activity_type = 'rock_climbing' OR
-            activity_type = 'walking' OR
-            activity_type = 'casual_walking' OR
-            activity_type = 'speed_walking' OR
-            activity_type = 'running' OR
-            activity_type = 'trail_running'
-        ) AND distance >= 100
-);
-
-
-
-
 -- simplified geometry for all hikes and walks no shorter than 100 m
 DROP VIEW IF EXISTS garmin.hike_or_walk CASCADE;
 CREATE VIEW garmin.hike_or_walk AS (
@@ -120,6 +100,54 @@ CREATE VIEW garmin.bike AS (
 
 
 
+-- simplified geometry for all water activities no shorter than 100 m
+DROP VIEW IF EXISTS garmin.water CASCADE;
+CREATE VIEW garmin.water AS (
+    SELECT *
+    FROM garmin.tracked_activity
+    WHERE
+        (
+            activity_type = 'kayaking_v2' OR
+            activity_type = 'open_water_swimming' OR
+            activity_type = 'rowing_v2' OR
+            activity_type = 'sailing_v2' OR
+            activity_type = 'whitewater_rafting_kayaking'
+        ) AND distance >= 100
+);
+
+
+
+
+-- simplified geometry for all "sport" activities
+-- (hike, walk, run, bike, water) no shorter than 100 m
+DROP VIEW IF EXISTS garmin.sport CASCADE;
+CREATE VIEW garmin.sport AS (
+    SELECT *
+    FROM garmin.tracked_activity
+    WHERE
+        (
+            activity_type = 'hiking' OR
+            activity_type = 'rock_climbing' OR
+            activity_type = 'walking' OR
+            activity_type = 'casual_walking' OR
+            activity_type = 'speed_walking' OR
+            activity_type = 'running' OR
+            activity_type = 'trail_running' OR
+            activity_type = 'cycling' OR
+            activity_type = 'road_biking' OR
+            activity_type = 'gravel_cycling' OR
+            activity_type = 'mountain_biking' OR
+            activity_type = 'kayaking_v2' OR
+            activity_type = 'open_water_swimming' OR
+            activity_type = 'rowing_v2' OR
+            activity_type = 'sailing_v2' OR
+            activity_type = 'whitewater_rafting_kayaking'
+        ) AND distance >= 100
+);
+
+
+
+
 -- simplified geometry for all other activities no shorter than 100 m
 DROP VIEW IF EXISTS garmin.other;
 CREATE VIEW garmin.other AS (
@@ -131,11 +159,16 @@ CREATE VIEW garmin.other AS (
         activity_type != 'walking' AND
         activity_type != 'casual_walking' AND
         activity_type != 'speed_walking' AND
+        activity_type != 'running' AND
+        activity_type != 'trail_running' AND
         activity_type != 'cycling' AND
         activity_type != 'road_biking' AND
         activity_type != 'gravel_cycling' AND
         activity_type != 'mountain_biking' AND
-        activity_type != 'running' AND
-        activity_type != 'trail_running' AND
+        activity_type != 'kayaking_v2' AND
+        activity_type != 'open_water_swimming' AND
+        activity_type != 'rowing_v2' AND
+        activity_type != 'sailing_v2' AND
+        activity_type != 'whitewater_rafting_kayaking' AND
         distance >= 100
 );

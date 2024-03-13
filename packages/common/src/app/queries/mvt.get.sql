@@ -21,7 +21,7 @@ y (v) AS (VALUES ($<y>)),
 -- tracks intersecting requested coordinate (precomputed)
 intersections AS (
     SELECT track_id
-    FROM tile.on_foot_mvt_intersection
+    FROM tile.sport_mvt_intersection
     WHERE
         z = (SELECT v FROM z) AND
         x = (SELECT v FROM x) AND

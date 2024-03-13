@@ -7,7 +7,7 @@
 
 import type { CliAction } from "~common/framework/actions";
 import { printError } from "~common/lib/error";
-import { infonl, oknl } from "~common/lib/terminal";
+import { oknl } from "~common/lib/terminal";
 import { extractGarminData } from "~cli/actions/extractGarminData";
 import { fetchImages } from "~cli/actions/fetchImages";
 import { processFits } from "~cli/actions/processFits";
@@ -33,7 +33,6 @@ export const ingestGarminData: CliAction<{
         await processTcxes({ userShortId });
         await processFits({ userShortId });
 
-        infonl();
         oknl("ALL DONE");
 
     } catch (e) {

@@ -12,18 +12,18 @@ CREATE SCHEMA IF NOT EXISTS tile;
 
 
 
--- "on foot" track minimum bounding circles:
+-- "sport" track minimum bounding circles:
 -- circle centers intended to be used as track marks
 -- for low zoom levels
-DROP MATERIALIZED VIEW IF EXISTS tile.on_foot_circle CASCADE;
-CREATE MATERIALIZED VIEW tile.on_foot_circle AS (
+DROP MATERIALIZED VIEW IF EXISTS tile.sport_circle CASCADE;
+CREATE MATERIALIZED VIEW tile.sport_circle AS (
     WITH
     mercator_track AS (
         SELECT
             track_id,
             user_short_id,
             ST_Transform(track, 3857) AS track
-        FROM garmin.on_foot
+        FROM garmin.sport
     ),
     bounding_radius AS (
         SELECT
@@ -42,47 +42,47 @@ CREATE MATERIALIZED VIEW tile.on_foot_circle AS (
     FROM bounding_radius
 )
 WITH NO DATA;
-REFRESH MATERIALIZED VIEW tile.on_foot_circle;
+REFRESH MATERIALIZED VIEW tile.sport_circle;
 
 
 
 
--- "on foot" activities coverage (union of envelopes)
-DROP MATERIALIZED VIEW IF EXISTS tile.on_foot_bounds_union CASCADE;
-CREATE MATERIALIZED VIEW tile.on_foot_bounds_union AS (
+-- "sport" activities coverage (union of envelopes)
+DROP MATERIALIZED VIEW IF EXISTS tile.sport_bounds_union CASCADE;
+CREATE MATERIALIZED VIEW tile.sport_bounds_union AS (
     SELECT ST_Union(ST_Envelope(track)) AS boundary
-    FROM garmin.on_foot
+    FROM garmin.sport
 )
 WITH NO DATA;
-REFRESH MATERIALIZED VIEW tile.on_foot_bounds_union;
+REFRESH MATERIALIZED VIEW tile.sport_bounds_union;
 
 
 
 
--- "on foot" activities detailed coverage (union of convex hulls)
-DROP MATERIALIZED VIEW IF EXISTS tile.on_foot_hulls_union CASCADE;
-CREATE MATERIALIZED VIEW tile.on_foot_hulls_union AS (
+-- "sport" activities detailed coverage (union of convex hulls)
+DROP MATERIALIZED VIEW IF EXISTS tile.sport_hulls_union CASCADE;
+CREATE MATERIALIZED VIEW tile.sport_hulls_union AS (
     SELECT ST_Union(ST_ConvexHull(track)) AS hull
-    FROM garmin.on_foot
+    FROM garmin.sport
 )
 WITH NO DATA;
-REFRESH MATERIALIZED VIEW tile.on_foot_hulls_union;
+REFRESH MATERIALIZED VIEW tile.sport_hulls_union;
 
 
 
 
--- "on foot" activities mvt tiles coverage (max zoom 16),
+-- "sport" activities mvt tiles coverage (max zoom 16),
 -- first approximation - intersecting with precomputed activity geometries
 -- convex hulls (no "holes" inside closed or c-shaped activity track-lines)
-DROP MATERIALIZED VIEW IF EXISTS tile.on_foot_approx_mvt_envelope CASCADE;
-CREATE MATERIALIZED VIEW tile.on_foot_approx_mvt_envelope AS (
+DROP MATERIALIZED VIEW IF EXISTS tile.sport_approx_mvt_envelope CASCADE;
+CREATE MATERIALIZED VIEW tile.sport_approx_mvt_envelope AS (
     WITH RECURSIVE
 
     -- boundary (single row with merged geometry)
     -- coordinate system transformed from WGS84 to Spherical Mercator (web)
     bounds (boundary) AS (
         SELECT ST_Transform(hull, 3857) AS boundary
-        FROM tile.on_foot_hulls_union
+        FROM tile.sport_hulls_union
     ),
 
     -- coordinates of direct subtiles (one-zoom-level deeper)
@@ -128,31 +128,31 @@ CREATE MATERIALIZED VIEW tile.on_foot_approx_mvt_envelope AS (
     FROM tile_coords
 )
 WITH NO DATA;
-CREATE INDEX IF NOT EXISTS on_foot_approx_mvt_envelope_envelope_gix
-    ON tile.on_foot_approx_mvt_envelope USING gist (envelope);
-REFRESH MATERIALIZED VIEW tile.on_foot_approx_mvt_envelope;
+CREATE INDEX IF NOT EXISTS sport_approx_mvt_envelope_envelope_gix
+    ON tile.sport_approx_mvt_envelope USING gist (envelope);
+REFRESH MATERIALIZED VIEW tile.sport_approx_mvt_envelope;
 
 
 
 
--- all mvt tile coordinates to "on foot" track intersection mapping
+-- all mvt tile coordinates to "sport" track intersection mapping
 -- (z, x, y) -> track_id[]
-DROP MATERIALIZED VIEW IF EXISTS tile.on_foot_mvt_intersection CASCADE;
-CREATE MATERIALIZED VIEW tile.on_foot_mvt_intersection AS (
+DROP MATERIALIZED VIEW IF EXISTS tile.sport_mvt_intersection CASCADE;
+CREATE MATERIALIZED VIEW tile.sport_mvt_intersection AS (
     WITH RECURSIVE
 
     -- all finest-zoom-level tile coordinates with corresponding track ids
     z16_tiles (z, x, y, track_id) AS (
         SELECT
-            tile.on_foot_approx_mvt_envelope.z AS z,
-            tile.on_foot_approx_mvt_envelope.x AS x,
-            tile.on_foot_approx_mvt_envelope.y AS y,
-            garmin.on_foot.track_id AS track_id
-        FROM tile.on_foot_approx_mvt_envelope
-            INNER JOIN garmin.on_foot
+            tile.sport_approx_mvt_envelope.z AS z,
+            tile.sport_approx_mvt_envelope.x AS x,
+            tile.sport_approx_mvt_envelope.y AS y,
+            garmin.sport.track_id AS track_id
+        FROM tile.sport_approx_mvt_envelope
+            INNER JOIN garmin.sport
                 ON ST_Intersects(
-                    garmin.on_foot.track,
-                    tile.on_foot_approx_mvt_envelope.envelope
+                    garmin.sport.track,
+                    tile.sport_approx_mvt_envelope.envelope
                 )
         WHERE z = 16
     ),
@@ -173,23 +173,23 @@ CREATE MATERIALIZED VIEW tile.on_foot_mvt_intersection AS (
     ORDER BY z, x, y ASC
 )
 WITH NO DATA;
-CREATE INDEX IF NOT EXISTS on_foot_mvt_intersection_zxy_idx
-    ON tile.on_foot_mvt_intersection USING btree (z, x, y);
-REFRESH MATERIALIZED VIEW tile.on_foot_mvt_intersection;
+CREATE INDEX IF NOT EXISTS sport_mvt_intersection_zxy_idx
+    ON tile.sport_mvt_intersection USING btree (z, x, y);
+REFRESH MATERIALIZED VIEW tile.sport_mvt_intersection;
 
 
 
 
--- set of mvt envelopes with exact covering of "on foot" track geometry
-DROP VIEW IF EXISTS tile.on_foot_mvt_envelope CASCADE;
-CREATE VIEW tile.on_foot_mvt_envelope AS (
+-- set of mvt envelopes with exact covering of "sport" track geometry
+DROP VIEW IF EXISTS tile.sport_mvt_envelope CASCADE;
+CREATE VIEW tile.sport_mvt_envelope AS (
     SELECT *
     FROM (
         SELECT
             z, x, y,
             count(track_id) AS intersections,
             ST_Transform(ST_TileEnvelope(z, x, y), 4326) AS envelope
-        FROM tile.on_foot_mvt_intersection
+        FROM tile.sport_mvt_intersection
         GROUP BY z, x, y
     )
     ORDER BY intersections DESC, z, x, y ASC
