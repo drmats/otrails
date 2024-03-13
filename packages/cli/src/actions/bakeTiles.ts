@@ -105,7 +105,7 @@ export const bakeTiles: CliAction = async () => {
                             "minzoom": 0,
                             "maxzoom": MAX_ZOOM,
                             "fields": {
-                                "track_id": "Number",
+                                "sport": "String",
                                 "user_short_id": "String",
                                 "begin_timestamp": "String",
                             },

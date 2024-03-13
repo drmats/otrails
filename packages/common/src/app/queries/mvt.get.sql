@@ -45,6 +45,7 @@ track_geometries AS (
             10
         ) AS mvtgeom,
         garmin.simple_track.id AS track_id,
+        garmin.simple_track.sport AS sport,
         garmin.simple_track.user_short_id AS user_short_id,
         garmin.simple_track.begin_timestamp::text AS begin_timestamp
     FROM garmin.simple_track INNER JOIN intersections
@@ -54,7 +55,7 @@ track_geometries AS (
 -- binary tile
 SELECT
     COALESCE(
-        ST_AsMVT(track_geometries.*, 'track', 4096, 'mvtgeom'),
+        ST_AsMVT(track_geometries.*, 'track', 4096, 'mvtgeom', 'track_id'),
         ''
     ) AS layer
 FROM track_geometries;
