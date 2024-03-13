@@ -7,11 +7,17 @@ import { type FC, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { isNumber, isString } from "@xcmats/js-toolbox/type";
+import Box from "@mui/material/Box";
 
 import MapGL from "~web/map/components/MapGL";
 import { appMemory } from "~web/root/memory";
 import { useSpaNavigation } from "~web/router/hooks";
-import { useDimensions, useDocumentTitle, useStyles } from "~web/layout/hooks";
+import {
+    useDimensions,
+    useDocumentTitle,
+    useIsMobile,
+    useStyles,
+} from "~web/layout/hooks";
 import {
     selectMaxTileSourceIndex,
     selectTileSourceIndex,
@@ -39,19 +45,29 @@ import { MapSelectionInspect } from "~web/map/components/MapSelectionInspect";
 /**
  * ...
  */
-const createStyles = (width: number) => sxStyles({
+const createStyles = (isMobile: boolean, width: number) => sxStyles({
     mapSelectionSurface: {
         position: "fixed",
-        right: "10px",
-        top: "10px",
-        maxWidth: width >= 400 ? "380px" : `${width - 20}px`,
-        maxHeight: "640px",
-        p: 1,
+        right: isMobile ? "0px" : "10px",
+        top: isMobile ? "0px" : "10px",
+        width: isMobile ? "100%" : "auto",
+        maxWidth:
+            isMobile
+                ? "100%"
+                : width >= 400 ? "400px" : `${width}px`,
+        maxHeight: isMobile ? "40%" : "640px",
+        overflow: "hidden",
+        "& > *": {
+            m: 1,
+            width: "calc(100% - 16px)",
+            maxHeight: "calc(640px - 16px)",
+            overflow: "scroll",
+        },
     },
     tileSourceSurface: {
         position: "fixed",
-        right: "10px",
-        bottom: "10px",
+        right: isMobile ? "0px" : "10px",
+        bottom: isMobile ? "0px" : "10px",
     },
 });
 
@@ -73,7 +89,8 @@ const BasicMap: FC = () => {
     const navigate = useSpaNavigation();
     const { t } = useTranslation();
     const { width } = useDimensions();
-    const sx = useStyles(createStyles, width);
+    const isMobile = useIsMobile();
+    const sx = useStyles(createStyles, isMobile, width);
 
     useDocumentTitle(t("BasicMap:title"), true);
 
@@ -150,7 +167,7 @@ const BasicMap: FC = () => {
         <>
             <MapGL />
             <MobilePaper sx={sx.mapSelectionSurface}>
-                <MapSelectionInspect />
+                <Box><MapSelectionInspect /></Box>
             </MobilePaper>
             <MobilePaper sx={sx.tileSourceSurface}>
                 <TileSourceSelect />
