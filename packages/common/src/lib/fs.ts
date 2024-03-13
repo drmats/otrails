@@ -148,7 +148,9 @@ export const getExtFilenames = async (
     const maxDepth = opts?.maxDepth ?? 0;
     const filenames: string[] = [];
     await fsWalk(path, async (_, name) => {
-        if (name.endsWith(ext)) filenames.push(name);
+        if (name.toLowerCase().endsWith(ext.toLowerCase())) {
+            filenames.push(name);
+        }
     }, { maxDepth });
     return filenames;
 };

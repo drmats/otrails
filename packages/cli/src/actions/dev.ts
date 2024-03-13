@@ -25,6 +25,7 @@ import * as libFit from "~common/fit/lib";
 import * as libFs from "~common/lib/fs";
 import * as libHttp from "~common/lib/http";
 import * as libIds from "~common/lib/ids";
+import * as libIgc from "~common/igc/lib";
 import * as libMbtilesLib from "~common/mbtiles/lib";
 import * as libMbtilesMath from "~common/mbtiles/math";
 import * as libPgsql from "~common/lib/pgsql";
@@ -65,7 +66,7 @@ export const startDevCli = async <A extends FreeFormRecord<unknown>>(
         ctx,
         lib: {
             async: libAsync, dayjs: libDayjs, dev: libDev, error: libError,
-            fit: libFit, fs: libFs, http: libHttp, ids: libIds,
+            fit: libFit, fs: libFs, http: libHttp, ids: libIds, igc: libIgc,
             mbtiles: { lib: libMbtilesLib, math: libMbtilesMath },
             pgsql: libPgsql, sqlite: libSqlite, string: libString,
             struct: libStruct, tcx: libTcx, terminal: libTerminal,

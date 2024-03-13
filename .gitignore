@@ -1,5 +1,6 @@
 .DS_Store
 data/exports/*
+data/flights/*
 data/garmin/*
 data/pg/pgdata
 data/service/*

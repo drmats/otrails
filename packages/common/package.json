@@ -20,6 +20,7 @@
         "chalk": "4.1.2",
         "dayjs": "1.11.10",
         "fit-file-parser": "1.9.5",
+        "igc-parser": "1.1.0",
         "pg-promise": "11.5.4",
         "pg": "8.11.3",
         "xml2js": "0.6.2"

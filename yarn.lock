@@ -4923,6 +4923,11 @@ flatted@^3.2.9:
   resolved "https://registry.yarnpkg.com/flatted/-/flatted-3.3.1.tgz#21db470729a6734d4997002f439cb308987f567a"
   integrity sha512-X8cqMLLie7KsNUDSdzeN8FYK9rEt4Dt67OsG/DNGnYTSDBG4uFAJFBnUeiV+zCVAvwFy56IjM9sH51jVaEhNxw==
 
+flight-recorder-manufacturers@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/flight-recorder-manufacturers/-/flight-recorder-manufacturers-2.0.0.tgz#b396a40ffcf3323572cae2289cce9793c999cc5d"
+  integrity sha512-FhSY7XslPkhYGdBBVRLLExoKqiLWbKuxPEx3O3a443hp8VOrcvE+ibibigVplQbaNipVG3pSPTZPTFJPIfcO8Q==
+
 follow-redirects@^1.0.0:
   version "1.15.5"
   resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.15.5.tgz#54d4d6d062c0fa7d9d17feb008461550e3ba8020"
@@ -5361,6 +5366,13 @@ ieee754@^1.1.12, ieee754@^1.1.13:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/ieee754/-/ieee754-1.2.1.tgz#8eb7a10a63fff25d15a57b001586d177d1b0d352"
   integrity sha512-dcyqhDvX1C46lXZcVqCpK+FtMRQVdIMN6/Df5js2zouUsqG7I6sFxitIC+7KYK29KdXOLHdu9zL4sFnoVQnqaA==
+
+igc-parser@1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/igc-parser/-/igc-parser-1.1.0.tgz#29546737b27110f78ab44e174780f60d59b63072"
+  integrity sha512-CJGWiCcCCxNSI3Pt0zbllHNekEp2NOVCgDysg5/7FuW/uXUUDiW+AcZWSwRwvtRQxnYf+Sn7mQmYKLWQfVSATA==
+  dependencies:
+    flight-recorder-manufacturers "^2.0.0"
 
 ignore-by-default@^1.0.1:
   version "1.0.1"
