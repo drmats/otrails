@@ -27,7 +27,7 @@ export const getIgcFilenames = async (
  */
 export const parseIgcFile = async (path: string): Promise<IGCFile> => {
     const source = await readFile(path, { encoding: "utf8" });
-    return parse(source);
+    return parse(source, { lenient: true });
 };
 
 

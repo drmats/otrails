@@ -20,6 +20,7 @@ import { initAllProxyTiles } from "~cli/actions/initAllProxyTiles";
 import { initProxyTiles } from "~cli/actions/initProxyTiles";
 import { prepareBaseMaps } from "~cli/actions/prepareBaseMaps";
 import { processFits } from "~cli/actions/processFits";
+import { processIgcs } from "~cli/actions/processIgcs";
 import { processSummaries } from "~cli/actions/processSummaries";
 import { processTcxes } from "~cli/actions/processTcxes";
 import { setupViews } from "~cli/actions/setupViews";
@@ -170,6 +171,28 @@ export default async function configureArgsParser (): Promise<void> {
                 },
             },
             ingestGarminData,
+        )
+
+        // igc flights processor
+        .command(
+            "process-igcs [folder] [userShortId]",
+            "process igc flights",
+            (y) => y
+                .positional("folder", {
+                    type: "string",
+                    describe: "tracks subfolder",
+                })
+                .positional("userShortId", {
+                    type: "string",
+                    describe: "pilot",
+                })
+                .option("tandem", {
+                    type: "boolean",
+                    describe: "biplace flag",
+                    default: false,
+                })
+                .boolean("tandem"),
+            async (args) => await processIgcs(args),
         )
 
         // database views
