@@ -15,6 +15,7 @@ import { devConsole } from "~cli/actions/dev";
 import { extractGarminData } from "~cli/actions/extractGarminData";
 import { fetchImages } from "~cli/actions/fetchImages";
 import { hello } from "~cli/actions/hello";
+import { ingestGarminData } from "~cli/actions/ingestGarminData";
 import { initAllProxyTiles } from "~cli/actions/initAllProxyTiles";
 import { initProxyTiles } from "~cli/actions/initProxyTiles";
 import { prepareBaseMaps } from "~cli/actions/prepareBaseMaps";
@@ -22,7 +23,7 @@ import { processFits } from "~cli/actions/processFits";
 import { processSummaries } from "~cli/actions/processSummaries";
 import { processTcxes } from "~cli/actions/processTcxes";
 import { setupViews } from "~cli/actions/setupViews";
-import { ingestGarminData } from "~cli/actions/ingestGarminData";
+
 
 
 
@@ -74,7 +75,7 @@ export default async function configureArgsParser (): Promise<void> {
         // export contents of garmin data export zip to id-subfolder
         .command(
             "extract-garmin-data [zipFileName] [userShortId]",
-            "uncompress contents of garmin export",
+            "(1) uncompress contents of garmin export",
             {
                 zipFileName: {
                     type: "string",
@@ -91,7 +92,7 @@ export default async function configureArgsParser (): Promise<void> {
         // image retriever
         .command(
             "fetch-images [userShortId]",
-            "fetch all export-data images",
+            "(2) fetch all export-data images",
             {
                 userShortId: {
                     type: "string",
@@ -104,7 +105,7 @@ export default async function configureArgsParser (): Promise<void> {
         // summarized activities processor
         .command(
             "process-summaries [userShortId]",
-            "process summarized activities",
+            "(3) process summarized activities",
             {
                 userShortId: {
                     type: "string",
@@ -117,7 +118,7 @@ export default async function configureArgsParser (): Promise<void> {
         // tcx-file activities processor
         .command(
             "process-tcxes [userShortId]",
-            "process tcx-file activities",
+            "(4) process tcx-file activities",
             {
                 userShortId: {
                     type: "string",
@@ -130,7 +131,7 @@ export default async function configureArgsParser (): Promise<void> {
         // fit-file activities processor
         .command(
             "process-fits [userShortId]",
-            "process fit-file activities",
+            "(5) process fit-file activities",
             {
                 userShortId: {
                     type: "string",
@@ -138,6 +139,28 @@ export default async function configureArgsParser (): Promise<void> {
                 },
             },
             processFits,
+        )
+
+        // automate:
+        //     - extract-garmin-data
+        //     - fetch-images
+        //     - process-summaries
+        //     - process-tcxes
+        //     - process-fits
+        .command(
+            "ingest-garmin-data [zipFileName] [userShortId]",
+            "ingest garmin user data (automate 5 steps)",
+            {
+                zipFileName: {
+                    type: "string",
+                    describe: "garmin data export zip",
+                },
+                userShortId: {
+                    type: "string",
+                    describe: "destination subfolder",
+                },
+            },
+            ingestGarminData,
         )
 
         // database views
@@ -162,23 +185,6 @@ export default async function configureArgsParser (): Promise<void> {
             "prepare base maps",
             emptyObject,
             prepareBaseMaps,
-        )
-
-        // automator
-        .command(
-            "ingest-garmin-data [zipFileName] [userShortId]",
-            "ingest garmin user data",
-            {
-                zipFileName: {
-                    type: "string",
-                    describe: "garmin data export zip",
-                },
-                userShortId: {
-                    type: "string",
-                    describe: "destination subfolder",
-                },
-            },
-            ingestGarminData,
         )
 
         // tile proxy (single)
