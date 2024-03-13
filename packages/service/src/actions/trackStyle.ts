@@ -24,30 +24,83 @@ import { ACTION } from "~common/app/api";
 /**
  * ...
  */
+const trackLayoutStyle = {
+    "line-cap": "round",
+    "line-join": "round",
+    "visibility": "visible",
+};
+
+
+
+
+/**
+ * ...
+ */
+const trackPaintStyle = {
+    "line-blur": 2,
+    "line-width": [
+        "interpolate", ["linear"], ["zoom"],
+        6, 6,
+        9, 5,
+    ],
+};
+
+
+
+
+/**
+ * ...
+ */
 const layers = [
     {
-        "id": "track",
+        "id": "running",
         "type": "line",
         "source": "tracks",
         "source-layer": "track",
-        "layout": {
-            "line-cap": "round",
-            "line-join": "round",
-            "visibility": "visible",
-        },
+        "filter": [
+            "any",
+            ["==", ["get", "sport"], "running"],
+            ["==", ["get", "sport"], "trail_running"],
+        ],
+        "layout": trackLayoutStyle,
         "paint": {
-            "line-blur": 2,
-            "line-color": "#a21",
-            "line-width": [
-                "interpolate", ["linear"], ["zoom"],
-                4, 13,
-                5, 11,
-                6, 9,
-                7, 7,
-                8, 6,
-                9, 5,
-                10, 3,
-            ],
+            "line-color": "#D38E00AA",
+            ...trackPaintStyle,
+        },
+        "interactive": true,
+    },
+    {
+        "id": "walking",
+        "type": "line",
+        "source": "tracks",
+        "source-layer": "track",
+        "filter": [
+            "any",
+            ["==", ["get", "sport"], "walking"],
+            ["==", ["get", "sport"], "casual_walking"],
+            ["==", ["get", "sport"], "speed_walking"],
+        ],
+        "layout": trackLayoutStyle,
+        "paint": {
+            "line-color": "#BE4400AA",
+            ...trackPaintStyle,
+        },
+        "interactive": true,
+    },
+    {
+        "id": "hiking",
+        "type": "line",
+        "source": "tracks",
+        "source-layer": "track",
+        "filter": [
+            "any",
+            ["==", ["get", "sport"], "hiking"],
+            ["==", ["get", "sport"], "rock_climbing"],
+        ],
+        "layout": trackLayoutStyle,
+        "paint": {
+            "line-color": "#BE005BAA",
+            ...trackPaintStyle,
         },
         "interactive": true,
     },
