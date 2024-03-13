@@ -7,7 +7,7 @@
 
 
 -- ...
-INSERT INTO garmin.simple_track (
+INSERT INTO track.simple (
     user_short_id,
     source_type,
     source_name,

@@ -7,14 +7,14 @@
 
 
 -- ...
-CREATE SCHEMA IF NOT EXISTS garmin;
+CREATE SCHEMA IF NOT EXISTS track;
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
 
 
 
 -- ...
-CREATE TABLE IF NOT EXISTS garmin.simple_track (
+CREATE TABLE IF NOT EXISTS track.simple (
     id                                   SERIAL         PRIMARY KEY NOT NULL,
     created_at                           TIMESTAMPTZ    NOT NULL DEFAULT now(),
     user_short_id                        TEXT           NOT NULL,
@@ -26,26 +26,26 @@ CREATE TABLE IF NOT EXISTS garmin.simple_track (
     line                                 GEOMETRY(Linestring, 4326)
 );
 
-CREATE INDEX IF NOT EXISTS simple_track_created_at_idx
-    ON garmin.simple_track USING brin (created_at);
+CREATE INDEX IF NOT EXISTS simple_created_at_idx
+    ON track.simple USING brin (created_at);
 
-CREATE INDEX IF NOT EXISTS simple_track_user_short_id_idx
-    ON garmin.simple_track USING btree (user_short_id);
+CREATE INDEX IF NOT EXISTS simple_user_short_id_idx
+    ON track.simple USING btree (user_short_id);
 
-CREATE UNIQUE INDEX IF NOT EXISTS simple_track_source_name_idx
-    ON garmin.simple_track USING btree (source_name);
+CREATE UNIQUE INDEX IF NOT EXISTS simple_source_name_idx
+    ON track.simple USING btree (source_name);
 
-CREATE INDEX IF NOT EXISTS simple_track_sport_idx
-    ON garmin.simple_track USING btree (sport);
+CREATE INDEX IF NOT EXISTS simple_sport_idx
+    ON track.simple USING btree (sport);
 
-CREATE INDEX IF NOT EXISTS simple_track_begin_timestamp_idx
-    ON garmin.simple_track USING brin (begin_timestamp);
+CREATE INDEX IF NOT EXISTS simple_begin_timestamp_idx
+    ON track.simple USING brin (begin_timestamp);
 
-CREATE INDEX IF NOT EXISTS simple_track_line_gix
-    ON garmin.simple_track USING gist (line);
+CREATE INDEX IF NOT EXISTS simple_line_gix
+    ON track.simple USING gist (line);
 
-CREATE UNIQUE INDEX IF NOT EXISTS simple_track_unique_line_idx
-    ON garmin.simple_track USING btree (
+CREATE UNIQUE INDEX IF NOT EXISTS simple_unique_line_idx
+    ON track.simple USING btree (
         user_short_id,
         digest(ST_AsBinary(line), 'sha256')
     );

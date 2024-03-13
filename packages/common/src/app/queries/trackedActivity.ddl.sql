@@ -16,7 +16,7 @@ CREATE SCHEMA IF NOT EXISTS garmin;
 DROP VIEW IF EXISTS garmin.tracked_activity CASCADE;
 CREATE VIEW garmin.tracked_activity AS (
     SELECT
-        garmin.simple_track.id AS track_id,
+        track.simple.id AS track_id,
         garmin.summarized_activity.id AS summarized_activity_id,
         garmin.summarized_activity.begin_timestamp AS begin_timestamp,
         garmin.summarized_activity.name AS name,
@@ -30,20 +30,20 @@ CREATE VIEW garmin.tracked_activity AS (
         garmin.summarized_activity.elevation_loss / 100 AS elevation_loss,
         garmin.summarized_activity.activity_type AS activity_type,
         garmin.summarized_activity.sport_type AS sport_type,
-        garmin.simple_track.sport AS track_sport,
-        garmin.simple_track.source_type AS track_source_type,
+        track.simple.sport AS track_sport,
+        track.simple.source_type AS track_source_type,
         garmin.summarized_activity.user_short_id AS user_short_id,
         garmin.summarized_activity.user_profile_id AS user_profile_id,
         garmin.summarized_activity.start_position AS start_position,
         garmin.summarized_activity.end_position AS end_position,
-        ST_Simplify(garmin.simple_track.line, 0.0001) AS track,
-        garmin.simple_track.source_name AS track_name
+        ST_Simplify(track.simple.line, 0.0001) AS track,
+        track.simple.source_name AS track_name
     FROM garmin.summarized_activity
-        INNER JOIN garmin.simple_track ON
+        INNER JOIN track.simple ON
             garmin.summarized_activity.begin_timestamp =
-                garmin.simple_track.begin_timestamp AND
+                track.simple.begin_timestamp AND
             garmin.summarized_activity.user_short_id =
-                garmin.simple_track.user_short_id
+                track.simple.user_short_id
     ORDER BY garmin.summarized_activity.begin_timestamp
 );
 

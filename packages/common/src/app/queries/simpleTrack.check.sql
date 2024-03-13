@@ -8,5 +8,5 @@
 
 -- ...
 SELECT count(*) > 0 AS track_found
-FROM garmin.simple_track
+FROM track.simple
 WHERE source_name = $<source_name>;

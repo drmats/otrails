@@ -19,7 +19,7 @@ x (v) AS (VALUES ($<x>)),
 y (v) AS (VALUES ($<y>)),
 
 -- tracks intersecting requested coordinate (precomputed)
-intersections AS (
+sport_track_intersections AS (
     SELECT track_id
     FROM tile.sport_mvt_intersection
     WHERE
@@ -33,7 +33,7 @@ track_geometries AS (
     SELECT
         ST_SimplifyPreserveTopology (
             ST_AsMVTGeom(
-                ST_Transform(garmin.simple_track.line, 3857),
+                ST_Transform(track.simple.line, 3857),
                 ST_TileEnvelope(
                     (SELECT v FROM z),
                     (SELECT v FROM x),
@@ -44,15 +44,15 @@ track_geometries AS (
             ),
             10
         ) AS mvtgeom,
-        garmin.simple_track.id AS track_id,
+        track.simple.id AS track_id,
         garmin.tracked_activity.activity_type AS activity_type,
         garmin.tracked_activity.user_short_id AS user_short_id,
         garmin.tracked_activity.begin_timestamp::text AS begin_timestamp
-    FROM garmin.simple_track
-        INNER JOIN intersections
-            ON garmin.simple_track.id = intersections.track_id
+    FROM track.simple
+        INNER JOIN sport_track_intersections
+            ON track.simple.id = sport_track_intersections.track_id
         INNER JOIN garmin.tracked_activity
-            ON garmin.simple_track.id = garmin.tracked_activity.track_id
+            ON track.simple.id = garmin.tracked_activity.track_id
 )
 
 -- binary tile
