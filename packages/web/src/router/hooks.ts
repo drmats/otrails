@@ -43,7 +43,7 @@ import {
 /**
  * ...
  */
-const { tnk, store } = appMemory();
+const { store, tnk } = appMemory();
 
 
 

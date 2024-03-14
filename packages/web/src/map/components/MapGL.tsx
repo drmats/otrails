@@ -28,7 +28,6 @@ import ReactMapGL, {
     type ViewStateChangeEvent,
 } from "react-map-gl/maplibre";
 
-import { ACTION } from "~common/app/api";
 import {
     selectRawTileSource,
     selectViewport,
@@ -68,10 +67,7 @@ const MapGL: FC = () => {
     const [trackStyle, setTrackStyle] =
         useState<StyleSpecification | undefined>(undefined);
     const getTrackStyle = useCallback(async () => {
-        const trackStyle =
-            await tnk.network.jsonRequest(
-                ACTION.trackStyle,
-            ) as StyleSpecification;
+        const trackStyle = await tnk.map.getTrackStyle();
         setTrackStyle(trackStyle);
         setInteractiveLayers(
             (trackStyle.layers as (

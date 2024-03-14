@@ -5,6 +5,8 @@
  * @copyright Mat. 2020-present
  */
 
+import type { StyleSpecification } from "maplibre-gl";
+
 import type { ThunkType } from "~web/store/types";
 import type { TileSourcesResponseOk } from "~common/app/actions/tile";
 import type { MapViewport } from "~web/map/types";
@@ -81,3 +83,15 @@ export const setTileSourceIndex = (
                 settingTileSourceIndexProgress(false);
         }, 100);
     };
+
+
+
+
+/**
+ * Get otrails track style.
+ */
+export const getTrackStyle = (): ThunkType<Promise<StyleSpecification>> =>
+    async (_d, _getState, { tnk }) =>
+        await tnk.network.jsonRequest(
+            ACTION.trackStyle,
+        ) as StyleSpecification;
