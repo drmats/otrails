@@ -23,9 +23,33 @@ import { ACTION } from "~common/app/api";
 
 
 /**
- * ...
+ * Base layer style for track start points.
  */
-const layerBase = () => ({
+const startLayerBase = () => ({
+    "id": hfid(),
+    "type": "circle",
+    "source": "tracks",
+    "source-layer": "start",
+    "layout": {
+        "visibility": "visible",
+    },
+    "paint": {
+        "circle-radius": 5,
+        "circle-color": "#EEEEEEDD",
+        "circle-stroke-color": "#222222DD",
+        "circle-stroke-width": 2,
+        "circle-blur": 0.25,
+    },
+    "interactive": false,
+});
+
+
+
+
+/**
+ * Base layer style for track bottoms.
+ */
+const trackLayerBottomBase = () => ({
     "id": hfid(),
     "type": "line",
     "source": "tracks",
@@ -38,14 +62,34 @@ const layerBase = () => ({
     "paint": {
         "line-blur": [
             "interpolate", ["linear"], ["zoom"],
-            8, 2,
+            8, 3,
             11, 2,
             16, 0,
         ],
         "line-width": [
             "interpolate", ["linear"], ["zoom"],
-            6, 3,
-            9, 5,
+            4, 0,
+            8, 6,
+            10, 6,
+        ],
+    },
+    "interactive": false,
+});
+
+
+
+
+/**
+ * Base layer style for track tops.
+ */
+const trackLayerTopBase = () => deepMerge(trackLayerBottomBase(), {
+    "paint": {
+        "line-blur": 0,
+        "line-width": [
+            "interpolate", ["linear"], ["zoom"],
+            4, 0,
+            7, 1,
+            10, 2,
         ],
     },
     "interactive": true,
@@ -55,7 +99,7 @@ const layerBase = () => ({
 
 
 /**
- * ...
+ * Helper for constructing property-based filter expression.
  */
 const propFilter = (
     op: "any" | "all",
@@ -72,69 +116,115 @@ const propFilter = (
 /**
  * ...
  */
+const bikeFilter = () => propFilter(
+    "any", "activity_type",
+    ["cycling", "road_biking", "gravel_cycling", "mountain_biking"],
+);
+const flightFilter = () => propFilter(
+    "any", "activity_type",
+    ["paragliding", "tandem_paragliding"],
+);
+const runFilter = () => propFilter(
+    "any", "activity_type",
+    ["running", "trail_running"],
+);
+const walkFilter = () => propFilter(
+    "any", "activity_type",
+    ["walking", "casual_walking", "speed_walking"],
+);
+const hikeFilter = () => propFilter(
+    "any", "activity_type",
+    ["hiking", "rock_climbing"],
+);
+const waterFilter = () => propFilter(
+    "any", "activity_type",
+    [
+        "kayaking_v2", "open_water_swimming", "rowing_v2",
+        "sailing_v2", "whitewater_rafting_kayaking",
+    ],
+);
+
+
+
+
+/**
+ * ...
+ */
 const layers = [
 
-    // bikes
-    deepMerge(layerBase(), {
-        "id": "biking",
-        "filter": propFilter(
-            "any", "activity_type",
-            ["cycling", "road_biking", "gravel_cycling", "mountain_biking"],
-        ),
-        "paint": { "line-color": "#0EAB00EE" },
-    }, { allowGrowth: true }),
+    // start points for all tracks
+    deepMerge(startLayerBase(), { id: "all-starts" }),
 
     // flights
-    deepMerge(layerBase(), {
+    deepMerge(trackLayerBottomBase(), {
         "id": "flying",
-        "filter": propFilter(
-            "any", "activity_type",
-            ["paragliding", "tandem_paragliding"],
-        ),
-        "paint": { "line-color": "#00AECAEE" },
+        "filter": flightFilter(),
+        "paint": { "line-color": "#006B82CC" },
+    }, { allowGrowth: true }),
+    deepMerge(trackLayerTopBase(), {
+        "id": "flying-top",
+        "filter": flightFilter(),
+        "paint": { "line-color": "#00D1FFEE" },
+    }, { allowGrowth: true }),
+
+    // bikes
+    deepMerge(trackLayerBottomBase(), {
+        "id": "biking",
+        "filter": bikeFilter(),
+        "paint": { "line-color": "#085B00CC" },
+    }, { allowGrowth: true }),
+    deepMerge(trackLayerTopBase(), {
+        "id": "biking-top",
+        "filter": bikeFilter(),
+        "paint": { "line-color": "#11CC00EE" },
     }, { allowGrowth: true }),
 
     // runs
-    deepMerge(layerBase(), {
+    deepMerge(trackLayerBottomBase(), {
         "id": "running",
-        "filter": propFilter(
-            "any", "activity_type",
-            ["running", "trail_running"],
-        ),
+        "filter": runFilter(),
+        "paint": { "line-color": "#6A5500CC" },
+    }, { allowGrowth: true }),
+    deepMerge(trackLayerTopBase(), {
+        "id": "running-top",
+        "filter": runFilter(),
         "paint": { "line-color": "#DEB100EE" },
     }, { allowGrowth: true }),
 
     // walks
-    deepMerge(layerBase(), {
+    deepMerge(trackLayerBottomBase(), {
         "id": "walking",
-        "filter": propFilter(
-            "any", "activity_type",
-            ["walking", "casual_walking", "speed_walking"],
-        ),
-        "paint": { "line-color": "#D85E00EE" },
+        "filter": walkFilter(),
+        "paint": { "line-color": "#592700CC" },
+    }, { allowGrowth: true }),
+    deepMerge(trackLayerTopBase(), {
+        "id": "walking-top",
+        "filter": walkFilter(),
+        "paint": { "line-color": "#F86C00EE" },
     }, { allowGrowth: true }),
 
     // hikes
-    deepMerge(layerBase(), {
+    deepMerge(trackLayerBottomBase(), {
         "id": "hiking",
-        "filter": propFilter(
-            "any", "activity_type",
-            ["hiking", "rock_climbing"],
-        ),
-        "paint": { "line-color": "#B90025EE" },
+        "filter": hikeFilter(),
+        "paint": { "line-color": "#680015CC" },
+    }, { allowGrowth: true }),
+    deepMerge(trackLayerTopBase(), {
+        "id": "hiking-top",
+        "filter": hikeFilter(),
+        "paint": { "line-color": "#D3002AEE" },
     }, { allowGrowth: true }),
 
     // water sports
-    deepMerge(layerBase(), {
+    deepMerge(trackLayerBottomBase(), {
         "id": "watering",
-        "filter": propFilter(
-            "any", "activity_type",
-            [
-                "kayaking_v2", "open_water_swimming", "rowing_v2",
-                "sailing_v2", "whitewater_rafting_kayaking",
-            ],
-        ),
-        "paint": { "line-color": "#002795EE" },
+        "filter": waterFilter(),
+        "paint": { "line-color": "#001654CC" },
+    }, { allowGrowth: true }),
+    deepMerge(trackLayerTopBase(), {
+        "id": "watering-top",
+        "filter": waterFilter(),
+        "paint": { "line-color": "#003EE9EE" },
     }, { allowGrowth: true }),
 
 ];

@@ -34,7 +34,7 @@ CREATE VIEW track.props_view AS (
         garmin.sport.track_id AS track_id,
         garmin.sport.activity_type AS activity_type,
         garmin.sport.user_short_id AS user_short_id,
-        garmin.sport.begin_timestamp AS begin_timestamp,
+        garmin.sport.begin_timestamp::text AS begin_timestamp,
         garmin.sport.track_name AS track_name
     FROM garmin.sport
     UNION ALL
@@ -42,7 +42,7 @@ CREATE VIEW track.props_view AS (
         track.simple.id AS track_id,
         track.simple.sport AS activity_type,
         track.simple.user_short_id AS user_short_id,
-        track.simple.begin_timestamp AS begin_timestamp,
+        track.simple.begin_timestamp::text AS begin_timestamp,
         track.simple.source_name AS track_name
     FROM track.simple
     WHERE
