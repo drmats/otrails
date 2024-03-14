@@ -19,6 +19,7 @@ import { printError } from "~common/lib/error";
 import coverageDdlQuery from "~common/app/queries/coverage.ddl.sql";
 import trackedActivityDdlQuery from "~common/app/queries/trackedActivity.ddl.sql";
 import trackPropertiesQuery from "~common/app/queries/trackProperties.ddl.sql";
+import trackBoundingCirclesQuery from "~common/app/queries/trackBoundingCircles.ddl.sql";
 
 
 
@@ -39,9 +40,14 @@ export const setupViews: CliAction = async () => {
         await db.none(sql(trackedActivityDdlQuery));
         spinner.dispose(); infonl();
 
-        info("setting up: "); shout("track views");
+        info("computing: "); shout("track properties");
         info(" "); spinner = createAutoSpinner();
         await db.none(sql(trackPropertiesQuery));
+        spinner.dispose(); infonl();
+
+        info("computing: "); shout("track bounding circles");
+        info(" "); spinner = createAutoSpinner();
+        await db.none(sql(trackBoundingCirclesQuery));
         spinner.dispose(); infonl();
 
         info("computing: "); shout("hulls, mvt coordinates and intersections");
