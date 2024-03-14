@@ -12,11 +12,13 @@
 
 Trails. Open.
 
-Parse garmin data export files, download images, store geometries in PostGIS,
-compute occupied MVT tile coordinates, bake MVT tiles into MBTile format,
-serve multiple MBTile data sources, visualise with MapLibre and more.
+Parse garmin data export files, download images,
+parse [IGC file](www.fai.org/sites/default/files/igc_fr_specification_2020-11-25_with_al6.pdf) sets,
+store geometries in PostGIS, compute occupied MVT tile coordinates,
+bake MVT tiles into MBTile format, serve multiple MBTile data sources,
+visualise with MapLibre and more.
 
-Hiking trails, cycling routes, running paths, multiple users - all at once.
+Hiking trails, cycling routes, running paths, flight tracks, multiple users - all at once.
 
 <br />
 
