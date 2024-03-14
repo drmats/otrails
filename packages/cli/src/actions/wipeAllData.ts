@@ -9,6 +9,7 @@ import type { CliAction } from "~common/framework/actions";
 import { useMemory } from "~cli/setup/memory";
 import {
     countdown,
+    createAutoSpinner,
     err,
     info,
     infonl,
@@ -45,10 +46,11 @@ export const wipeAllData: CliAction = async () => {
 
         // erase
         infonl();
-        info("Deleting all data... ");
+        info("Deleting all data... "); const spinner = createAutoSpinner();
         await db.none(sql(wipeAllDataQuery));
-        oknl("DONE");
+        spinner.dispose(); infonl();
 
+        oknl("DONE");
         infonl();
 
     } catch (e) {

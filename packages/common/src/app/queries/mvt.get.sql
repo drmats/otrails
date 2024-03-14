@@ -19,9 +19,9 @@ x (v) AS (VALUES ($<x>)),
 y (v) AS (VALUES ($<y>)),
 
 -- tracks intersecting requested coordinate (precomputed)
-sport_track_intersections AS (
+track_intersections AS (
     SELECT track_id
-    FROM tile.sport_mvt_intersection
+    FROM tile.track_mvt_intersection
     WHERE
         z = (SELECT v FROM z) AND
         x = (SELECT v FROM x) AND
@@ -45,14 +45,15 @@ track_geometries AS (
             10
         ) AS mvtgeom,
         track.simple.id AS track_id,
-        garmin.tracked_activity.activity_type AS activity_type,
-        garmin.tracked_activity.user_short_id AS user_short_id,
-        garmin.tracked_activity.begin_timestamp::text AS begin_timestamp
+        track.properties.activity_type AS activity_type,
+        track.properties.user_short_id AS user_short_id,
+        track.properties.begin_timestamp::text AS begin_timestamp,
+        track.properties.track_name AS track_name
     FROM track.simple
-        INNER JOIN sport_track_intersections
-            ON track.simple.id = sport_track_intersections.track_id
-        INNER JOIN garmin.tracked_activity
-            ON track.simple.id = garmin.tracked_activity.track_id
+        INNER JOIN track_intersections
+            ON track.simple.id = track_intersections.track_id
+        INNER JOIN track.properties
+            ON track.simple.id = track.properties.track_id
 )
 
 -- binary tile

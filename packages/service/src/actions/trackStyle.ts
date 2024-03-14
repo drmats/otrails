@@ -36,10 +36,15 @@ const layerBase = () => ({
         "visibility": "visible",
     },
     "paint": {
-        "line-blur": 2,
+        "line-blur": [
+            "interpolate", ["linear"], ["zoom"],
+            8, 2,
+            11, 2,
+            16, 0,
+        ],
         "line-width": [
             "interpolate", ["linear"], ["zoom"],
-            6, 6,
+            6, 3,
             9, 5,
         ],
     },
@@ -69,16 +74,6 @@ const propFilter = (
  */
 const layers = [
 
-    // runs
-    deepMerge(layerBase(), {
-        "id": "running",
-        "filter": propFilter(
-            "any", "activity_type",
-            ["running", "trail_running"],
-        ),
-        "paint": { "line-color": "#DEB100AA" },
-    }, { allowGrowth: true }),
-
     // bikes
     deepMerge(layerBase(), {
         "id": "biking",
@@ -86,7 +81,27 @@ const layers = [
             "any", "activity_type",
             ["cycling", "road_biking", "gravel_cycling", "mountain_biking"],
         ),
-        "paint": { "line-color": "#0E9800AA" },
+        "paint": { "line-color": "#0EAB00EE" },
+    }, { allowGrowth: true }),
+
+    // flights
+    deepMerge(layerBase(), {
+        "id": "flying",
+        "filter": propFilter(
+            "any", "activity_type",
+            ["paragliding", "tandem_paragliding"],
+        ),
+        "paint": { "line-color": "#00AECAEE" },
+    }, { allowGrowth: true }),
+
+    // runs
+    deepMerge(layerBase(), {
+        "id": "running",
+        "filter": propFilter(
+            "any", "activity_type",
+            ["running", "trail_running"],
+        ),
+        "paint": { "line-color": "#DEB100EE" },
     }, { allowGrowth: true }),
 
     // walks
@@ -96,7 +111,7 @@ const layers = [
             "any", "activity_type",
             ["walking", "casual_walking", "speed_walking"],
         ),
-        "paint": { "line-color": "#D85E00AA" },
+        "paint": { "line-color": "#D85E00EE" },
     }, { allowGrowth: true }),
 
     // hikes
@@ -106,7 +121,7 @@ const layers = [
             "any", "activity_type",
             ["hiking", "rock_climbing"],
         ),
-        "paint": { "line-color": "#B90025AA" },
+        "paint": { "line-color": "#B90025EE" },
     }, { allowGrowth: true }),
 
     // water sports
@@ -119,7 +134,7 @@ const layers = [
                 "sailing_v2", "whitewater_rafting_kayaking",
             ],
         ),
-        "paint": { "line-color": "#002795AA" },
+        "paint": { "line-color": "#002795EE" },
     }, { allowGrowth: true }),
 
 ];

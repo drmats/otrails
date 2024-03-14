@@ -36,7 +36,6 @@ CREATE VIEW garmin.tracked_activity AS (
         garmin.summarized_activity.user_profile_id AS user_profile_id,
         garmin.summarized_activity.start_position AS start_position,
         garmin.summarized_activity.end_position AS end_position,
-        ST_Simplify(track.simple.line, 0.0001) AS track,
         track.simple.source_name AS track_name
     FROM garmin.summarized_activity
         INNER JOIN track.simple ON

@@ -54,6 +54,7 @@ export default {
         "l_open-street-map.raster": "Open Street Map",
         "l_open-topo-map.raster": "Open Topo",
         "l_otrails": "Otrails",
+        "l_topo-xcontest.raster": "XContest Topo",
         "l_windy.raster": "Windy",
         "label": "Base map",
     },

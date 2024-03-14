@@ -8,5 +8,5 @@
 
 -- ...
 SELECT x, y
-FROM tile.sport_mvt_envelope
+FROM tile.track_mvt_envelope
 WHERE z = $<z>;

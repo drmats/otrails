@@ -12,77 +12,73 @@ CREATE SCHEMA IF NOT EXISTS tile;
 
 
 
--- "sport" track minimum bounding circles:
--- circle centers intended to be used as track marks
--- for low zoom levels
-DROP MATERIALIZED VIEW IF EXISTS tile.sport_circle CASCADE;
-CREATE MATERIALIZED VIEW tile.sport_circle AS (
+-- track minimum bounding circles:
+-- circle centers intended to be used as track marks for low zoom levels
+DROP MATERIALIZED VIEW IF EXISTS tile.track_circle CASCADE;
+CREATE MATERIALIZED VIEW tile.track_circle AS (
     WITH
     mercator_track AS (
         SELECT
-            track_id,
-            user_short_id,
-            ST_Transform(track, 3857) AS track
-        FROM garmin.sport
+            track.properties_with_simplified.track_id AS track_id,
+            ST_Transform(track.properties_with_simplified.track, 3857) AS track
+        FROM track.properties_with_simplified
     ),
     bounding_radius AS (
         SELECT
             track_id,
-            user_short_id,
             track,
             (ST_MinimumBoundingRadius(track)).*
         FROM mercator_track
     )
     SELECT
         track_id,
-        user_short_id,
         ST_Transform(center, 4326) AS center,
         ST_Transform(ST_MinimumBoundingCircle(track), 4326) AS bounding,
         radius
     FROM bounding_radius
 )
 WITH NO DATA;
-REFRESH MATERIALIZED VIEW tile.sport_circle;
+REFRESH MATERIALIZED VIEW tile.track_circle;
 
 
 
 
--- "sport" activities coverage (union of envelopes)
-DROP MATERIALIZED VIEW IF EXISTS tile.sport_bounds_union CASCADE;
-CREATE MATERIALIZED VIEW tile.sport_bounds_union AS (
+-- tracked activities coverage (union of envelopes)
+DROP MATERIALIZED VIEW IF EXISTS tile.track_bounds_union CASCADE;
+CREATE MATERIALIZED VIEW tile.track_bounds_union AS (
     SELECT ST_Union(ST_Envelope(track)) AS boundary
-    FROM garmin.sport
+    FROM track.properties_with_simplified
 )
 WITH NO DATA;
-REFRESH MATERIALIZED VIEW tile.sport_bounds_union;
+REFRESH MATERIALIZED VIEW tile.track_bounds_union;
 
 
 
 
--- "sport" activities detailed coverage (union of convex hulls)
-DROP MATERIALIZED VIEW IF EXISTS tile.sport_hulls_union CASCADE;
-CREATE MATERIALIZED VIEW tile.sport_hulls_union AS (
+-- tracked activities detailed coverage (union of convex hulls)
+DROP MATERIALIZED VIEW IF EXISTS tile.track_hulls_union CASCADE;
+CREATE MATERIALIZED VIEW tile.track_hulls_union AS (
     SELECT ST_Union(ST_ConvexHull(track)) AS hull
-    FROM garmin.sport
+    FROM track.properties_with_simplified
 )
 WITH NO DATA;
-REFRESH MATERIALIZED VIEW tile.sport_hulls_union;
+REFRESH MATERIALIZED VIEW tile.track_hulls_union;
 
 
 
 
--- "sport" activities mvt tiles coverage (max zoom 16),
+-- tracked activities mvt tiles coverage (max zoom 16),
 -- first approximation - intersecting with precomputed activity geometries
 -- convex hulls (no "holes" inside closed or c-shaped activity track-lines)
-DROP MATERIALIZED VIEW IF EXISTS tile.sport_approx_mvt_envelope CASCADE;
-CREATE MATERIALIZED VIEW tile.sport_approx_mvt_envelope AS (
+DROP MATERIALIZED VIEW IF EXISTS tile.track_approx_mvt_envelope CASCADE;
+CREATE MATERIALIZED VIEW tile.track_approx_mvt_envelope AS (
     WITH RECURSIVE
 
     -- boundary (single row with merged geometry)
     -- coordinate system transformed from WGS84 to Spherical Mercator (web)
     bounds (boundary) AS (
         SELECT ST_Transform(hull, 3857) AS boundary
-        FROM tile.sport_hulls_union
+        FROM tile.track_hulls_union
     ),
 
     -- coordinates of direct subtiles (one-zoom-level deeper)
@@ -129,30 +125,30 @@ CREATE MATERIALIZED VIEW tile.sport_approx_mvt_envelope AS (
 )
 WITH NO DATA;
 CREATE INDEX IF NOT EXISTS sport_approx_mvt_envelope_envelope_gix
-    ON tile.sport_approx_mvt_envelope USING gist (envelope);
-REFRESH MATERIALIZED VIEW tile.sport_approx_mvt_envelope;
+    ON tile.track_approx_mvt_envelope USING gist (envelope);
+REFRESH MATERIALIZED VIEW tile.track_approx_mvt_envelope;
 
 
 
 
--- all mvt tile coordinates to "sport" track intersection mapping
+-- all mvt tile coordinates to track intersection mapping
 -- (z, x, y) -> track_id[]
-DROP MATERIALIZED VIEW IF EXISTS tile.sport_mvt_intersection CASCADE;
-CREATE MATERIALIZED VIEW tile.sport_mvt_intersection AS (
+DROP MATERIALIZED VIEW IF EXISTS tile.track_mvt_intersection CASCADE;
+CREATE MATERIALIZED VIEW tile.track_mvt_intersection AS (
     WITH RECURSIVE
 
     -- all finest-zoom-level tile coordinates with corresponding track ids
     z16_tiles (z, x, y, track_id) AS (
         SELECT
-            tile.sport_approx_mvt_envelope.z AS z,
-            tile.sport_approx_mvt_envelope.x AS x,
-            tile.sport_approx_mvt_envelope.y AS y,
-            garmin.sport.track_id AS track_id
-        FROM tile.sport_approx_mvt_envelope
-            INNER JOIN garmin.sport
+            tile.track_approx_mvt_envelope.z AS z,
+            tile.track_approx_mvt_envelope.x AS x,
+            tile.track_approx_mvt_envelope.y AS y,
+            track.properties_with_simplified.track_id AS track_id
+        FROM tile.track_approx_mvt_envelope
+            INNER JOIN track.properties_with_simplified
                 ON ST_Intersects(
-                    garmin.sport.track,
-                    tile.sport_approx_mvt_envelope.envelope
+                    track.properties_with_simplified.track,
+                    tile.track_approx_mvt_envelope.envelope
                 )
         WHERE z = 16
     ),
@@ -174,22 +170,22 @@ CREATE MATERIALIZED VIEW tile.sport_mvt_intersection AS (
 )
 WITH NO DATA;
 CREATE INDEX IF NOT EXISTS sport_mvt_intersection_zxy_idx
-    ON tile.sport_mvt_intersection USING btree (z, x, y);
-REFRESH MATERIALIZED VIEW tile.sport_mvt_intersection;
+    ON tile.track_mvt_intersection USING btree (z, x, y);
+REFRESH MATERIALIZED VIEW tile.track_mvt_intersection;
 
 
 
 
--- set of mvt envelopes with exact covering of "sport" track geometry
-DROP VIEW IF EXISTS tile.sport_mvt_envelope CASCADE;
-CREATE VIEW tile.sport_mvt_envelope AS (
+-- set of mvt envelopes with exact covering of track geometry
+DROP VIEW IF EXISTS tile.track_mvt_envelope CASCADE;
+CREATE VIEW tile.track_mvt_envelope AS (
     SELECT *
     FROM (
         SELECT
             z, x, y,
             count(track_id) AS intersections,
             ST_Transform(ST_TileEnvelope(z, x, y), 4326) AS envelope
-        FROM tile.sport_mvt_intersection
+        FROM tile.track_mvt_intersection
         GROUP BY z, x, y
     )
     ORDER BY intersections DESC, z, x, y ASC
