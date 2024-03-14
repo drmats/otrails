@@ -15,6 +15,7 @@ import {
 } from "react";
 import { useSelector } from "react-redux";
 import type {
+    LayerSpecification,
     LngLat,
     MapGeoJSONFeature,
     MapLibreEvent,
@@ -72,7 +73,13 @@ const MapGL: FC = () => {
                 ACTION.trackStyle,
             ) as StyleSpecification;
         setTrackStyle(trackStyle);
-        setInteractiveLayers(trackStyle.layers.map(({ id }) => id));
+        setInteractiveLayers(
+            (trackStyle.layers as (
+                LayerSpecification & { interactive: boolean }
+            )[])
+                .filter(({ interactive }) => interactive)
+                .map(({ id }) => id),
+        );
     }, []);
 
 
