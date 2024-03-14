@@ -13,7 +13,7 @@
 Trails. Open.
 
 Parse garmin data export files, download images,
-parse [IGC file](www.fai.org/sites/default/files/igc_fr_specification_2020-11-25_with_al6.pdf) sets,
+parse [IGC file](https://www.fai.org/sites/default/files/igc_fr_specification_2020-11-25_with_al6.pdf) sets,
 store geometries in PostGIS, compute occupied MVT tile coordinates,
 bake MVT tiles into MBTile format, serve multiple MBTile data sources,
 visualise with MapLibre and more.
