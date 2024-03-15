@@ -50,6 +50,7 @@ export default {
         "l_natural_earth_2_shaded_relief.raster": "Natural Earth Relief",
         "l_ne_vector": "Natural Earth Vector",
         "l_open-cycle-map.raster": "Open Cycle Map",
+        "l_open-street-map-dark-fiord.raster": "Open Street Map Fiord",
         "l_open-street-map-hot.raster": "Humanitarian Open Street Map",
         "l_open-street-map.raster": "Open Street Map",
         "l_open-topo-map.raster": "Open Topo",
