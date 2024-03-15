@@ -3,7 +3,7 @@
  * @copyright Mat. 2024-present
  */
 
-import { type FC, useCallback } from "react";
+import { memo, type FC, useCallback } from "react";
 import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { isNumber } from "@xcmats/js-toolbox/type";
@@ -45,7 +45,7 @@ const createStyles = () => sxStyles({
 /**
  * ...
  */
-export const TileSourceSelect: FC = () => {
+export const TileSourceSelect: FC = memo(() => {
     const { t } = useTranslation();
     const sx = useStyles(createStyles);
 
@@ -77,4 +77,4 @@ export const TileSourceSelect: FC = () => {
             </Select>
         </FormControl>
     );
-};
+});

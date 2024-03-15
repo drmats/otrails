@@ -3,7 +3,7 @@
  * @copyright Mat. 2024-present
  */
 
-import type { FC } from "react";
+import { memo, type FC } from "react";
 import { useSelector } from "react-redux";
 
 import { selectSelection } from "~web/map/selectors";
@@ -16,7 +16,7 @@ import { timestampToIso } from "~common/lib/time";
 /**
  * ...
  */
-export const MapSelectionInspect: FC = () => {
+export const MapSelectionInspect: FC = memo(() => {
     const mapSelection = useSelector(selectSelection);
 
     return (
@@ -37,4 +37,4 @@ export const MapSelectionInspect: FC = () => {
             }}
         />
     );
-};
+});

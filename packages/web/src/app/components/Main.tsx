@@ -3,7 +3,7 @@
  * @copyright Mat. 2021-present
  */
 
-import type { FC } from "react";
+import { memo, type FC } from "react";
 import { lazy, useEffect, useCallback, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { choose } from "@xcmats/js-toolbox/func";
@@ -32,7 +32,7 @@ const BasicMap = lazy(() => import("~web/map/screens/BasicMap"));
 /**
  * Main application component.
  */
-export const App: FC = () => {
+export const App: FC = memo(() => {
     const appReady = useSelector(selectReady);
     const { act } = useMemory();
     const dispatch = useThunkDispatch();
@@ -116,4 +116,4 @@ export const App: FC = () => {
             { choose(route.matched, screens, errorScreen) }
         </Body>
     );
-};
+});

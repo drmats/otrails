@@ -6,6 +6,7 @@
  */
 
 import {
+    memo,
     type FC,
     useCallback,
     useEffect,
@@ -52,7 +53,7 @@ const { act, mut, tnk } = appMemory();
 /**
  * ...
  */
-const MapGL: FC = () => {
+const MapGL: FC = memo(() => {
 
     // map reference and viewport status
     const mapRef = useRef<MapRef | null>(null);
@@ -193,7 +194,7 @@ const MapGL: FC = () => {
         </ReactMapGL>
     );
 
-};
+});
 
 export default MapGL;
 
