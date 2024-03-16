@@ -5,7 +5,7 @@
  * @copyright Mat. 2024-present
  */
 
-import { join } from "node:path";
+import { extname, join } from "node:path";
 import BetterSqlite3 from "better-sqlite3";
 import { isString } from "@xcmats/js-toolbox/type";
 
@@ -105,6 +105,12 @@ export const initProxyTiles: CliAction<{
             format = "webp";
         } else if (firstTileResponse.headers["content-type"] === "image/png") {
             format = "png";
+        } else if (
+            firstTileResponse.headers["content-type"] === "application/vnd.mapbox-vector-tile" ||
+            firstTileResponse.headers["content-type"] === "application/x-protobuf" ||
+            extname(url) === ".pbf"
+        ) {
+            format = "pbf";
         } else {
             firstTileRequest.destroy();
             throw new Error("Unsupported tile format");

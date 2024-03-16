@@ -21,6 +21,75 @@ import { tileInserter } from "~common/mbtiles/lib";
 
 
 /**
+ * Try fetching remote tile and store it in tile proxy.
+ */
+const handleTileProxy = async (
+    format: string | undefined,
+    name: string,
+    x: number, y: number, z: number,
+    setData: (data: Buffer) => void,
+    setErrorStatus: (status: number) => void,
+) => {
+
+    const { model } = useMemory();
+
+    const proxyUrl = model.mbtile.getMeta(name, "x-proxied-url");
+
+    // if current tileset is not a proxy
+    if (!isString(proxyUrl)) {
+        // respond with 404 for raster proxies
+        if (format !== "pbf") {
+            setErrorStatus(404);
+            throw new Error(HttpMessage.C404);
+        }
+        // do nothing for vector proxies (zero-length output is a valid one)
+        return;
+    }
+
+    // try fetching tile from remote resource
+    const {
+        request: tileRequest,
+        response: tileResponse,
+    } = await httpGet(
+        proxyUrl
+            .replaceAll("{x}", String(x))
+            .replaceAll("{y}", String(y))
+            .replaceAll("{z}", String(z)),
+        // pretend firefox
+        { headers: browserRequestHeaders() },
+    );
+
+    // check response code
+    if (tileResponse.statusCode !== 200) {
+        tileRequest.destroy();
+        // respond with 404 for raster proxies
+        if (format !== "pbf") {
+            setErrorStatus(404);
+            throw new Error(HttpMessage.C404);
+        }
+        // do nothing for vector proxies (zero-length output is a valid one)
+        return;
+    }
+
+    // fetch tile data
+    const data = await collectData(tileResponse);
+    setData(data);
+
+    // check length
+    if (data.length === 0 && format !== "pbf") {
+        setErrorStatus(404);
+        throw new Error(HttpMessage.C404);
+    }
+
+    // insert tile into db
+    tileInserter(model.mbtile.getSource(name))({ z, x, y, data });
+
+};
+
+
+
+
+/**
  * Get one tile by source name and z-x-y coordinates.
  */
 export const tileGet: RequestHandler<
@@ -61,48 +130,12 @@ export const tileGet: RequestHandler<
             throw new Error(HttpMessage.C400);
         }
 
-        // raster format and no data - special case (proxy?)
-        if (format !== "pbf" && data.length === 0) {
-            const proxyUrl = model.mbtile.getMeta(name, "x-proxied-url");
-
-            // respond with 404 for no-proxied raster tiles
-            if (!isString(proxyUrl)) {
-                errorStatus = 404;
-                throw new Error(HttpMessage.C404);
-            }
-
-            // fetch tile from remote resource
-            const {
-                request: tileRequest,
-                response: tileResponse,
-            } = await httpGet(
-                proxyUrl
-                    .replaceAll("{x}", String(x))
-                    .replaceAll("{y}", String(y))
-                    .replaceAll("{z}", String(z)),
-                // pretend firefox
-                { headers: browserRequestHeaders() },
-            );
-
-            // check response code
-            if (tileResponse.statusCode !== 200) {
-                tileRequest.destroy();
-                errorStatus = 404;
-                throw new Error(HttpMessage.C404);
-            }
-
-            // fetch tile data
-            data = await collectData(tileResponse);
-
-            // check length
-            if (data.length === 0) {
-                errorStatus = 404;
-                throw new Error(HttpMessage.C404);
-            }
-
-            // insert tile into db
-            tileInserter(model.mbtile.getSource(name))({ z, x, y, data });
-        }
+        // no data - try special case: proxy
+        if (data.length === 0) await handleTileProxy(
+            format, name, x, y, z,
+            (d) => { data = d; },
+            (s) => { errorStatus = s; },
+        );
 
         // try guessing if data is gzipped
         const isCompressed =
