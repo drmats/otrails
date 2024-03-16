@@ -77,7 +77,13 @@ point_geometry AS (
 SELECT
     1 AS layer_ordering,
     COALESCE(
-        ST_AsMVT(track_geometry.*, 'track', 4096, 'mvt_track_geom', 'track_id'),
+        ST_AsMVT(
+            track_geometry.*,
+            'otrails-track',
+            4096,
+            'mvt_track_geom',
+            'track_id'
+        ),
         ''
     ) AS layer
 FROM track_geometry
@@ -87,7 +93,13 @@ UNION ALL
 SELECT
     2 AS layer_ordering,
     COALESCE(
-        ST_AsMVT(point_geometry.*, 'start', 4096, 'mvt_point_geom', 'track_id'),
+        ST_AsMVT(
+            point_geometry.*,
+            'otrails-track-start',
+            4096,
+            'mvt_point_geom',
+            'track_id'
+        ),
         ''
     ) AS layer
 FROM point_geometry

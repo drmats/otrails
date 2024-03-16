@@ -28,8 +28,8 @@ import { ACTION } from "~common/app/api";
 const startLayerBase = () => ({
     "id": hfid(),
     "type": "circle",
-    "source": "tracks",
-    "source-layer": "start",
+    "source": "otrails-data",
+    "source-layer": "otrails-track-start",
     "layout": {
         "visibility": "visible",
     },
@@ -52,8 +52,8 @@ const startLayerBase = () => ({
 const trackLayerBottomBase = () => ({
     "id": hfid(),
     "type": "line",
-    "source": "tracks",
-    "source-layer": "track",
+    "source": "otrails-data",
+    "source-layer": "otrails-track",
     "layout": {
         "line-cap": "round",
         "line-join": "round",
@@ -153,76 +153,76 @@ const waterFilter = () => propFilter(
 const layers = [
 
     // start points for all tracks
-    deepMerge(startLayerBase(), { id: "all-starts" }),
+    deepMerge(startLayerBase(), { id: "otr-track-starts" }),
 
     // flights
     deepMerge(trackLayerBottomBase(), {
-        "id": "flying",
+        "id": "otr-flying",
         "filter": flightFilter(),
         "paint": { "line-color": "#006B82CC" },
     }, { allowGrowth: true }),
     deepMerge(trackLayerTopBase(), {
-        "id": "flying-top",
+        "id": "otr-flying-top",
         "filter": flightFilter(),
         "paint": { "line-color": "#00D1FFEE" },
     }, { allowGrowth: true }),
 
     // bikes
     deepMerge(trackLayerBottomBase(), {
-        "id": "biking",
+        "id": "otr-biking",
         "filter": bikeFilter(),
         "paint": { "line-color": "#085B00CC" },
     }, { allowGrowth: true }),
     deepMerge(trackLayerTopBase(), {
-        "id": "biking-top",
+        "id": "otr-biking-top",
         "filter": bikeFilter(),
         "paint": { "line-color": "#11CC00EE" },
     }, { allowGrowth: true }),
 
     // runs
     deepMerge(trackLayerBottomBase(), {
-        "id": "running",
+        "id": "otr-running",
         "filter": runFilter(),
         "paint": { "line-color": "#6A5500CC" },
     }, { allowGrowth: true }),
     deepMerge(trackLayerTopBase(), {
-        "id": "running-top",
+        "id": "otr-running-top",
         "filter": runFilter(),
         "paint": { "line-color": "#DEB100EE" },
     }, { allowGrowth: true }),
 
     // walks
     deepMerge(trackLayerBottomBase(), {
-        "id": "walking",
+        "id": "otr-walking",
         "filter": walkFilter(),
         "paint": { "line-color": "#592700CC" },
     }, { allowGrowth: true }),
     deepMerge(trackLayerTopBase(), {
-        "id": "walking-top",
+        "id": "otr-walking-top",
         "filter": walkFilter(),
         "paint": { "line-color": "#F86C00EE" },
     }, { allowGrowth: true }),
 
     // hikes
     deepMerge(trackLayerBottomBase(), {
-        "id": "hiking",
+        "id": "otr-hiking",
         "filter": hikeFilter(),
         "paint": { "line-color": "#680015CC" },
     }, { allowGrowth: true }),
     deepMerge(trackLayerTopBase(), {
-        "id": "hiking-top",
+        "id": "otr-hiking-top",
         "filter": hikeFilter(),
         "paint": { "line-color": "#D3002AEE" },
     }, { allowGrowth: true }),
 
     // water sports
     deepMerge(trackLayerBottomBase(), {
-        "id": "watering",
+        "id": "otr-watering",
         "filter": waterFilter(),
         "paint": { "line-color": "#001654CC" },
     }, { allowGrowth: true }),
     deepMerge(trackLayerTopBase(), {
-        "id": "watering-top",
+        "id": "otr-watering-top",
         "filter": waterFilter(),
         "paint": { "line-color": "#003EE9EE" },
     }, { allowGrowth: true }),
@@ -272,7 +272,7 @@ export const trackStyle: RequestHandler<
 
         // tile sources (dynamic)
         const sources = {
-            tracks: {
+            "otrails-data": {
                 url: [
                     selfOrigin,
                     substitute(

@@ -102,7 +102,7 @@ export const bakeTiles: CliAction = async () => {
                 value: JSON.stringify({
                     vector_layers: [
                         {
-                            "id": "track",
+                            "id": "otrails-track",
                             "description": "Recorded track.",
                             "minzoom": 0,
                             "maxzoom": MAX_ZOOM,
@@ -114,7 +114,7 @@ export const bakeTiles: CliAction = async () => {
                             },
                         },
                         {
-                            "id": "start",
+                            "id": "otrails-track-start",
                             "description": "Recorded track start point.",
                             "minzoom": 0,
                             "maxzoom": MAX_ZOOM,
