@@ -21,7 +21,7 @@ import { tileInserter } from "~common/mbtiles/lib";
 
 
 /**
- * Try fetching remote tile and store it in tile proxy.
+ * Try fetching remote tile and store it in corresponding tile proxy.
  */
 const handleTileProxy = async (
     format: string | undefined,

@@ -44,7 +44,7 @@ const PUBLIC_SOURCES = [
 /**
  * ...
  */
-const ADDITIONAL_SOURCES_FILE = "external-tile-sources.json";
+const ADDITIONAL_SOURCES_FILE = "external-style-sources.json";
 
 
 
