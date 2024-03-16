@@ -235,7 +235,7 @@ const layers = [
 /**
  * Get map style. Only tracks.
  */
-export const trackStyle: RequestHandler<
+export const mapTrackStyle: RequestHandler<
     ParamsDictionary,
     ComplexRecord | ResponseErr
 > = async (req, res, next) => {

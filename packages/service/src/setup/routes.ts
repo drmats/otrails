@@ -12,11 +12,11 @@ import { hello } from "~service/actions/hello";
 import { mapOtrailsStyle } from "~service/actions/mapOtrailsStyle";
 import { mapRasterStyle } from "~service/actions/mapRasterStyle";
 import { mapStyleSources } from "~service/actions/mapStyleSources";
+import { mapTrackStyle } from "~service/actions/mapTrackStyle";
 import { networkProxy } from "~service/actions/networkProxy";
 import { tileGet } from "~service/actions/tileGet";
 import { tileJson } from "~service/actions/tileJson";
 import { tileSources } from "~service/actions/tileSources";
-import { trackStyle } from "~service/actions/trackStyle";
 
 
 
@@ -56,6 +56,12 @@ export default function configureRoutes (): void {
         .get(
             `${apiV1}${ACTION.mapStyleSources}`,
             mapStyleSources,
+        )
+
+        // map style - tracks only
+        .get(
+            `${apiV1}${ACTION.mapTrackStyle}`,
+            mapTrackStyle,
         )
 
         // network proxy
@@ -98,12 +104,6 @@ export default function configureRoutes (): void {
         .get(
             `${apiV1}${ACTION.tileSources}`,
             tileSources,
-        )
-
-        // map style - tracks only
-        .get(
-            `${apiV1}${ACTION.trackStyle}`,
-            trackStyle,
         );
 
     if (firstWorker) {

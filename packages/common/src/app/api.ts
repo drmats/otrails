@@ -19,6 +19,7 @@ export const ACTION = {
 
     mapOtrailsStyle:  "/map/otrails/style.json",
     mapRasterStyle:   "/map/raster/:name/style.json",
+    mapTrackStyle:    "/map/otrails/tracks/style.json",
 
     mapStyleSources:  "/map/style/sources/",
 
@@ -30,8 +31,6 @@ export const ACTION = {
     tileGetWebp:      "/tile/get/:name/:z/:x/:y/t.webp",
     tileJson:         "/tile/schema/:name.json",
     tileSources:      "/tile/sources/",
-
-    trackStyle:       "/map/tracks.json",
 
 } as const;
 

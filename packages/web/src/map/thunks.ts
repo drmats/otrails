@@ -110,5 +110,5 @@ export const setMapStyleSourceIndex = (
 export const getTrackStyle = (): ThunkType<Promise<StyleSpecification>> =>
     async (_d, _getState, { tnk }) =>
         await tnk.network.jsonRequest(
-            ACTION.trackStyle,
+            ACTION.mapTrackStyle,
         ) as StyleSpecification;
