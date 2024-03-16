@@ -3,8 +3,13 @@
  * @copyright Mat. 2022-present
  */
 
-import type { FC, ReactNode } from "react";
-import { Suspense, useLayoutEffect, useMemo } from "react";
+import {
+    Suspense,
+    type FC,
+    type ReactNode,
+    useLayoutEffect,
+    useMemo,
+} from "react";
 
 import Loader from "~web/layout/components/Loader";
 
@@ -25,7 +30,7 @@ const Layout: FC<{
         [showContent],
     );
 
-    const showAppControls = useMemo(
+    const showTopControls = useMemo(
         () => typeof showControls === "undefined" || showControls,
         [showControls],
     );
@@ -33,11 +38,9 @@ const Layout: FC<{
     useLayoutEffect(() => { if (guard) guard(); }, [guard]);
 
     return showAppContent ? (
-        <>
-            <Suspense fallback={<Loader withAppBar={showAppControls} />}>
-                { children }
-            </Suspense>
-        </>
+        <Suspense fallback={<Loader withAppBar={showTopControls} />}>
+            { children }
+        </Suspense>
     ) : null;
 };
 

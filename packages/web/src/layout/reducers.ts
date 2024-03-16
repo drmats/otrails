@@ -45,6 +45,10 @@ export default sliceReducer(initState) ((slice) => slice
 
     .handle(act.SET_IN_IFRAME, produce((draft, { flag }) => {
         draft.inIframe = flag;
+    }))
+
+    .handle(act.SET_BOTTOM_DRAWER_OPEN, produce((draft, { flag }) => {
+        draft.bottomDrawerOpen = flag;
     })),
 
 );

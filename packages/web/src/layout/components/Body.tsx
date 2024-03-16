@@ -8,6 +8,8 @@ import { useSelector } from "react-redux";
 import CssBaseline from "@mui/material/CssBaseline";
 import GlobalStyles from "@mui/material/GlobalStyles";
 
+import { appMemory } from "~web/root/memory";
+import { selectBottomDrawerOpen } from "~web/layout/selectors";
 import { selectReady } from "~web/app/selectors";
 import {
     useInIframe,
@@ -18,6 +20,16 @@ import {
 import ErrorBoundary from "~web/layout/components/ErrorBoundary";
 import HeroBack from "~web/layout/components/HeroBack";
 import Loader from "~web/layout/components/Loader";
+import MenuFab from "~web/layout/components/MenuFab";
+import BottomDrawer from "~web/app/components/BottomDrawer";
+
+
+
+
+/**
+ * ...
+ */
+const { act } = appMemory();
 
 
 
@@ -37,6 +49,8 @@ const Body: FC<{ children: ReactNode }> = ({ children }) => {
         () => userAgent.includes("Firefox") && userAgent.includes("Linux"),
         [userAgent],
     );
+
+    const bottomDrawerOpen = useSelector(selectBottomDrawerOpen);
 
     return (
         <>
@@ -72,6 +86,12 @@ const Body: FC<{ children: ReactNode }> = ({ children }) => {
                         background: lightTheme ? "#444" : "#999",
                     },
                 }}
+            />
+            <MenuFab />
+            <BottomDrawer
+                open={bottomDrawerOpen}
+                onOpen={() => { act.layout.SET_BOTTOM_DRAWER_OPEN(true); }}
+                onClose={() => { act.layout.SET_BOTTOM_DRAWER_OPEN(false); }}
             />
             <ErrorBoundary>
                 <Suspense fallback={<HeroBack withTint><Loader /></HeroBack>}>

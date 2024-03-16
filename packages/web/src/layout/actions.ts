@@ -32,6 +32,8 @@ export enum LayoutActionType {
 
     SET_IN_IFRAME = "Layout/SET_IN_IFRAME",
 
+    SET_BOTTOM_DRAWER_OPEN = "Layout/SET_BOTTOM_DRAWER_OPEN",
+
 }
 
 
@@ -55,5 +57,7 @@ export default actionCreators(LayoutActionType, {
     SET_DIMENSIONS: (dimensions: LayoutDimensions) => ({ dimensions }),
 
     SET_IN_IFRAME: (flag: boolean) => ({ flag }),
+
+    SET_BOTTOM_DRAWER_OPEN: (flag: boolean) => ({ flag }),
 
 });

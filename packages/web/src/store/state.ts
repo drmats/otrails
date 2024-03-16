@@ -27,6 +27,7 @@ export const overrides: DeepPartial<RootState> = {
         inIframe: false,
         loading: false,
         themeLanguage: undefined,
+        bottomDrawerOpen: false,
     },
 
     map: {
