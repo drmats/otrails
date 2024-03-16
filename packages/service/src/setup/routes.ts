@@ -9,8 +9,8 @@ import { ACTION } from "~common/app/api";
 import { useMemory } from "~service/logic/memory";
 import { apiV1 } from "~service/setup/env";
 import { hello } from "~service/actions/hello";
+import { mapOtrailsStyle } from "~service/actions/mapOtrailsStyle";
 import { mapRasterStyle } from "~service/actions/mapRasterStyle";
-import { mapStyle } from "~service/actions/mapStyle";
 import { networkProxy } from "~service/actions/networkProxy";
 import { tileGet } from "~service/actions/tileGet";
 import { tileJson } from "~service/actions/tileJson";
@@ -39,16 +39,16 @@ export default function configureRoutes (): void {
             hello,
         )
 
+        // map style (otrails - base map)
+        .get(
+            `${apiV1}${ACTION.mapOtrailsStyle}`,
+            mapOtrailsStyle,
+        )
+
         // map raster style
         .get(
             `${apiV1}${ACTION.mapRasterStyle}`,
             mapRasterStyle,
-        )
-
-        // map style
-        .get(
-            `${apiV1}${ACTION.mapStyle}`,
-            mapStyle,
         )
 
         // network proxy

@@ -12,5 +12,5 @@
  * Action response type - list of tile source names.
  */
 export type TileSourcesResponseOk = {
-    sources: { name: string; format: string }[];
+    sources: { name: string; format: string; type: string }[];
 };

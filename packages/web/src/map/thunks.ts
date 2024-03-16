@@ -34,7 +34,8 @@ export const tileSources = (): ThunkType<Promise<TileSourcesResponseOk>> =>
 export const tileRasterSources = (): ThunkType<Promise<string[]>> =>
     async (dispatch) => {
         return (await dispatch(tileSources()))
-            .sources.filter((ts) => (
+            .sources
+            .filter((ts) => ts.type === "basemap" && (
                 ts.format === "jpg" || ts.format === "jpeg" ||
                 ts.format === "png" || ts.format === "webp"
             ))

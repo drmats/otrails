@@ -169,7 +169,7 @@ const layers = [
 /**
  * Get map style. Otrails. Base.
  */
-export const mapStyle: RequestHandler<
+export const mapOtrailsStyle: RequestHandler<
     ParamsDictionary,
     ComplexRecord | ResponseErr
 > = async (req, res, next) => {
@@ -194,7 +194,8 @@ export const mapStyle: RequestHandler<
         // check if all required tile sources are present
         if (
             !tileSourceNames.includes("natural_earth_2_shaded_relief.raster") ||
-            !tileSourceNames.includes("natural_earth.vector")
+            !tileSourceNames.includes("natural_earth.vector") ||
+            !tileSourceNames.includes("open-data-elevation-tiles.raster-dem")
         ) {
             errorStatus = 400;
             throw new Error("not enough tile sources present");
@@ -203,6 +204,7 @@ export const mapStyle: RequestHandler<
         // tile sources (dynamic)
         const sources = {
             natural_earth_shaded_relief: {
+                type: "raster",
                 tiles: [
                     [
                         selfOrigin,
@@ -215,14 +217,22 @@ export const mapStyle: RequestHandler<
                         ),
                     ].join(""),
                 ],
-                type: "raster",
                 tileSize: 256,
                 maxzoom: 6,
             },
             terrarium: {
                 type: "raster-dem",
                 tiles: [
-                    "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png",
+                    [
+                        selfOrigin,
+                        substitute(
+                            ACTION.tileGetPng,
+                            {
+                                name: "open-data-elevation-tiles.raster-dem",
+                                x: "{x}", y: "{y}", z: "{z}",
+                            },
+                        ),
+                    ].join(""),
                 ],
                 minzoom: 0,
                 maxzoom: 15,

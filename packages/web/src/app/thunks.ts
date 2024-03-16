@@ -36,16 +36,17 @@ export const initialize = (): ThunkType =>
         // add all available tilesources
         act.map.SET_TILESOURCES(
             tileSources.concat(
-                (await tnk.map.tileRasterSources()).map((trs) => ({
-                    label: trs,
-                    url: substitute(ACTION.mapRasterStyle, {
-                        name: trs,
-                    }),
-                    themeVariant:
-                        trs.includes("dark")
-                            ? ThemeVariant.DARK
-                            : ThemeVariant.LIGHT,
-                })),
+                (await tnk.map.tileRasterSources())
+                    .map((trs) => ({
+                        label: trs,
+                        url: substitute(ACTION.mapRasterStyle, {
+                            name: trs,
+                        }),
+                        themeVariant:
+                            trs.includes("dark")
+                                ? ThemeVariant.DARK
+                                : ThemeVariant.LIGHT,
+                    })),
             ),
         );
 

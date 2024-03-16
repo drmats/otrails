@@ -17,8 +17,11 @@ import {
     infonl,
     oknl,
     shout,
+    shoutnl,
 } from "~common/lib/terminal";
 import { printError } from "~common/lib/error";
+import { initProxyTiles } from "~cli/actions/initProxyTiles";
+import { isFile } from "~common/lib/fs";
 
 
 
@@ -44,19 +47,33 @@ export const prepareBaseMaps: CliAction = async () => {
 
         info("setting up: "); shout("natural earth vector data");
         info(" "); spinner = createAutoSpinner();
-        await getFile(
-            "https://github.com/lukasmartinelli/naturalearthtiles/releases/download/v1.0/natural_earth.vector.mbtiles",
-            join(tilesDir, "natural_earth.vector.mbtiles"),
-        );
+        const neVecDataFile = join(tilesDir, "natural_earth.vector.mbtiles");
+        if (!await isFile(neVecDataFile)) {
+            await getFile(
+                "https://github.com/lukasmartinelli/naturalearthtiles/releases/download/v1.0/natural_earth.vector.mbtiles",
+                neVecDataFile,
+            );
+        }
         spinner.dispose(); infonl();
 
         info("setting up: "); shout("natural earth shaded relief");
         info(" "); spinner = createAutoSpinner();
-        await getFile(
-            "https://github.com/lukasmartinelli/naturalearthtiles/releases/download/v1.0/natural_earth_2_shaded_relief.raster.mbtiles",
-            join(tilesDir, "natural_earth_2_shaded_relief.raster.mbtiles"),
-        );
+        const neShadeDataFile = join(tilesDir, "natural_earth_2_shaded_relief.raster.mbtiles");
+        if (!await isFile(neShadeDataFile)) {
+            await getFile(
+                "https://github.com/lukasmartinelli/naturalearthtiles/releases/download/v1.0/natural_earth_2_shaded_relief.raster.mbtiles",
+                neShadeDataFile,
+            );
+        }
         spinner.dispose(); infonl();
+
+        info("initializing: "); shoutnl("open data elevation tiles");
+        await initProxyTiles({
+            name: "open-data-elevation-tiles.raster-dem",
+            url: "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png",
+            type: "raster-dem",
+            encoding: "terrarium",
+        });
 
         oknl("DONE");
 

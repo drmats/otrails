@@ -13,23 +13,23 @@
  */
 export const ACTION = {
 
-    hello:          "/",
+    hello:            "/",
 
-    static:         "/static/",
+    static:           "/static/",
 
-    mapRasterStyle: "/map/raster/:name/style.json",
-    mapStyle:       "/map/style.json",
+    mapOtrailsStyle:  "/map/otrails/style.json",
+    mapRasterStyle:   "/map/raster/:name/style.json",
 
-    networkProxy:   "/network/proxy/",
+    networkProxy:     "/network/proxy/",
 
-    tileGetJpg:     "/tile/get/:name/:z/:x/:y/t.jpg",
-    tileGetPbf:     "/tile/get/:name/:z/:x/:y/t.pbf",
-    tileGetPng:     "/tile/get/:name/:z/:x/:y/t.png",
-    tileGetWebp:    "/tile/get/:name/:z/:x/:y/t.webp",
-    tileJson:       "/tile/schema/:name.json",
-    tileSources:    "/tile/sources/",
+    tileGetJpg:       "/tile/get/:name/:z/:x/:y/t.jpg",
+    tileGetPbf:       "/tile/get/:name/:z/:x/:y/t.pbf",
+    tileGetPng:       "/tile/get/:name/:z/:x/:y/t.png",
+    tileGetWebp:      "/tile/get/:name/:z/:x/:y/t.webp",
+    tileJson:         "/tile/schema/:name.json",
+    tileSources:      "/tile/sources/",
 
-    trackStyle:     "/map/tracks.json",
+    trackStyle:       "/map/tracks.json",
 
 } as const;
 

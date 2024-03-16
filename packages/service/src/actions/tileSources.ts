@@ -34,6 +34,7 @@ export const tileSources: RequestHandler<
             sources: model.mbtile.getSourceNames().map((name) => ({
                 name,
                 format: model.mbtile.getMeta(name, "format") ?? "unknown",
+                type: model.mbtile.getMeta(name, "type") ?? "unknown",
             })),
         });
 

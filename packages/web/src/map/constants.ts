@@ -18,17 +18,17 @@ import { ACTION } from "~common/app/api";
 export const tileSources: TileSource[] = [
     {
         label: "otrails",
-        url: ACTION.mapStyle,
-        themeVariant: ThemeVariant.LIGHT,
-    },
-    {
-        label: "ne_vector",
-        url: "https://klokantech.github.io/naturalearthtiles/maps/natural_earth.vector.json",
+        url: ACTION.mapOtrailsStyle,
         themeVariant: ThemeVariant.LIGHT,
     },
     {
         label: "maplibre_demo",
         url: "https://demotiles.maplibre.org/style.json",
+        themeVariant: ThemeVariant.LIGHT,
+    },
+    {
+        label: "ne_vector",
+        url: "https://klokantech.github.io/naturalearthtiles/maps/natural_earth.vector.json",
         themeVariant: ThemeVariant.LIGHT,
     },
 ];

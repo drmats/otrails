@@ -33,7 +33,9 @@ const MAX_ZOOM = 22;
 export const initProxyTiles: CliAction<{
     name?: string;
     url?: string;
-}> = async ({ name, url }) => {
+    type?: string;
+    encoding?: string;
+}> = async ({ name, url, type, encoding }) => {
 
     const { vars } = useMemory();
 
@@ -122,18 +124,19 @@ export const initProxyTiles: CliAction<{
             // mbtiles schema
             ensureSchema(filedb);
             const insertMeta = metaInserter(filedb);
-            insertMeta({ name: "name", value: name });
-            insertMeta({ name: "description", value: `proxied ${name}` });
-            insertMeta({ name: "version", value: "1" });
-            insertMeta({ name: "type", value: "basemap" });
             insertMeta({ name: "bounds", value: "-180.0,-85.0,180.0,85.0" });
             insertMeta({ name: "center", value: "50.6707772,16.2072538,14" });
-            insertMeta({ name: "minzoom", value: "0" });
-            insertMeta({ name: "maxzoom", value: String(MAX_ZOOM) });
-            insertMeta({ name: "generator", value: "otrails-cli" });
+            insertMeta({ name: "description", value: `proxied ${name}` });
+            if (encoding) insertMeta({ name: "encoding", value: encoding });
             insertMeta({ name: "format", value: format });
+            insertMeta({ name: "generator", value: "otrails-cli" });
+            insertMeta({ name: "maxzoom", value: String(MAX_ZOOM) });
+            insertMeta({ name: "minzoom", value: "0" });
+            insertMeta({ name: "name", value: name });
             insertMeta({ name: "scheme", value: "tms" });
             insertMeta({ name: "tileSize", value: "256" });
+            insertMeta({ name: "type", value: type ?? "basemap" });
+            insertMeta({ name: "version", value: "1" });
             insertMeta({ name: "x-proxied-url", value: url });
 
             // insert first tile
