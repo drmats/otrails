@@ -24,7 +24,6 @@ import { tileInserter } from "~common/mbtiles/lib";
  * Try fetching remote tile and store it in corresponding tile proxy.
  */
 const handleTileProxy = async (
-    format: string | undefined,
     name: string,
     x: number, y: number, z: number,
     setData: (data: Buffer) => void,
@@ -35,15 +34,10 @@ const handleTileProxy = async (
 
     const proxyUrl = model.mbtile.getMeta(name, "x-proxied-url");
 
-    // if current tileset is not a proxy
+    // if current tileset is not a proxy - respond with 404
     if (!isString(proxyUrl)) {
-        // respond with 404 for raster proxies
-        if (format !== "pbf") {
-            setErrorStatus(404);
-            throw new Error(HttpMessage.C404);
-        }
-        // do nothing for vector proxies (zero-length output is a valid one)
-        return;
+        setErrorStatus(404);
+        throw new Error(HttpMessage.C404);
     }
 
     // try fetching tile from remote resource
@@ -59,16 +53,11 @@ const handleTileProxy = async (
         { headers: browserRequestHeaders() },
     );
 
-    // check response code
+    // check response code and response with 404 if not ok
     if (tileResponse.statusCode !== 200) {
         tileRequest.destroy();
-        // respond with 404 for raster proxies
-        if (format !== "pbf") {
-            setErrorStatus(404);
-            throw new Error(HttpMessage.C404);
-        }
-        // do nothing for vector proxies (zero-length output is a valid one)
-        return;
+        setErrorStatus(404);
+        throw new Error(HttpMessage.C404);
     }
 
     // fetch tile data
@@ -76,7 +65,7 @@ const handleTileProxy = async (
     setData(data);
 
     // check length
-    if (data.length === 0 && format !== "pbf") {
+    if (data.length === 0) {
         setErrorStatus(404);
         throw new Error(HttpMessage.C404);
     }
@@ -130,9 +119,9 @@ export const tileGet: RequestHandler<
             throw new Error(HttpMessage.C400);
         }
 
-        // no data - try special case: proxy
-        if (data.length === 0) await handleTileProxy(
-            format, name, x, y, z,
+        // no data and no protobuf format - try special case: proxy
+        if (data.length === 0 && format !== "pbf") await handleTileProxy(
+            name, x, y, z,
             (d) => { data = d; },
             (s) => { errorStatus = s; },
         );
