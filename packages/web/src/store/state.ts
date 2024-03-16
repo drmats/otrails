@@ -31,7 +31,7 @@ export const overrides: DeepPartial<RootState> = {
 
     map: {
         ready: false,
-        tileSourceIndex: 0,
+        mapStyleSourceIndex: 0,
     },
 
     network: {

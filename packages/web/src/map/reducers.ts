@@ -27,19 +27,25 @@ export default sliceReducer(initState) ((slice) => slice
         ...state, ready,
     }))
 
-    // set map tilesources
-    .handle(act.SET_TILESOURCES, (state, { tileSources }) => ({
-        ...state, tileSources,
+    // set map dimensions
+    .handle(act.SET_DIMENSIONS, produce((draft, { dimensions }) => {
+        if (dimensions.height) draft.dimensions.height = dimensions.height;
+        if (dimensions.width) draft.dimensions.width = dimensions.width;
+    }))
+
+    // set map style sources
+    .handle(act.SET_MAPSTYLE_SOURCES, (state, { mapStyleSources }) => ({
+        ...state, mapStyleSources,
     }))
 
     // set map tilesource index
-    .handle(act.SET_TILESOURCE_INDEX, produce((draft, { tileSourceIndex }) => {
-        if (tileSourceIndex < 0)
-            draft.tileSourceIndex = 0;
-        else if (tileSourceIndex >= draft.tileSources.length)
-            draft.tileSourceIndex = draft.tileSources.length - 1;
+    .handle(act.SET_MAPSTYLE_SOURCE_INDEX, produce((draft, { mapStyleSourceIndex }) => {
+        if (mapStyleSourceIndex < 0)
+            draft.mapStyleSourceIndex = 0;
+        else if (mapStyleSourceIndex >= draft.mapStyleSources.length)
+            draft.mapStyleSourceIndex = draft.mapStyleSources.length - 1;
         else
-            draft.tileSourceIndex = tileSourceIndex;
+            draft.mapStyleSourceIndex = mapStyleSourceIndex;
     }))
 
     // set map viewport
@@ -49,12 +55,6 @@ export default sliceReducer(initState) ((slice) => slice
         if (viewport.longitude) draft.viewport.longitude = viewport.longitude;
         if (viewport.pitch) draft.viewport.pitch = viewport.pitch;
         if (viewport.zoom) draft.viewport.zoom = viewport.zoom;
-    }))
-
-    // set map dimensions
-    .handle(act.SET_DIMENSIONS, produce((draft, { dimensions }) => {
-        if (dimensions.height) draft.dimensions.height = dimensions.height;
-        if (dimensions.width) draft.dimensions.width = dimensions.width;
     }))
 
     // set map selection

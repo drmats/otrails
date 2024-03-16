@@ -11,6 +11,7 @@ import { apiV1 } from "~service/setup/env";
 import { hello } from "~service/actions/hello";
 import { mapOtrailsStyle } from "~service/actions/mapOtrailsStyle";
 import { mapRasterStyle } from "~service/actions/mapRasterStyle";
+import { mapStyleSources } from "~service/actions/mapStyleSources";
 import { networkProxy } from "~service/actions/networkProxy";
 import { tileGet } from "~service/actions/tileGet";
 import { tileJson } from "~service/actions/tileJson";
@@ -49,6 +50,12 @@ export default function configureRoutes (): void {
         .get(
             `${apiV1}${ACTION.mapRasterStyle}`,
             mapRasterStyle,
+        )
+
+        // map style sources (external)
+        .get(
+            `${apiV1}${ACTION.mapStyleSources}`,
+            mapStyleSources,
         )
 
         // network proxy

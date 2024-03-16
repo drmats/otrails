@@ -35,9 +35,10 @@ export default {
         "open_map": "Open map",
     },
 
-    "TileSource": {
+    "MapStyleSource": {
         "l_carto-dark-matter.raster": "Carto Dark Matter",
         "l_esri-dark-gray.raster": "ESRI Dark Gray",
+        "l_esri-earth-dark-night.raster": "ESRI Earth At Night",
         "l_esri-natgeo.raster": "ESRI National Geographic",
         "l_esri-standard.raster": "ESRI Standard",
         "l_esri-world-imagery.raster": "ESRI World Imagery",
@@ -46,8 +47,6 @@ export default {
         "l_google-satellite-hybrid.raster": "Google Satellite Hybrid",
         "l_google-satellite.raster": "Google Satellite",
         "l_google-terrain-hybrid.raster": "Google Terrain Hybrid",
-        "l_maplibre_demo": "Geography Class",
-        "l_ne_vector": "Natural Earth Vector",
         "l_open-cycle-map.raster": "Open Cycle Map",
         "l_open-street-map-dark-fiord.raster": "Open Street Map Fiord",
         "l_open-street-map-hot.raster": "Open Street Map Humanitarian",

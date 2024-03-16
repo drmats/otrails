@@ -30,7 +30,7 @@ import ReactMapGL, {
 } from "react-map-gl/maplibre";
 
 import {
-    selectRawTileSource,
+    selectRawMapStyleSource,
     selectViewport,
 } from "~web/map/selectors";
 import { appMemory } from "~web/root/memory";
@@ -84,12 +84,12 @@ const MapGL: FC = memo(() => {
     const {
         url: baseStyleSource,
         themeVariant,
-    } = useSelector(selectRawTileSource);
-    const [baseStyle, setBaseStyle] =
+    } = useSelector(selectRawMapStyleSource);
+    const [baseMapStyle, setBaseMapStyle] =
         useState<StyleSpecification | undefined>(undefined);
     const getBaseStyle = useCallback(async () => {
         try {
-            setBaseStyle(
+            setBaseMapStyle(
                 baseStyleSource.startsWith("/")
                     ? await tnk.network.jsonRequest(
                         baseStyleSource,
@@ -99,7 +99,7 @@ const MapGL: FC = memo(() => {
                     }) as StyleSpecification,
             );
         } catch {
-            setBaseStyle(undefined);
+            setBaseMapStyle(undefined);
         }
     }, [baseStyleSource]);
     useEffect(() => {
@@ -110,13 +110,13 @@ const MapGL: FC = memo(() => {
 
 
     // merged map (tracks over base map)
-    const mapStyle = useMemo<StyleSpecification | undefined>(() => {
-        if (baseStyle && trackStyle) {
-            return mergeMapStyles(baseStyle, trackStyle);
+    const mergedMapStyle = useMemo<StyleSpecification | undefined>(() => {
+        if (baseMapStyle && trackStyle) {
+            return mergeMapStyles(baseMapStyle, trackStyle);
         }
         if (trackStyle) return trackStyle;
         return undefined;
-    }, [baseStyle, trackStyle]);
+    }, [baseMapStyle, trackStyle]);
 
 
     // initialize / destroy
@@ -176,11 +176,9 @@ const MapGL: FC = memo(() => {
         <ReactMapGL
             attributionControl={false}
             interactiveLayerIds={interactiveLayers}
-            {...{
-                mapStyle,
-                minZoom: 1,
-                maxZoom: 22,
-            }}
+            mapStyle={mergedMapStyle}
+            maxZoom={22}
+            minZoom={1}
             onClick={onMapClick}
             onLoad={onMapLoad}
             onMove={onMapMove}

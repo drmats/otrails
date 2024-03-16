@@ -5,7 +5,6 @@
  * @copyright Mat. 2020-present
  */
 
-import { ThemeVariant } from "~common/framework/theme";
 import type { PlainRecord } from "~common/lib/struct";
 
 
@@ -31,18 +30,6 @@ export type MapViewport = {
 export type MapDimensions = {
     width: number;
     height: number;
-};
-
-
-
-
-/**
- * Map style source.
- */
-export type TileSource = {
-    label: string;
-    url: string;
-    themeVariant: ThemeVariant;
 };
 
 

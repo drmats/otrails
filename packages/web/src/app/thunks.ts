@@ -5,9 +5,14 @@
  * @copyright Mat. 2020-present
  */
 
+import i18n from "i18next";
+
 import type { ThunkType } from "~web/store/types";
+import { FreeFormRecord } from "~common/lib/type";
+import type { MapStyleSource } from "~common/map/types";
+import { lex } from "~common/lib/sort";
 import { inIframe } from "~web/layout/lib";
-import { tileSources } from "~web/map/constants";
+import { mapStyleSources } from "~web/map/constants";
 import { substitute } from "~common/framework/routing";
 import { ThemeVariant } from "~common/framework/theme";
 import { ACTION } from "~common/app/api";
@@ -31,24 +36,43 @@ export const initialize = (): ThunkType =>
         await tnk.layout.syncTheme();
 
         // take care of language
-        await tnk.layout.detectClientThemeLanguage();
+        const themeLanguage = await tnk.layout.detectClientThemeLanguage();
 
-        // add all available tilesources
-        act.map.SET_TILESOURCES(
-            tileSources.concat(
-                (await tnk.map.tileRasterSources())
-                    .map((trs) => ({
-                        label: trs,
-                        url: substitute(ACTION.mapRasterStyle, {
-                            name: trs,
-                        }),
-                        themeVariant:
-                            trs.includes("dark")
-                                ? ThemeVariant.DARK
-                                : ThemeVariant.LIGHT,
-                    })),
+        // fetch map style display name mapping for current language
+        const mapStyleDisplayNameMap =
+            i18n.getResourceBundle(
+                themeLanguage, "MapStyleSource",
+            ) as FreeFormRecord<string>;
+
+        // fetch all style sources and sort them
+        const additionalStyleSources = [
+            ...(await tnk.map.mapStyleSources()).sources,
+            ...(await tnk.map.tileRasterSources())
+                .map((trs) => ({
+                    label: trs,
+                    url: substitute(ACTION.mapRasterStyle, {
+                        name: trs,
+                    }),
+                    themeVariant:
+                        trs.includes("dark")
+                            ? ThemeVariant.DARK
+                            : ThemeVariant.LIGHT,
+                }) as MapStyleSource),
+        ].toSorted(
+            (
+                { label: l1, displayName: d1 },
+                { label: l2, displayName: d2 },
+            ) => lex(
+                d1 ?? mapStyleDisplayNameMap[`l_${l1}`] ?? l1,
+                d2 ?? mapStyleDisplayNameMap[`l_${l2}`] ?? l2,
             ),
         );
+
+        // register all available map style sources
+        act.map.SET_MAPSTYLE_SOURCES([
+            ...mapStyleSources,
+            ...additionalStyleSources,
+        ]);
 
         // all done
         act.app.READY();

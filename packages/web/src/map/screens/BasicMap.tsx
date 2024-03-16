@@ -17,7 +17,7 @@ import {
 } from "~web/layout/hooks";
 import { sxStyles } from "~web/common/utils";
 import MobilePaper from "~web/common/components/MobilePaper";
-import { TileSourceSelect } from "~web/map/components/TileSourceSelect";
+import { MapStyleSourceSelect } from "~web/map/components/MapStyleSourceSelect";
 import { MapSelectionInspect } from "~web/map/components/MapSelectionInspect";
 
 
@@ -35,7 +35,7 @@ const createStyles = (isMobile: boolean, width: number) => sxStyles({
         maxWidth:
             isMobile
                 ? "100%"
-                : width >= 400 ? "400px" : `${width}px`,
+                : width >= 420 ? "420px" : `${width}px`,
         maxHeight: isMobile ? "40%" : "640px",
         overflow: "hidden",
         "& > *": {
@@ -45,7 +45,7 @@ const createStyles = (isMobile: boolean, width: number) => sxStyles({
             overflow: "scroll",
         },
     },
-    tileSourceSurface: {
+    mapStyleSourceSurface: {
         position: "fixed",
         right: isMobile ? "0px" : "10px",
         bottom: isMobile ? "0px" : "10px",
@@ -73,8 +73,8 @@ const BasicMap: FC = () => {
             <MobilePaper sx={sx.mapSelectionSurface}>
                 <Box><MapSelectionInspect /></Box>
             </MobilePaper>
-            <MobilePaper sx={sx.tileSourceSurface}>
-                <TileSourceSelect />
+            <MobilePaper sx={sx.mapStyleSourceSurface}>
+                <MapStyleSourceSelect />
             </MobilePaper>
         </>
     );

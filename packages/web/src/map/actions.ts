@@ -7,11 +7,11 @@
 
 import { actionCreators } from "red-g";
 
+import type { MapStyleSource } from "~common/map/types";
 import type {
     MapDimensions,
     MapSelection,
     MapViewport,
-    TileSource,
 } from "~web/map/types";
 
 
@@ -24,10 +24,10 @@ export enum MapActionType {
 
     RESET = "Map/RESET",
     SET_READY = "Map/SET_READY",
-    SET_TILESOURCES = "Map/SET_TILESOURCES",
-    SET_TILESOURCE_INDEX = "Map/SET_TILESOURCE_INDEX",
-    SET_VIEWPORT = "Map/SET_VIEWPORT",
     SET_DIMENSIONS = "Map/SET_DIMENSIONS",
+    SET_MAPSTYLE_SOURCES = "Map/SET_MAPSTYLE_SOURCES",
+    SET_MAPSTYLE_SOURCE_INDEX = "Map/SET_MAPSTYLE_SOURCE_INDEX",
+    SET_VIEWPORT = "Map/SET_VIEWPORT",
     SET_SELECTION = "Map/SET_SELECTION",
 
 }
@@ -41,10 +41,10 @@ export enum MapActionType {
 export default actionCreators(MapActionType, {
 
     SET_READY: (ready: boolean) => ({ ready }),
-    SET_TILESOURCES: (tileSources: TileSource[]) => ({ tileSources }),
-    SET_TILESOURCE_INDEX: (tileSourceIndex: number) => ({ tileSourceIndex }),
-    SET_VIEWPORT: (viewport: Partial<MapViewport>) => ({ viewport }),
     SET_DIMENSIONS: (dimensions: Partial<MapDimensions>) => ({ dimensions }),
+    SET_MAPSTYLE_SOURCES: (mapStyleSources: MapStyleSource[]) => ({ mapStyleSources }),
+    SET_MAPSTYLE_SOURCE_INDEX: (mapStyleSourceIndex: number) => ({ mapStyleSourceIndex }),
+    SET_VIEWPORT: (viewport: Partial<MapViewport>) => ({ viewport }),
     SET_SELECTION: (selection?: MapSelection) => ({ selection }),
 
 });

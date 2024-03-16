@@ -15,8 +15,8 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { appMemory } from "~web/root/memory";
 import {
     selectMapReady,
-    selectTileSources,
-    selectTileSourceIndex,
+    selectMapStyleSourceIndex,
+    selectMapStyleSources,
 } from "~web/map/selectors";
 import { useStyles } from "~web/layout/hooks";
 import { sxStyles } from "~web/common/utils";
@@ -45,33 +45,33 @@ const createStyles = () => sxStyles({
 /**
  * ...
  */
-export const TileSourceSelect: FC = memo(() => {
+export const MapStyleSourceSelect: FC = memo(() => {
     const { t } = useTranslation();
     const sx = useStyles(createStyles);
 
     const mapReady = useSelector(selectMapReady);
-    const tileSources = useSelector(selectTileSources);
-    const tileSourceIndex = useSelector(selectTileSourceIndex);
+    const mapStyleSources = useSelector(selectMapStyleSources);
+    const mapStyleSourceIndex = useSelector(selectMapStyleSourceIndex);
 
     const handleChange = useCallback((e: SelectChangeEvent) => {
         if (isNumber(e.target.value)) {
-            void tnk.map.setTileSourceIndex(e.target.value);
+            void tnk.map.setMapStyleSourceIndex(e.target.value);
         }
     }, []);
 
     return (
         <FormControl sx={sx.formControl} size="small">
-            <InputLabel>{ t("TileSource:label") }</InputLabel>
+            <InputLabel>{ t("MapStyleSource:label") }</InputLabel>
             <Select
-                label={t("TileSource:label")}
-                value={String(tileSourceIndex)}
+                label={t("MapStyleSource:label")}
+                value={String(mapStyleSourceIndex)}
                 onChange={handleChange}
                 size="small"
                 disabled={!mapReady}
             >
-                { tileSources.map((ts, i) => (
-                    <MenuItem key={`${ts.label}-${i}`} value={i}>
-                        { t(`TileSource:l_${ts.label}`) }
+                { mapStyleSources.map((mss, i) => (
+                    <MenuItem key={`${mss.label}-${i}`} value={i}>
+                        { mss.displayName ?? t(`MapStyleSource:l_${mss.label}`) }
                     </MenuItem>
                 )) }
             </Select>

@@ -8,7 +8,10 @@
 import type { StyleSpecification } from "maplibre-gl";
 
 import type { ThunkType } from "~web/store/types";
-import type { TileSourcesResponseOk } from "~common/app/actions/tile";
+import type {
+    MapStyleSourcesResponseOk,
+    TileSourcesResponseOk,
+} from "~common/app/actions/map";
 import type { MapViewport } from "~web/map/types";
 import { ACTION } from "~common/app/api";
 
@@ -46,6 +49,19 @@ export const tileRasterSources = (): ThunkType<Promise<string[]>> =>
 
 
 /**
+ * List available map style sources.
+ */
+export const mapStyleSources = (): ThunkType<Promise<MapStyleSourcesResponseOk>> =>
+    async (_d, _getState, { tnk }) => {
+        return await tnk.network.jsonRequest(
+            ACTION.mapStyleSources,
+        ) as MapStyleSourcesResponseOk;
+    };
+
+
+
+
+/**
  * Set map viewport, but first stop all eventual map animations.
  */
 export const setViewport = (
@@ -66,22 +82,22 @@ export const setViewport = (
 
 
 /**
- * Set tile source index (effectively changing tile source),
+ * Set map style source index (effectively changing map style source),
  * but first stop all eventual map animations.
  */
-export const setTileSourceIndex = (
-    tileSourceIndex: number,
-    settingTileSourceIndexProgress?: (s: boolean) => void,
+export const setMapStyleSourceIndex = (
+    mapStyleSourceIndex: number,
+    settingMapStyleSourceIndexProgress?: (s: boolean) => void,
 ): ThunkType =>
     async (_d, _getState, { act, mut }) => {
-        if (settingTileSourceIndexProgress)
-            settingTileSourceIndexProgress(true);
+        if (settingMapStyleSourceIndexProgress)
+            settingMapStyleSourceIndexProgress(true);
         const map = mut?.map?.getMap();
         if (map) { map.stop(); }
         setTimeout(() => {
-            act.map.SET_TILESOURCE_INDEX(tileSourceIndex);
-            if (settingTileSourceIndexProgress)
-                settingTileSourceIndexProgress(false);
+            act.map.SET_MAPSTYLE_SOURCE_INDEX(mapStyleSourceIndex);
+            if (settingMapStyleSourceIndexProgress)
+                settingMapStyleSourceIndexProgress(false);
         }, 100);
     };
 

@@ -19,28 +19,28 @@ export const selectDimensions = (s: RootState) => s.map.dimensions;
 
 export const selectMapReady = (s: RootState) => s.map.ready;
 
-export const selectTileSources = (s: RootState) => s.map.tileSources;
+export const selectMapStyleSources = (s: RootState) => s.map.mapStyleSources;
 
-export const selectTileSourceIndex = (s: RootState) => s.map.tileSourceIndex;
+export const selectMapStyleSourceIndex = (s: RootState) => s.map.mapStyleSourceIndex;
 
-export const selectMaxTileSourceIndex = createSelector(
-    [selectTileSources],
-    (tileSources) => tileSources.length - 1,
+export const selectMaxMapStyleSourceIndex = createSelector(
+    [selectMapStyleSources],
+    (mapStyleSources) => mapStyleSources.length - 1,
 );
 
-export const selectRawTileSource = createSelector(
-    [selectTileSources, selectTileSourceIndex],
-    (tileSources, tileSourceIndex) => tileSources[tileSourceIndex],
+export const selectRawMapStyleSource = createSelector(
+    [selectMapStyleSources, selectMapStyleSourceIndex],
+    (mapStyleSources, mapStyleSourceIndex) => mapStyleSources[mapStyleSourceIndex],
 );
 
-export const selectTileSource = createSelector(
-    [selectRawTileSource, selectBackendLocation],
-    (rawTileSource, backendLocation) =>
-        rawTileSource.url.startsWith("http")
-            ? rawTileSource
+export const selectMapStyleSource = createSelector(
+    [selectRawMapStyleSource, selectBackendLocation],
+    (rawMapStyleSource, backendLocation) =>
+        rawMapStyleSource.url.startsWith("http")
+            ? rawMapStyleSource
             : {
-                ...rawTileSource,
-                url: `${backendLocation}${rawTileSource.url}`,
+                ...rawMapStyleSource,
+                url: `${backendLocation}${rawMapStyleSource.url}`,
             },
 );
 

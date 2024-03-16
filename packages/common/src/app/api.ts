@@ -20,6 +20,8 @@ export const ACTION = {
     mapOtrailsStyle:  "/map/otrails/style.json",
     mapRasterStyle:   "/map/raster/:name/style.json",
 
+    mapStyleSources:  "/map/style/sources/",
+
     networkProxy:     "/network/proxy/",
 
     tileGetJpg:       "/tile/get/:name/:z/:x/:y/t.jpg",

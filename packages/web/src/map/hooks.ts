@@ -10,8 +10,8 @@ import { isNumber, isString } from "@xcmats/js-toolbox/type";
 import { appMemory } from "~web/root/memory";
 import { useSpaNavigation } from "~web/router/hooks";
 import {
-    selectMaxTileSourceIndex,
-    selectTileSourceIndex,
+    selectMaxMapStyleSourceIndex,
+    selectMapStyleSourceIndex,
     selectViewport,
 } from "~web/map/selectors";
 import {
@@ -48,8 +48,8 @@ export const useAddressBarInteraction = (): void => {
     const inQueryChange = useSelector(selectIncomingBrowserHashChange);
     const viewport = useSelector(selectViewport);
     const settingViewportProgress = useRef(false);
-    const tileSourceIndex = useSelector(selectTileSourceIndex);
-    const settingTileSourceIndexProgress = useRef(false);
+    const mapStyleSourceIndex = useSelector(selectMapStyleSourceIndex);
+    const settingMapStyleSourceIndexProgress = useRef(false);
 
 
     // handle manual address-bar changes (and initial link-parsing)
@@ -76,15 +76,15 @@ export const useAddressBarInteraction = (): void => {
         if (
             isNumber(inQuery.m) &&
             inQuery.m >= 0 &&
-            inQuery.m <= selectMaxTileSourceIndex(state)
+            inQuery.m <= selectMaxMapStyleSourceIndex(state)
         ) {
-            void tnk.map.setTileSourceIndex(
+            void tnk.map.setMapStyleSourceIndex(
                 inQuery.m,
-                (state) => { settingTileSourceIndexProgress.current = state; },
+                (state) => { settingMapStyleSourceIndexProgress.current = state; },
             );
         } else {
             navigate.replaceQuery((c) => ({
-                ...c, m: selectTileSourceIndex(state),
+                ...c, m: selectMapStyleSourceIndex(state),
             }));
         }
     }, [inQueryChange]);
@@ -103,12 +103,12 @@ export const useAddressBarInteraction = (): void => {
 
     // reflect base map selection (tile source) in address-bar query
     useEffect(() => {
-        if (!settingTileSourceIndexProgress.current) {
+        if (!settingMapStyleSourceIndexProgress.current) {
             throttledTileSourceIndexHashUpdate(
                 (m) => navigate.replaceQuery((c) => ({ ...c, m })),
-                tileSourceIndex,
+                mapStyleSourceIndex,
             );
         }
-    }, [tileSourceIndex]);
+    }, [mapStyleSourceIndex]);
 
 };

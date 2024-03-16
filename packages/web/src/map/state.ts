@@ -5,7 +5,7 @@
  * @copyright Mat. 2020-present
  */
 
-import { tileSources } from "~web/map/constants";
+import { mapStyleSources } from "~web/map/constants";
 import type { MapSelection } from "~web/map/types";
 
 
@@ -19,11 +19,11 @@ export default {
     // is map loaded and ready?
     ready: false,
 
-    // all tilesources
-    tileSources,
+    // all map style sources
+    mapStyleSources,
 
-    // what's the current tilesource (map style)?
-    tileSourceIndex: 0,
+    // what's the current map style source?
+    mapStyleSourceIndex: 0,
 
     // viewport state
     viewport: {

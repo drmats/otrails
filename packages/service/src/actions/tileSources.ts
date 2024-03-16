@@ -9,7 +9,7 @@ import type { RequestHandler } from "express";
 import type { ParamsDictionary } from "express-serve-static-core";
 
 import type { ResponseErr } from "~common/framework/actions";
-import type { TileSourcesResponseOk } from "~common/app/actions/tile";
+import type { TileSourcesResponseOk } from "~common/app/actions/map";
 import { useMemory } from "~service/logic/memory";
 
 
