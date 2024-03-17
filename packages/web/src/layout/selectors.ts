@@ -41,4 +41,8 @@ export const selectWindowOuterDimensions = createSelector(
 
 export const selectInIframe = (s: RootState) => s.layout.inIframe;
 
-export const selectBottomDrawerOpen = (s: RootState) => s.layout.bottomDrawerOpen;
+export const selectBottomDrawerOpen = (s: RootState) =>
+    s.layout.bottomDrawerOpen;
+
+export const selectMapSelectionInspectVisible = (s: RootState) =>
+    s.layout.mapSelectionInspectVisible;

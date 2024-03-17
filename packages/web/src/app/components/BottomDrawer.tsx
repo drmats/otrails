@@ -5,10 +5,14 @@
 
 import type { FC } from "react";
 import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 import Box from "@mui/material/Box";
+import IconInspect from "@mui/icons-material/Troubleshoot";
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 
+import { appMemory } from "~web/root/memory";
 import { selectReady } from "~web/app/selectors";
+import { selectMapSelectionInspectVisible } from "~web/layout/selectors";
 import {
     useDimensions,
     useIsMobile,
@@ -17,7 +21,7 @@ import {
 import { sxStyles } from "~web/common/utils";
 import { WithTransitions } from "~web/layout/components/ThemeProvider";
 import { MapStyleSourceSelect } from "~web/map/components/MapStyleSourceSelect";
-import { MapSelectionInspect } from "~web/map/components/MapSelectionInspect";
+import SettingSwitch from "~web/common/components/SettingSwitch";
 
 
 
@@ -32,8 +36,8 @@ const createStyles = (isMobile: boolean, width: number) => {
     return sxStyles({
         drawer: {
             "& > .MuiPaper-root": {
-                borderTopLeftRadius: "5px",
-                borderTopRightRadius: "5px",
+                borderTopLeftRadius: "4px",
+                borderTopRightRadius: "4px",
                 left: margin,
                 right: margin,
                 display: "flex",
@@ -41,21 +45,23 @@ const createStyles = (isMobile: boolean, width: number) => {
                 alignItems: "center",
             },
         },
-        mapStyleSurface: {
+        surface: {
             display: "flex",
             flexDirection: "column",
             width: isMobile ? "80%" : "40%",
-            marginY: 1,
         },
-        mapSelectionSurface: {
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            width: isMobile ? "80%" : "60%",
-            mb: 1,
-        },
+        switch: { p: 1 },
+        formLabel: { alignItems: "flex-end" },
     });
 };
+
+
+
+
+/**
+ * ...
+ */
+const { act } = appMemory();
 
 
 
@@ -68,11 +74,14 @@ const BottomDrawer: FC<{
     onClose: () => void;
     onOpen: () => void;
 }> = ({ open, onClose, onOpen }) => {
+    const { t } = useTranslation();
     const { width } = useDimensions();
     const isMobile = useIsMobile();
     const sx = useStyles(createStyles, isMobile, width);
 
     const appReady = useSelector(selectReady);
+    const mapSelectionInspectVisible =
+        useSelector(selectMapSelectionInspectVisible);
 
     return appReady && (
         <WithTransitions>
@@ -83,11 +92,23 @@ const BottomDrawer: FC<{
                 onOpen={onOpen}
                 sx={sx.drawer}
             >
-                <Box sx={sx.mapStyleSurface}>
+                <Box sx={[sx.surface, { mt: 1 }]}>
                     <MapStyleSourceSelect />
                 </Box>
-                <Box sx={sx.mapSelectionSurface}>
-                    <MapSelectionInspect />
+                <Box sx={sx.surface}>
+                    <SettingSwitch
+                        icon={<IconInspect />}
+                        label={t("Dev:map_selection_inspector")}
+                        state={mapSelectionInspectVisible}
+                        onStateChange={(s) => {
+                            act.layout.SET_MAP_SELECTION_INSPECT_VISIBLE(s);
+                        }}
+                        overrides={{
+                            container: sx.switch,
+                            formControlLabel: sx.formLabel,
+                        }}
+                        headingVariant="body1"
+                    />
                 </Box>
             </SwipeableDrawer>
         </WithTransitions>

@@ -24,6 +24,10 @@ export default {
         "theme_light": "Light theme",
     },
 
+    "Dev": {
+        "map_selection_inspector": "Map data inspection",
+    },
+
     "Error": {
         "network_error": "Error: connection failure.",
         "wrong_path": "Wrong path.",

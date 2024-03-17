@@ -24,6 +24,10 @@ export default {
         "theme_light": "Tryb jasny",
     },
 
+    "Dev": {
+        "map_selection_inspector": "Inspekcja danych mapy",
+    },
+
     "Error": {
         "network_error": "Błąd: brak połączenia.",
         "wrong_path": "Zła ścieżka.",

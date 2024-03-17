@@ -29,11 +29,11 @@ const createStyles = () => sxStyles({
         position: "fixed",
         [th.breakpoints.down("md")]: {
             bottom: th.spacing(2),
-            left: th.spacing(2),
+            right: th.spacing(2),
         },
         [th.breakpoints.up("md")]: {
             bottom: th.spacing(3),
-            left: th.spacing(3),
+            right: th.spacing(3),
         },
     }),
 });
