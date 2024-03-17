@@ -51,8 +51,8 @@ export default sliceReducer(initState) ((slice) => slice
         draft.bottomDrawerOpen = flag;
     }))
 
-    .handle(act.SET_MAP_SELECTION_INSPECT_VISIBLE, produce((draft, { flag }) => {
-        draft.mapSelectionInspectVisible = flag;
+    .handle(act.SET_MAP_INSPECT_VISIBLE, produce((draft, { flag }) => {
+        draft.mapInspectVisible = flag;
     })),
 
 );

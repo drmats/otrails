@@ -33,7 +33,7 @@ export enum LayoutActionType {
     SET_IN_IFRAME = "Layout/SET_IN_IFRAME",
 
     SET_BOTTOM_DRAWER_OPEN = "Layout/SET_BOTTOM_DRAWER_OPEN",
-    SET_MAP_SELECTION_INSPECT_VISIBLE = "Layout/SET_MAP_SELECTION_INSPECT_VISIBLE",
+    SET_MAP_INSPECT_VISIBLE = "Layout/SET_MAP_INSPECT_VISIBLE",
 
 }
 
@@ -61,6 +61,6 @@ export default actionCreators(LayoutActionType, {
 
     SET_BOTTOM_DRAWER_OPEN: (flag: boolean) => ({ flag }),
 
-    SET_MAP_SELECTION_INSPECT_VISIBLE: (flag: boolean) => ({ flag }),
+    SET_MAP_INSPECT_VISIBLE: (flag: boolean) => ({ flag }),
 
 });

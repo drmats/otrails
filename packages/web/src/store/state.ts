@@ -28,7 +28,7 @@ export const overrides: DeepPartial<RootState> = {
         loading: false,
         themeLanguage: undefined,
         bottomDrawerOpen: false,
-        mapSelectionInspectVisible: false,
+        mapInspectVisible: false,
     },
 
     map: {

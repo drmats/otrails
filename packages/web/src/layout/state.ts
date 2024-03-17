@@ -33,6 +33,6 @@ export default {
     inIframe: false,
 
     bottomDrawerOpen: false,
-    mapSelectionInspectVisible: false,
+    mapInspectVisible: false,
 
 };

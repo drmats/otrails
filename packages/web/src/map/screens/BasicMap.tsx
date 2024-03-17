@@ -9,7 +9,7 @@ import { useTranslation } from "react-i18next";
 import Box from "@mui/material/Box";
 
 import MapGL from "~web/map/components/MapGL";
-import { selectMapSelectionInspectVisible } from "~web/layout/selectors";
+import { selectMapInspectVisible } from "~web/layout/selectors";
 import { useAddressBarInteraction } from "~web/map/hooks";
 import {
     useDimensions,
@@ -19,7 +19,7 @@ import {
 } from "~web/layout/hooks";
 import { sxStyles } from "~web/common/utils";
 import MobilePaper from "~web/common/components/MobilePaper";
-import { MapSelectionInspect } from "~web/map/components/MapSelectionInspect";
+import { MapInspect } from "~web/map/components/MapInspect";
 
 
 
@@ -28,11 +28,12 @@ import { MapSelectionInspect } from "~web/map/components/MapSelectionInspect";
  * ...
  */
 const createStyles = (isMobile: boolean, width: number) => sxStyles({
-    mapSelectionSurface: {
+    mapInspectSurface: {
         position: "fixed",
         right: isMobile ? "0px" : "10px",
         top: isMobile ? "0px" : "10px",
         width: isMobile ? "100%" : "auto",
+        minWidth: "220px",
         maxWidth:
             isMobile
                 ? "100%"
@@ -63,15 +64,14 @@ const BasicMap: FC = () => {
     useAddressBarInteraction();
     useDocumentTitle(t("BasicMap:title"), true);
 
-    const mapSelectionInspectVisible =
-        useSelector(selectMapSelectionInspectVisible);
+    const mapInspectVisible = useSelector(selectMapInspectVisible);
 
     return (
         <>
             <MapGL />
-            { mapSelectionInspectVisible && (
-                <MobilePaper sx={sx.mapSelectionSurface}>
-                    <Box><MapSelectionInspect /></Box>
+            { mapInspectVisible && (
+                <MobilePaper sx={sx.mapInspectSurface}>
+                    <Box><MapInspect /></Box>
                 </MobilePaper>
             ) }
         </>

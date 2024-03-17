@@ -12,7 +12,7 @@ import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 
 import { appMemory } from "~web/root/memory";
 import { selectReady } from "~web/app/selectors";
-import { selectMapSelectionInspectVisible } from "~web/layout/selectors";
+import { selectMapInspectVisible } from "~web/layout/selectors";
 import {
     useDimensions,
     useIsMobile,
@@ -80,8 +80,7 @@ const BottomDrawer: FC<{
     const sx = useStyles(createStyles, isMobile, width);
 
     const appReady = useSelector(selectReady);
-    const mapSelectionInspectVisible =
-        useSelector(selectMapSelectionInspectVisible);
+    const mapInspectVisible = useSelector(selectMapInspectVisible);
 
     return appReady && (
         <WithTransitions>
@@ -99,9 +98,9 @@ const BottomDrawer: FC<{
                     <SettingSwitch
                         icon={<IconInspect />}
                         label={t("Dev:map_selection_inspector")}
-                        state={mapSelectionInspectVisible}
+                        state={mapInspectVisible}
                         onStateChange={(s) => {
-                            act.layout.SET_MAP_SELECTION_INSPECT_VISIBLE(s);
+                            act.layout.SET_MAP_INSPECT_VISIBLE(s);
                         }}
                         overrides={{
                             container: sx.switch,
