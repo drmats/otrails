@@ -15,8 +15,6 @@ import { selectBackendLocation } from "~web/network/selectors";
 
 
 
-export const selectDimensions = (s: RootState) => s.map.dimensions;
-
 export const selectMapReady = (s: RootState) => s.map.ready;
 
 export const selectMapStyleSources = (s: RootState) => s.map.mapStyleSources;
@@ -45,5 +43,9 @@ export const selectMapStyleSource = createSelector(
 );
 
 export const selectViewport = (s: RootState) => s.map.viewport;
+
+export const selectDimensions = (s: RootState) => s.map.dimensions;
+
+export const selectTerrainEnabled = (s: RootState) => s.map.terrainEnabled;
 
 export const selectSelection = (s: RootState) => s.map.selection;

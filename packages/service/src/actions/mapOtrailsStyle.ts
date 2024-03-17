@@ -23,6 +23,61 @@ import { ACTION } from "~common/app/api";
 /**
  * ...
  */
+const sources = {
+    ne_sr: (origin: string, name = "ne_sr") => ({ [name]: {
+        type: "raster",
+        tiles: [
+            [
+                origin,
+                substitute(
+                    ACTION.tileGetWebp,
+                    {
+                        name: "natural_earth_2_shaded_relief.raster",
+                        x: "{x}", y: "{y}", z: "{z}",
+                    },
+                ),
+            ].join(""),
+        ],
+        tileSize: 256,
+        maxzoom: 6,
+    } }),
+    terrain: (origin: string, name = "terrain") => ({ [name]: {
+        type: "raster-dem",
+        tiles: [
+            [
+                origin,
+                substitute(
+                    ACTION.tileGetPng,
+                    {
+                        name: "open-data-elevation-tiles.raster-dem",
+                        x: "{x}", y: "{y}", z: "{z}",
+                    },
+                ),
+            ].join(""),
+        ],
+        minzoom: 0,
+        maxzoom: 15,
+        tileSize: 256,
+        encoding: "terrarium",
+    } }),
+    ne: (origin: string, name = "ne") => ({ [name]: {
+        url: [
+            origin,
+            substitute(
+                ACTION.tileJson,
+                { name: "natural_earth.vector" },
+            ),
+        ].join(""),
+        type: "vector",
+    } }),
+};
+
+
+
+
+/**
+ * ...
+ */
 const layers = [
     {
         "id": "background",
@@ -34,7 +89,7 @@ const layers = [
     {
         "id": "shaded_relief",
         "type": "raster",
-        "source": "natural_earth_shaded_relief",
+        "source": "ne_sr",
         "layout": { "visibility": "visible" },
         "paint": {
             "raster-opacity": [
@@ -52,7 +107,7 @@ const layers = [
     {
         "id": "terrain-rgb-terrarium",
         "type": "hillshade",
-        "source": "terrarium",
+        "source": "hills",
         "minzoom": 0,
         "paint": {
             "hillshade-shadow-color": "#444",
@@ -63,7 +118,7 @@ const layers = [
     {
         "id": "river",
         "type": "line",
-        "source": "natural_earth",
+        "source": "ne",
         "source-layer": "river",
         "layout": {
             "line-cap": "round",
@@ -81,7 +136,7 @@ const layers = [
     {
         "id": "water_shadow",
         "type": "fill",
-        "source": "natural_earth",
+        "source": "ne",
         "source-layer": "water",
         "layout": {
             "visibility": "visible",
@@ -100,7 +155,7 @@ const layers = [
     {
         "id": "water",
         "type": "fill",
-        "source": "natural_earth",
+        "source": "ne",
         "source-layer": "water",
         "filter": [
             "match",
@@ -116,7 +171,7 @@ const layers = [
     {
         "id": "ice",
         "type": "fill",
-        "source": "natural_earth",
+        "source": "ne",
         "source-layer": "ice",
         "layout": {
             "visibility": "visible",
@@ -128,7 +183,7 @@ const layers = [
     {
         "id": "admin_level_1",
         "type": "line",
-        "source": "natural_earth",
+        "source": "ne",
         "source-layer": "admin",
         "filter": ["==", ["get", "admin_level"], 1],
         "layout": { "line-join": "round" },
@@ -146,7 +201,7 @@ const layers = [
     {
         "id": "admin_level_0",
         "type": "line",
-        "source": "natural_earth",
+        "source": "ne",
         "source-layer": "admin",
         "filter": ["==", ["get", "admin_level"], 0],
         "layout": { "line-join": "round", "line-cap": "round" },
@@ -201,56 +256,6 @@ export const mapOtrailsStyle: RequestHandler<
             throw new Error("not enough tile sources present");
         }
 
-        // tile sources (dynamic)
-        const sources = {
-            natural_earth_shaded_relief: {
-                type: "raster",
-                tiles: [
-                    [
-                        selfOrigin,
-                        substitute(
-                            ACTION.tileGetWebp,
-                            {
-                                name: "natural_earth_2_shaded_relief.raster",
-                                x: "{x}", y: "{y}", z: "{z}",
-                            },
-                        ),
-                    ].join(""),
-                ],
-                tileSize: 256,
-                maxzoom: 6,
-            },
-            terrarium: {
-                type: "raster-dem",
-                tiles: [
-                    [
-                        selfOrigin,
-                        substitute(
-                            ACTION.tileGetPng,
-                            {
-                                name: "open-data-elevation-tiles.raster-dem",
-                                x: "{x}", y: "{y}", z: "{z}",
-                            },
-                        ),
-                    ].join(""),
-                ],
-                minzoom: 0,
-                maxzoom: 15,
-                tileSize: 256,
-                encoding: "terrarium",
-            },
-            natural_earth: {
-                url: [
-                    selfOrigin,
-                    substitute(
-                        ACTION.tileJson,
-                        { name: "natural_earth.vector" },
-                    ),
-                ].join(""),
-                type: "vector",
-            },
-        };
-
         // map style - root
         const style = {
             version: 8,
@@ -259,7 +264,11 @@ export const mapOtrailsStyle: RequestHandler<
             center: [49.9055, 13.5086],
             pitch: 0,
             zoom: 5,
-            sources,
+            sources: {
+                ...sources.ne_sr(selfOrigin),
+                ...sources.terrain(selfOrigin, "hills"),
+                ...sources.ne(selfOrigin),
+            },
             layers,
         };
 

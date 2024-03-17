@@ -8,11 +8,13 @@ import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import Box from "@mui/material/Box";
 import IconInspect from "@mui/icons-material/Troubleshoot";
+import IconTerrain from "@mui/icons-material/Terrain";
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 
 import { appMemory } from "~web/root/memory";
 import { selectReady } from "~web/app/selectors";
 import { selectMapInspectVisible } from "~web/layout/selectors";
+import { selectTerrainEnabled } from "~web/map/selectors";
 import {
     useDimensions,
     useIsMobile,
@@ -50,7 +52,7 @@ const createStyles = (isMobile: boolean, width: number) => {
             flexDirection: "column",
             width: isMobile ? "80%" : "40%",
         },
-        switch: { p: 1 },
+        switch: { p: 0 },
         formLabel: { alignItems: "flex-end" },
     });
 };
@@ -81,6 +83,7 @@ const BottomDrawer: FC<{
 
     const appReady = useSelector(selectReady);
     const mapInspectVisible = useSelector(selectMapInspectVisible);
+    const terrainEnabled = useSelector(selectTerrainEnabled);
 
     return appReady && (
         <WithTransitions>
@@ -101,6 +104,19 @@ const BottomDrawer: FC<{
                         state={mapInspectVisible}
                         onStateChange={(s) => {
                             act.layout.SET_MAP_INSPECT_VISIBLE(s);
+                        }}
+                        overrides={{
+                            container: sx.switch,
+                            formControlLabel: sx.formLabel,
+                        }}
+                        headingVariant="body1"
+                    />
+                    <SettingSwitch
+                        icon={<IconTerrain />}
+                        label={t("Map:terrain")}
+                        state={terrainEnabled}
+                        onStateChange={(s) => {
+                            act.map.SET_TERRAIN_ENABLED(s);
                         }}
                         overrides={{
                             container: sx.switch,

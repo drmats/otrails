@@ -27,12 +27,6 @@ export default sliceReducer(initState) ((slice) => slice
         ...state, ready,
     }))
 
-    // set map dimensions
-    .handle(act.SET_DIMENSIONS, produce((draft, { dimensions }) => {
-        if (dimensions.height) draft.dimensions.height = dimensions.height;
-        if (dimensions.width) draft.dimensions.width = dimensions.width;
-    }))
-
     // set map style sources
     .handle(act.SET_MAPSTYLE_SOURCES, (state, { mapStyleSources }) => ({
         ...state, mapStyleSources,
@@ -55,6 +49,17 @@ export default sliceReducer(initState) ((slice) => slice
         if (viewport.longitude) draft.viewport.longitude = viewport.longitude;
         if (viewport.pitch) draft.viewport.pitch = viewport.pitch;
         if (viewport.zoom) draft.viewport.zoom = viewport.zoom;
+    }))
+
+    // set map dimensions
+    .handle(act.SET_DIMENSIONS, produce((draft, { dimensions }) => {
+        if (dimensions.height) draft.dimensions.height = dimensions.height;
+        if (dimensions.width) draft.dimensions.width = dimensions.width;
+    }))
+
+    // terrain
+    .handle(act.SET_TERRAIN_ENABLED, produce((draft, { flag }) => {
+        draft.terrainEnabled = flag;
     }))
 
     // set map selection

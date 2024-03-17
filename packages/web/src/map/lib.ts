@@ -21,7 +21,7 @@ export const mergeMapStyles = (
     overlay: StyleSpecification,
 ): StyleSpecification => ({
     ...base,
-    name: "Otrails overlay",
+    name: "Otrails",
     bearing: 0,
     center: [49.9055, 13.5086],
     pitch: 0,
@@ -34,6 +34,34 @@ export const mergeMapStyles = (
         ...base.layers,
         ...overlay.layers,
     ],
+});
+
+
+
+
+/**
+ * Add 3D terrain to the style.
+ */
+export const enableTerrain = (
+    base: StyleSpecification,
+    terrainTileUrl: string,
+): StyleSpecification => ({
+    ...base,
+    sources: {
+        ...base.sources,
+        "otrails-terrain": {
+            type: "raster-dem",
+            tiles: [terrainTileUrl],
+            minzoom: 0,
+            maxzoom: 15,
+            tileSize: 256,
+            encoding: "terrarium",
+        },
+    },
+    terrain: {
+        source: "otrails-terrain",
+        exaggeration: 1,
+    },
 });
 
 

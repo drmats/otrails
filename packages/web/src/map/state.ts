@@ -40,6 +40,9 @@ export default {
         height: 0,
     },
 
+    // terrain
+    terrainEnabled: false,
+
     // active map selection
     selection: undefined as MapSelection | undefined,
 

@@ -28,6 +28,7 @@ export enum MapActionType {
     SET_MAPSTYLE_SOURCES = "Map/SET_MAPSTYLE_SOURCES",
     SET_MAPSTYLE_SOURCE_INDEX = "Map/SET_MAPSTYLE_SOURCE_INDEX",
     SET_VIEWPORT = "Map/SET_VIEWPORT",
+    SET_TERRAIN_ENABLED = "Map/SET_TERRAIN_ENABLED",
     SET_SELECTION = "Map/SET_SELECTION",
 
 }
@@ -45,6 +46,7 @@ export default actionCreators(MapActionType, {
     SET_MAPSTYLE_SOURCES: (mapStyleSources: MapStyleSource[]) => ({ mapStyleSources }),
     SET_MAPSTYLE_SOURCE_INDEX: (mapStyleSourceIndex: number) => ({ mapStyleSourceIndex }),
     SET_VIEWPORT: (viewport: Partial<MapViewport>) => ({ viewport }),
+    SET_TERRAIN_ENABLED: (flag: boolean) => ({ flag }),
     SET_SELECTION: (selection?: MapSelection) => ({ selection }),
 
 });

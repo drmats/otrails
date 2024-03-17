@@ -25,7 +25,7 @@ export default {
     },
 
     "Dev": {
-        "map_selection_inspector": "Inspekcja danych mapy",
+        "map_selection_inspector": "Inspekcja mapy",
     },
 
     "Error": {
@@ -37,6 +37,10 @@ export default {
         "hi": "Cześć!",
         "landing_title": "szlaki, otwarte",
         "open_map": "Otwórz mapę",
+    },
+
+    "Map": {
+        "terrain": "Teren",
     },
 
     "MapStyleSource": {

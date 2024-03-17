@@ -25,7 +25,7 @@ export default {
     },
 
     "Dev": {
-        "map_selection_inspector": "Map data inspection",
+        "map_selection_inspector": "Map inspection",
     },
 
     "Error": {
@@ -37,6 +37,10 @@ export default {
         "hi": "Hello!",
         "landing_title": "trails, open",
         "open_map": "Open map",
+    },
+
+    "Map": {
+        "terrain": "Terrain",
     },
 
     "MapStyleSource": {

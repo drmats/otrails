@@ -22,6 +22,8 @@ import HeroBack from "~web/layout/components/HeroBack";
 import Loader from "~web/layout/components/Loader";
 import MenuFab from "~web/layout/components/MenuFab";
 import BottomDrawer from "~web/app/components/BottomDrawer";
+import { useSpaRoute } from "~web/router/hooks";
+import { SCREEN } from "~common/app/api";
 
 
 
@@ -38,6 +40,7 @@ const { act } = appMemory();
  * Application body wrapper.
  */
 const Body: FC<{ children: ReactNode }> = ({ children }) => {
+    const route = useSpaRoute();
     const appReady = useSelector(selectReady);
     const theme = useTheme();
     const lightTheme = useIsThemeLight();
@@ -49,6 +52,37 @@ const Body: FC<{ children: ReactNode }> = ({ children }) => {
         () => userAgent.includes("Firefox") && userAgent.includes("Linux"),
         [userAgent],
     );
+
+    // "sky" for map views
+    const bodyBackgroundImage = useMemo(() => {
+        if (route.matched !== SCREEN.landing) {
+            if (lightTheme) return [
+                "linear-gradient(",
+                "180deg, ",
+                `${theme.palette.primary.main} `,
+                "0%, ",
+                `${theme.custom.background.bodyColor} `,
+                "100%",
+                ")",
+            ].join("");
+            return [
+                "linear-gradient(",
+                "0deg, ",
+                `${theme.palette.primary.dark} `,
+                "0%, ",
+                `${theme.custom.background.bodyColor} `,
+                "100%",
+                ")",
+            ].join("");
+        }
+        return "none";
+    }, [
+        lightTheme,
+        route.matched,
+        theme.custom.background.bodyColor,
+        theme.palette.primary.dark,
+        theme.palette.primary.main,
+    ]);
 
     const bottomDrawerOpen = useSelector(selectBottomDrawerOpen);
 
@@ -63,6 +97,7 @@ const Body: FC<{ children: ReactNode }> = ({ children }) => {
                             inIframe
                                 ? theme.custom.background.bodyIframeColor
                                 : theme.custom.background.bodyColor,
+                        backgroundImage: bodyBackgroundImage,
                         position: "fixed",
                         width: "100%",
                         height: "100%",

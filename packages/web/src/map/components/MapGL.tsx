@@ -29,12 +29,16 @@ import ReactMapGL, {
     type ViewStateChangeEvent,
 } from "react-map-gl/maplibre";
 
+import { substitute } from "~common/framework/routing";
 import {
     selectRawMapStyleSource,
+    selectTerrainEnabled,
     selectViewport,
 } from "~web/map/selectors";
+import { selectBackendLocation } from "~web/network/selectors";
 import { appMemory } from "~web/root/memory";
-import { mergeMapStyles } from "~web/map/lib";
+import { ACTION } from "~common/app/api";
+import { enableTerrain, mergeMapStyles } from "~web/map/lib";
 import MapContent from "~web/map/components/MapContent";
 
 import "maplibre-gl/dist/maplibre-gl.css";
@@ -119,6 +123,31 @@ const MapGL: FC = memo(() => {
     }, [baseMapStyle, trackStyle]);
 
 
+    // final map style (with terrain)
+    const backendLocation = useSelector(selectBackendLocation);
+    const terrainEnabled = useSelector(selectTerrainEnabled);
+    const presentationMapStyle = useMemo<StyleSpecification | undefined>(() => {
+        if (mergedMapStyle) {
+            if (terrainEnabled) {
+                return enableTerrain(
+                    mergedMapStyle, [
+                        backendLocation,
+                        substitute(
+                            ACTION.tileGetPng,
+                            {
+                                name: "open-data-elevation-tiles.raster-dem",
+                                x: "{x}", y: "{y}", z: "{z}",
+                            },
+                        ),
+                    ].join(""),
+                );
+            }
+            return mergedMapStyle;
+        }
+        return undefined;
+    }, [backendLocation, terrainEnabled, mergedMapStyle]);
+
+
     // initialize / destroy
     useEffect(() => {
         void getTrackStyle();
@@ -176,8 +205,10 @@ const MapGL: FC = memo(() => {
         <ReactMapGL
             attributionControl={false}
             interactiveLayerIds={interactiveLayers}
-            mapStyle={mergedMapStyle}
+            mapStyle={presentationMapStyle}
+            maxPitch={85}
             maxZoom={22}
+            minPitch={0}
             minZoom={1}
             onClick={onMapClick}
             onLoad={onMapLoad}
