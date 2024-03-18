@@ -71,6 +71,7 @@ export const TrackLayerVisibility: FC = memo(() => {
         <FormControl component="fieldset" sx={sx.formControl}>
             <FormGroup row sx={sx.formGroup}>
                 <FormControlLabel
+                    name="run"
                     checked={visibility.run}
                     onChange={(_, run) => {
                         act.map.SET_TRACK_LAYERS_VISIBILITY({ run });
@@ -91,6 +92,7 @@ export const TrackLayerVisibility: FC = memo(() => {
                     labelPlacement="top"
                 />
                 <FormControlLabel
+                    name="walk"
                     checked={visibility.walk}
                     onChange={(_, walk) => {
                         act.map.SET_TRACK_LAYERS_VISIBILITY({ walk });
@@ -111,6 +113,7 @@ export const TrackLayerVisibility: FC = memo(() => {
                     labelPlacement="top"
                 />
                 <FormControlLabel
+                    name="hike"
                     checked={visibility.hike}
                     onChange={(_, hike) => {
                         act.map.SET_TRACK_LAYERS_VISIBILITY({ hike });
@@ -131,6 +134,7 @@ export const TrackLayerVisibility: FC = memo(() => {
                     labelPlacement="top"
                 />
                 <FormControlLabel
+                    name="bike"
                     checked={visibility.bike}
                     onChange={(_, bike) => {
                         act.map.SET_TRACK_LAYERS_VISIBILITY({ bike });
@@ -151,6 +155,7 @@ export const TrackLayerVisibility: FC = memo(() => {
                     labelPlacement="top"
                 />
                 <FormControlLabel
+                    name="flight"
                     checked={visibility.flight}
                     onChange={(_, flight) => {
                         act.map.SET_TRACK_LAYERS_VISIBILITY({ flight });
@@ -171,6 +176,7 @@ export const TrackLayerVisibility: FC = memo(() => {
                     labelPlacement="top"
                 />
                 <FormControlLabel
+                    name="water"
                     checked={visibility.water}
                     onChange={(_, water) => {
                         act.map.SET_TRACK_LAYERS_VISIBILITY({ water });

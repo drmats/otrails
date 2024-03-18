@@ -35,7 +35,7 @@ import SettingSwitch from "~web/common/components/SettingSwitch";
 const createStyles = (isMobile: boolean, width: number) => {
     const margin = isMobile
         ? "0px"
-        : `${(width - 500) / 2}px`;
+        : `${(width - 440) / 2}px`;
     return sxStyles({
         drawer: {
             "& > .MuiPaper-root": {
@@ -51,10 +51,10 @@ const createStyles = (isMobile: boolean, width: number) => {
         surface: {
             display: "flex",
             flexDirection: "column",
-            width: "80%",
+            width: "calc(100% - 32px)",
             marginY: 1,
         },
-        switch: { p: 0 },
+        switch: { p: 0, ml: 1 },
         formLabel: { alignItems: "flex-end" },
     });
 };
