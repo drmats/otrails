@@ -18,7 +18,6 @@ import { useIsThemeLight } from "~web/layout/hooks";
  */
 const MapContent: FC = () => {
     const lightTheme = useIsThemeLight();
-
     const scaleStyle = useMemo<CSSProperties>(
         () => ({
             borderBottomLeftRadius: "4px",
@@ -46,7 +45,7 @@ const MapContent: FC = () => {
 
     return (
         <ScaleControl
-            position="top-right"
+            position="top-left"
             unit="metric"
             style={scaleStyle}
         />
