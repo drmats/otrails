@@ -37,7 +37,7 @@ const createStyles = (isMobile: boolean, width: number) => sxStyles({
         maxWidth:
             isMobile
                 ? "100%"
-                : width >= 420 ? "420px" : `${width}px`,
+                : width >= 440 ? "440px" : `${width}px`,
         maxHeight: isMobile ? "40%" : "640px",
         overflow: "hidden",
         "& > *": {

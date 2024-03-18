@@ -16,7 +16,6 @@ import {
 } from "react";
 import { useSelector } from "react-redux";
 import type {
-    LayerSpecification,
     LngLat,
     MapGeoJSONFeature,
     MapLibreEvent,
@@ -42,6 +41,7 @@ import { enableTerrain, mergeMapStyles } from "~web/map/lib";
 import MapContent from "~web/map/components/MapContent";
 
 import "maplibre-gl/dist/maplibre-gl.css";
+import { INTERACTIVE_TRACK_LAYERS } from "~common/app/models/track";
 
 
 
@@ -64,23 +64,12 @@ const MapGL: FC = memo(() => {
     const viewport = useSelector(selectViewport);
 
 
-    // interactive layers
-    const [interactiveLayers, setInteractiveLayers] = useState<string[]>([]);
-
-
     // otrails tracks
     const [trackStyle, setTrackStyle] =
         useState<StyleSpecification | undefined>(undefined);
     const getTrackStyle = useCallback(async () => {
         const trackStyle = await tnk.map.getTrackStyle();
         setTrackStyle(trackStyle);
-        setInteractiveLayers(
-            (trackStyle.layers as (
-                LayerSpecification & { interactive: boolean }
-            )[])
-                .filter(({ interactive }) => interactive)
-                .map(({ id }) => id),
-        );
     }, []);
 
 
@@ -204,7 +193,7 @@ const MapGL: FC = memo(() => {
     return (
         <ReactMapGL
             attributionControl={false}
-            interactiveLayerIds={interactiveLayers}
+            interactiveLayerIds={INTERACTIVE_TRACK_LAYERS}
             mapStyle={presentationMapStyle}
             maxPitch={85}
             maxZoom={22}

@@ -37,7 +37,7 @@ const TrackLayer: FC<{
             filter={TRACK_LAYER_FILTER[type]()}
         />
         <Layer
-            id={`otr-${type}`}
+            id={`otr-${type}-back`}
             type="line"
             source="otrails-data"
             source-layer="otrails-track"
@@ -64,7 +64,7 @@ const TrackLayer: FC<{
             filter={TRACK_LAYER_FILTER[type]()}
         />
         <Layer
-            id={`otr-${type}-top`}
+            id={`otr-${type}`}
             type="line"
             source="otrails-data"
             source-layer="otrails-track"

@@ -3,6 +3,7 @@
  * @copyright Mat. 2024-present
  */
 
+import { recordKeys } from "~common/lib/struct";
 import { propFilter } from "~common/map/lib";
 
 
@@ -57,3 +58,12 @@ export const TRACK_COLOR = {
     water: ["#001654CC", "#003EE9EE"],
 
 } as const;
+
+
+
+
+/**
+ * Interactive layer ids.
+ */
+export const INTERACTIVE_TRACK_LAYERS =
+    recordKeys(TRACK_LAYER_FILTER).map((k) => `otr-${k}`);
