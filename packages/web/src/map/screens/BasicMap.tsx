@@ -44,7 +44,8 @@ const createStyles = (isMobile: boolean, width: number) => sxStyles({
             m: 1,
             width: "calc(100% - 16px)",
             maxHeight: "calc(640px - 16px)",
-            overflow: "scroll",
+            overflowX: "hidden",
+            overflowY: "auto",
         },
     },
 });

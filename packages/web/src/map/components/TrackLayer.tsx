@@ -17,7 +17,7 @@ import { TRACK_COLOR, TRACK_LAYER_FILTER } from "~common/app/models/track";
 const TrackLayer: FC<{
     type: keyof typeof TRACK_LAYER_FILTER;
     visible: boolean;
-}> = memo(({ type, visible }) => visible ? (
+}> = memo(({ type, visible }) => (
     <>
         <Layer
             id={`otr-${type}-start`}
@@ -25,7 +25,7 @@ const TrackLayer: FC<{
             source="otrails-data"
             source-layer="otrails-track-start"
             layout={{
-                "visibility": "visible",
+                "visibility": visible ? "visible" : "none",
             }}
             paint={{
                 "circle-radius": 5,
@@ -44,7 +44,7 @@ const TrackLayer: FC<{
             layout={{
                 "line-cap": "round",
                 "line-join": "round",
-                "visibility": "visible",
+                "visibility": visible ? "visible" : "none",
             }}
             paint={{
                 "line-blur": [
@@ -71,7 +71,7 @@ const TrackLayer: FC<{
             layout={{
                 "line-cap": "round",
                 "line-join": "round",
-                "visibility": "visible",
+                "visibility": visible ? "visible" : "none",
             }}
             paint={{
                 "line-blur": 0,
@@ -86,6 +86,6 @@ const TrackLayer: FC<{
             filter={TRACK_LAYER_FILTER[type]()}
         />
     </>
-) : null);
+));
 
 export default TrackLayer;

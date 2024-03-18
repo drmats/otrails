@@ -5,10 +5,12 @@
  * @copyright Mat. 2020-present
  */
 
-import { type CSSProperties, type FC, useMemo } from "react";
+import { memo, type CSSProperties, type FC, useMemo } from "react";
+import { useSelector } from "react-redux";
 import { ScaleControl } from "react-map-gl/maplibre";
 
 import { useIsThemeLight } from "~web/layout/hooks";
+import { selectTrackLayersVisibility } from "~web/map/selectors";
 import TrackLayer from "~web/map/components/TrackLayer";
 
 
@@ -17,7 +19,7 @@ import TrackLayer from "~web/map/components/TrackLayer";
 /**
  * Sources, layers, components, etc.
  */
-const MapContent: FC = () => {
+const MapContent: FC = memo(() => {
     const lightTheme = useIsThemeLight();
     const scaleStyle = useMemo<CSSProperties>(
         () => ({
@@ -44,6 +46,8 @@ const MapContent: FC = () => {
         [lightTheme],
     );
 
+    const visibility = useSelector(selectTrackLayersVisibility);
+
     return (
         <>
             <ScaleControl
@@ -51,14 +55,14 @@ const MapContent: FC = () => {
                 unit="metric"
                 style={scaleStyle}
             />
-            <TrackLayer type="flight" visible />
-            <TrackLayer type="bike" visible />
-            <TrackLayer type="run" visible />
-            <TrackLayer type="walk" visible />
-            <TrackLayer type="hike" visible />
-            <TrackLayer type="water" visible />
+            <TrackLayer type="flight" visible={visibility.flight} />
+            <TrackLayer type="bike" visible={visibility.bike} />
+            <TrackLayer type="run" visible={visibility.run} />
+            <TrackLayer type="walk" visible={visibility.walk} />
+            <TrackLayer type="hike" visible={visibility.hike} />
+            <TrackLayer type="water" visible={visibility.water} />
         </>
     );
-};
+});
 
 export default MapContent;

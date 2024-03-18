@@ -5,6 +5,9 @@
  * @copyright Mat. 2020-present
  */
 
+import { objectMap } from "@xcmats/js-toolbox/struct";
+
+import { TRACK_LAYER_FILTER } from "~common/app/models/track";
 import { mapStyleSources } from "~web/map/constants";
 import type { MapSelection } from "~web/map/types";
 
@@ -39,6 +42,9 @@ export default {
         width: 0,
         height: 0,
     },
+
+    // ...
+    trackLayersVisibility: objectMap(TRACK_LAYER_FILTER) (([k]) => [k, true]),
 
     // terrain
     terrainEnabled: false,

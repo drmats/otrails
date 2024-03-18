@@ -91,6 +91,7 @@ const SettingSwitch: FC<{
         <Box sx={[sx.container, overrides?.container ?? {}]}>
             <WithTransitions>
                 <FormControlLabel
+                    name={label}
                     control={
                         <Switch
                             color="primary"

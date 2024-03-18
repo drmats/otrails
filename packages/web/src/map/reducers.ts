@@ -57,6 +57,14 @@ export default sliceReducer(initState) ((slice) => slice
         if (dimensions.width) draft.dimensions.width = dimensions.width;
     }))
 
+    // track layers
+    .handle(act.SET_TRACK_LAYERS_VISIBILITY, produce((draft, { visibility }) => {
+        draft.trackLayersVisibility = {
+            ...draft.trackLayersVisibility,
+            ...visibility,
+        };
+    }))
+
     // terrain
     .handle(act.SET_TERRAIN_ENABLED, produce((draft, { flag }) => {
         draft.terrainEnabled = flag;

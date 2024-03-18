@@ -58,7 +58,7 @@ export const initialize = (): ThunkType =>
                             ? ThemeVariant.DARK
                             : ThemeVariant.LIGHT,
                 }) as MapStyleSource),
-        ].toSorted(
+        ].sort(
             (
                 { label: l1, displayName: d1 },
                 { label: l2, displayName: d2 },

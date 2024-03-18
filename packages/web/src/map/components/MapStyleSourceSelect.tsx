@@ -64,6 +64,7 @@ export const MapStyleSourceSelect: FC = memo(() => {
             <InputLabel>{ t("MapStyleSource:label") }</InputLabel>
             <Select
                 label={t("MapStyleSource:label")}
+                name="MapStyleSource:label"
                 value={String(mapStyleSourceIndex)}
                 onChange={handleChange}
                 size="small"

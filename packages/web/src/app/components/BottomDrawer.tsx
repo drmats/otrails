@@ -23,6 +23,7 @@ import {
 import { sxStyles } from "~web/common/utils";
 import { WithTransitions } from "~web/layout/components/ThemeProvider";
 import { MapStyleSourceSelect } from "~web/map/components/MapStyleSourceSelect";
+import { TrackLayerVisibility } from "~web/map/components/TrackLayerVisibility";
 import SettingSwitch from "~web/common/components/SettingSwitch";
 
 
@@ -34,7 +35,7 @@ import SettingSwitch from "~web/common/components/SettingSwitch";
 const createStyles = (isMobile: boolean, width: number) => {
     const margin = isMobile
         ? "0px"
-        : `${(width - 800) / 2}px`;
+        : `${(width - 500) / 2}px`;
     return sxStyles({
         drawer: {
             "& > .MuiPaper-root": {
@@ -50,7 +51,8 @@ const createStyles = (isMobile: boolean, width: number) => {
         surface: {
             display: "flex",
             flexDirection: "column",
-            width: isMobile ? "80%" : "40%",
+            width: "80%",
+            marginY: 1,
         },
         switch: { p: 0 },
         formLabel: { alignItems: "flex-end" },
@@ -94,16 +96,17 @@ const BottomDrawer: FC<{
                 onOpen={onOpen}
                 sx={sx.drawer}
             >
-                <Box sx={[sx.surface, { mt: 1 }]}>
-                    <MapStyleSourceSelect />
-                </Box>
                 <Box sx={sx.surface}>
+                    <TrackLayerVisibility />
+
+                    <MapStyleSourceSelect />
+
                     <SettingSwitch
-                        icon={<IconInspect />}
-                        label={t("Dev:map_selection_inspector")}
-                        state={mapInspectVisible}
+                        icon={<IconTerrain />}
+                        label={t("Map:terrain")}
+                        state={terrainEnabled}
                         onStateChange={(s) => {
-                            act.layout.SET_MAP_INSPECT_VISIBLE(s);
+                            act.map.SET_TERRAIN_ENABLED(s);
                         }}
                         overrides={{
                             container: sx.switch,
@@ -111,12 +114,13 @@ const BottomDrawer: FC<{
                         }}
                         headingVariant="body1"
                     />
+
                     <SettingSwitch
-                        icon={<IconTerrain />}
-                        label={t("Map:terrain")}
-                        state={terrainEnabled}
+                        icon={<IconInspect />}
+                        label={t("Dev:map_selection_inspector")}
+                        state={mapInspectVisible}
                         onStateChange={(s) => {
-                            act.map.SET_TERRAIN_ENABLED(s);
+                            act.layout.SET_MAP_INSPECT_VISIBLE(s);
                         }}
                         overrides={{
                             container: sx.switch,
