@@ -118,6 +118,10 @@ export const bakeTiles: CliAction = async () => {
                             "description": "Recorded track start point.",
                             "minzoom": 0,
                             "maxzoom": MAX_ZOOM,
+                            "fields": {
+                                "activity_type": "String",
+                                "user_short_id": "String",
+                            },
                         },
                     ],
                 }),

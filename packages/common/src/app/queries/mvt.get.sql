@@ -67,7 +67,9 @@ point_geometry AS (
             ),
             extent => 4096, buffer => 128, clip_geom => true
         ) AS mvt_point_geom,
-        track.properties.track_id AS track_id
+        track.properties.track_id AS track_id,
+        track.properties.activity_type AS activity_type,
+        track.properties.user_short_id AS user_short_id
     FROM intersecting_track
         INNER JOIN track.properties
             ON intersecting_track.id = track.properties.track_id

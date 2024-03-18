@@ -11,50 +11,12 @@ import { isString } from "@xcmats/js-toolbox/type";
 
 import type { ResponseErr } from "~common/framework/actions";
 import { lex } from "~common/lib/sort";
-import { deepMerge, type ComplexRecord } from "~common/lib/struct";
-import { hfid } from "~common/lib/ids";
+import type { ComplexRecord } from "~common/lib/struct";
 import { substitute } from "~common/framework/routing";
 import { useMemory } from "~service/logic/memory";
 import { TILE_VALIDITY_PERIOD } from "~service/logic/configuration";
 import { apiV1 } from "~service/setup/env";
 import { ACTION } from "~common/app/api";
-
-
-
-
-/**
- * Base layer style for track start points.
- */
-const startLayerBase = () => ({
-    "id": hfid(),
-    "type": "circle",
-    "source": "otrails-data",
-    "source-layer": "otrails-track-start",
-    "layout": {
-        "visibility": "visible",
-    },
-    "paint": {
-        "circle-radius": 5,
-        "circle-color": "#EEEEEEDD",
-        "circle-stroke-color": "#222222DD",
-        "circle-stroke-width": 2,
-        "circle-blur": 0.25,
-    },
-    "interactive": false,
-});
-
-
-
-
-/**
- * ...
- */
-const layers = [
-
-    // start points for all tracks
-    deepMerge(startLayerBase(), { id: "otr-track-starts" }),
-
-];
 
 
 
@@ -120,7 +82,7 @@ export const mapTrackStyle: RequestHandler<
             pitch: 0,
             zoom: 5,
             sources,
-            layers,
+            layers: [],
         };
 
         // all ok

@@ -3,7 +3,7 @@
  * @copyright Mat. 2024-present
  */
 
-import type { FC } from "react";
+import { memo, type FC } from "react";
 import { Layer } from "react-map-gl/maplibre";
 
 import { TRACK_COLOR, TRACK_LAYER_FILTER } from "~common/app/models/track";
@@ -17,8 +17,25 @@ import { TRACK_COLOR, TRACK_LAYER_FILTER } from "~common/app/models/track";
 const TrackLayer: FC<{
     type: keyof typeof TRACK_LAYER_FILTER;
     visible: boolean;
-}> = ({ type, visible }) => visible ? (
+}> = memo(({ type, visible }) => visible ? (
     <>
+        <Layer
+            id={`otr-${type}-start`}
+            type="circle"
+            source="otrails-data"
+            source-layer="otrails-track-start"
+            layout={{
+                "visibility": "visible",
+            }}
+            paint={{
+                "circle-radius": 5,
+                "circle-color": "#EEEEEEDD",
+                "circle-stroke-color": "#222222DD",
+                "circle-stroke-width": 2,
+                "circle-blur": 0.25,
+            }}
+            filter={TRACK_LAYER_FILTER[type]()}
+        />
         <Layer
             id={`otr-${type}`}
             type="line"
@@ -69,6 +86,6 @@ const TrackLayer: FC<{
             filter={TRACK_LAYER_FILTER[type]()}
         />
     </>
-) : null;
+) : null);
 
 export default TrackLayer;
