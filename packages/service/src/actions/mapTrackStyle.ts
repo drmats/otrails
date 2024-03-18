@@ -18,7 +18,6 @@ import { useMemory } from "~service/logic/memory";
 import { TILE_VALIDITY_PERIOD } from "~service/logic/configuration";
 import { apiV1 } from "~service/setup/env";
 import { ACTION } from "~common/app/api";
-import { TRACK_COLOR, LAYER_FILTER } from "~common/app/models/track";
 
 
 
@@ -48,138 +47,12 @@ const startLayerBase = () => ({
 
 
 /**
- * Base layer style for track bottoms.
- */
-const trackLayerBottomBase = () => ({
-    "id": hfid(),
-    "type": "line",
-    "source": "otrails-data",
-    "source-layer": "otrails-track",
-    "layout": {
-        "line-cap": "round",
-        "line-join": "round",
-        "visibility": "visible",
-    },
-    "paint": {
-        "line-blur": [
-            "interpolate", ["linear"], ["zoom"],
-            8, 3,
-            11, 2,
-            16, 0,
-        ],
-        "line-width": [
-            "interpolate", ["linear"], ["zoom"],
-            4, 0,
-            8, 6,
-            10, 6,
-        ],
-    },
-    "interactive": false,
-});
-
-
-
-
-/**
- * Base layer style for track tops.
- */
-const trackLayerTopBase = () => deepMerge(
-    trackLayerBottomBase(), {
-        "paint": {
-            "line-blur": 0,
-            "line-width": [
-                "interpolate", ["linear"], ["zoom"],
-                4, 0,
-                7, 1,
-                10, 2,
-            ],
-        },
-        "interactive": true,
-    },
-);
-
-
-
-
-/**
  * ...
  */
 const layers = [
 
     // start points for all tracks
     deepMerge(startLayerBase(), { id: "otr-track-starts" }),
-
-    // flights
-    deepMerge(trackLayerBottomBase(), {
-        "id": "otr-flying",
-        "filter": LAYER_FILTER.flight(),
-        "paint": { "line-color": TRACK_COLOR.flying[0] },
-    }, { allowGrowth: true }),
-    deepMerge(trackLayerTopBase(), {
-        "id": "otr-flying-top",
-        "filter": LAYER_FILTER.flight(),
-        "paint": { "line-color": TRACK_COLOR.flying[1] },
-    }, { allowGrowth: true }),
-
-    // bikes
-    deepMerge(trackLayerBottomBase(), {
-        "id": "otr-biking",
-        "filter": LAYER_FILTER.bike(),
-        "paint": { "line-color": TRACK_COLOR.biking[0] },
-    }, { allowGrowth: true }),
-    deepMerge(trackLayerTopBase(), {
-        "id": "otr-biking-top",
-        "filter": LAYER_FILTER.bike(),
-        "paint": { "line-color": TRACK_COLOR.biking[1] },
-    }, { allowGrowth: true }),
-
-    // runs
-    deepMerge(trackLayerBottomBase(), {
-        "id": "otr-running",
-        "filter": LAYER_FILTER.run(),
-        "paint": { "line-color": TRACK_COLOR.running[0] },
-    }, { allowGrowth: true }),
-    deepMerge(trackLayerTopBase(), {
-        "id": "otr-running-top",
-        "filter": LAYER_FILTER.run(),
-        "paint": { "line-color": TRACK_COLOR.running[1] },
-    }, { allowGrowth: true }),
-
-    // walks
-    deepMerge(trackLayerBottomBase(), {
-        "id": "otr-walking",
-        "filter": LAYER_FILTER.walk(),
-        "paint": { "line-color": TRACK_COLOR.walking[0] },
-    }, { allowGrowth: true }),
-    deepMerge(trackLayerTopBase(), {
-        "id": "otr-walking-top",
-        "filter": LAYER_FILTER.walk(),
-        "paint": { "line-color": TRACK_COLOR.walking[1] },
-    }, { allowGrowth: true }),
-
-    // hikes
-    deepMerge(trackLayerBottomBase(), {
-        "id": "otr-hiking",
-        "filter": LAYER_FILTER.hike(),
-        "paint": { "line-color": TRACK_COLOR.hiking[0] },
-    }, { allowGrowth: true }),
-    deepMerge(trackLayerTopBase(), {
-        "id": "otr-hiking-top",
-        "filter": LAYER_FILTER.hike(),
-        "paint": { "line-color": TRACK_COLOR.hiking[1] },
-    }, { allowGrowth: true }),
-
-    // water sports
-    deepMerge(trackLayerBottomBase(), {
-        "id": "otr-watering",
-        "filter": LAYER_FILTER.water(),
-        "paint": { "line-color": TRACK_COLOR.watering[0] },
-    }, { allowGrowth: true }),
-    deepMerge(trackLayerTopBase(), {
-        "id": "otr-watering-top",
-        "filter": LAYER_FILTER.water(),
-        "paint": { "line-color": TRACK_COLOR.watering[1] },
-    }, { allowGrowth: true }),
 
 ];
 

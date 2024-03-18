@@ -5,7 +5,7 @@
  * @copyright Mat. 2024-present
  */
 
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+import type { FilterSpecification } from "maplibre-gl";
 
 
 
@@ -17,7 +17,7 @@ export const propFilter = (
     op: "any" | "all",
     prop: string,
     vals: (number | string)[],
-) => [
+): FilterSpecification => [
     op,
     ...vals.map((v) => ["==", ["get", prop], v]),
-];
+] as FilterSpecification;

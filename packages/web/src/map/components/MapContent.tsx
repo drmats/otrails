@@ -9,6 +9,7 @@ import { type CSSProperties, type FC, useMemo } from "react";
 import { ScaleControl } from "react-map-gl/maplibre";
 
 import { useIsThemeLight } from "~web/layout/hooks";
+import TrackLayer from "~web/map/components/TrackLayer";
 
 
 
@@ -44,11 +45,19 @@ const MapContent: FC = () => {
     );
 
     return (
-        <ScaleControl
-            position="top-left"
-            unit="metric"
-            style={scaleStyle}
-        />
+        <>
+            <ScaleControl
+                position="top-left"
+                unit="metric"
+                style={scaleStyle}
+            />
+            <TrackLayer type="flight" visible />
+            <TrackLayer type="bike" visible />
+            <TrackLayer type="run" visible />
+            <TrackLayer type="walk" visible />
+            <TrackLayer type="hike" visible />
+            <TrackLayer type="water" visible />
+        </>
     );
 };
 

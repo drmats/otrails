@@ -3,41 +3,22 @@
  * @copyright Mat. 2024-present
  */
 
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-
 import { propFilter } from "~common/map/lib";
 
 
 
 
 /**
- * Used colors.
+ * Track layer filters.
  */
-export const TRACK_COLOR = {
-
-    flying: ["#006B82CC", "#00D1FFEE"],
-    biking: ["#085B00CC", "#11CC00EE"],
-    running: ["#6A5500CC", "#DEB100EE"],
-    walking: ["#592700CC", "#F86C00EE"],
-    hiking: ["#680015CC", "#D3002AEE"],
-    watering: ["#001654CC", "#003EE9EE"],
-
-} as const;
-
-
-
-
-/**
- * Layer filters.
- */
-export const LAYER_FILTER = {
-    bike: () => propFilter (
-        "any", "activity_type",
-        ["cycling", "road_biking", "gravel_cycling", "mountain_biking"],
-    ),
+export const TRACK_LAYER_FILTER = {
     flight: () => propFilter(
         "any", "activity_type",
         ["paragliding", "tandem_paragliding"],
+    ),
+    bike: () => propFilter (
+        "any", "activity_type",
+        ["cycling", "road_biking", "gravel_cycling", "mountain_biking"],
     ),
     run: () => propFilter(
         "any", "activity_type",
@@ -58,4 +39,21 @@ export const LAYER_FILTER = {
             "sailing_v2", "whitewater_rafting_kayaking",
         ],
     ),
-};
+} as const;
+
+
+
+
+/**
+ * Track colors.
+ */
+export const TRACK_COLOR = {
+
+    flight: ["#006B82CC", "#00D1FFEE"],
+    bike: ["#085B00CC", "#11CC00EE"],
+    run: ["#6A5500CC", "#DEB100EE"],
+    walk: ["#592700CC", "#F86C00EE"],
+    hike: ["#680015CC", "#D3002AEE"],
+    water: ["#001654CC", "#003EE9EE"],
+
+} as const;
