@@ -18,6 +18,7 @@ import { useMemory } from "~service/logic/memory";
 import { TILE_VALIDITY_PERIOD } from "~service/logic/configuration";
 import { apiV1 } from "~service/setup/env";
 import { ACTION } from "~common/app/api";
+import { TRACK_COLOR } from "~common/app/models/track";
 
 
 
@@ -159,72 +160,72 @@ const layers = [
     deepMerge(trackLayerBottomBase(), {
         "id": "otr-flying",
         "filter": flightFilter(),
-        "paint": { "line-color": "#006B82CC" },
+        "paint": { "line-color": TRACK_COLOR.flying[0] },
     }, { allowGrowth: true }),
     deepMerge(trackLayerTopBase(), {
         "id": "otr-flying-top",
         "filter": flightFilter(),
-        "paint": { "line-color": "#00D1FFEE" },
+        "paint": { "line-color": TRACK_COLOR.flying[1] },
     }, { allowGrowth: true }),
 
     // bikes
     deepMerge(trackLayerBottomBase(), {
         "id": "otr-biking",
         "filter": bikeFilter(),
-        "paint": { "line-color": "#085B00CC" },
+        "paint": { "line-color": TRACK_COLOR.biking[0] },
     }, { allowGrowth: true }),
     deepMerge(trackLayerTopBase(), {
         "id": "otr-biking-top",
         "filter": bikeFilter(),
-        "paint": { "line-color": "#11CC00EE" },
+        "paint": { "line-color": TRACK_COLOR.biking[1] },
     }, { allowGrowth: true }),
 
     // runs
     deepMerge(trackLayerBottomBase(), {
         "id": "otr-running",
         "filter": runFilter(),
-        "paint": { "line-color": "#6A5500CC" },
+        "paint": { "line-color": TRACK_COLOR.running[0] },
     }, { allowGrowth: true }),
     deepMerge(trackLayerTopBase(), {
         "id": "otr-running-top",
         "filter": runFilter(),
-        "paint": { "line-color": "#DEB100EE" },
+        "paint": { "line-color": TRACK_COLOR.running[1] },
     }, { allowGrowth: true }),
 
     // walks
     deepMerge(trackLayerBottomBase(), {
         "id": "otr-walking",
         "filter": walkFilter(),
-        "paint": { "line-color": "#592700CC" },
+        "paint": { "line-color": TRACK_COLOR.walking[0] },
     }, { allowGrowth: true }),
     deepMerge(trackLayerTopBase(), {
         "id": "otr-walking-top",
         "filter": walkFilter(),
-        "paint": { "line-color": "#F86C00EE" },
+        "paint": { "line-color": TRACK_COLOR.walking[1] },
     }, { allowGrowth: true }),
 
     // hikes
     deepMerge(trackLayerBottomBase(), {
         "id": "otr-hiking",
         "filter": hikeFilter(),
-        "paint": { "line-color": "#680015CC" },
+        "paint": { "line-color": TRACK_COLOR.hiking[0] },
     }, { allowGrowth: true }),
     deepMerge(trackLayerTopBase(), {
         "id": "otr-hiking-top",
         "filter": hikeFilter(),
-        "paint": { "line-color": "#D3002AEE" },
+        "paint": { "line-color": TRACK_COLOR.hiking[1] },
     }, { allowGrowth: true }),
 
     // water sports
     deepMerge(trackLayerBottomBase(), {
         "id": "otr-watering",
         "filter": waterFilter(),
-        "paint": { "line-color": "#001654CC" },
+        "paint": { "line-color": TRACK_COLOR.watering[0] },
     }, { allowGrowth: true }),
     deepMerge(trackLayerTopBase(), {
         "id": "otr-watering-top",
         "filter": waterFilter(),
-        "paint": { "line-color": "#003EE9EE" },
+        "paint": { "line-color": TRACK_COLOR.watering[1] },
     }, { allowGrowth: true }),
 
 ];
