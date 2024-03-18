@@ -9,11 +9,11 @@ import Checkbox from "@mui/material/Checkbox";
 import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormGroup from "@mui/material/FormGroup";
-import IconFlight from "@mui/icons-material/Paragliding";
 import IconBike from "@mui/icons-material/DirectionsBike";
+import IconFlight from "@mui/icons-material/Paragliding";
+import IconHike from "@mui/icons-material/Hiking";
 import IconRun from "@mui/icons-material/DirectionsRun";
 import IconWalk from "@mui/icons-material/DirectionsWalk";
-import IconHike from "@mui/icons-material/Hiking";
 import IconWater from "@mui/icons-material/Surfing";
 
 
@@ -60,6 +60,21 @@ const sxColor = (c: string) => ({
 /**
  * ...
  */
+const trackIcons = [
+    { type: "run", Icon: IconRun },
+    { type: "walk", Icon: IconWalk },
+    { type: "hike", Icon: IconHike },
+    { type: "bike", Icon: IconBike },
+    { type: "flight", Icon: IconFlight },
+    { type: "water", Icon: IconWater },
+] as const;
+
+
+
+
+/**
+ * ...
+ */
 export const TrackLayerVisibility: FC = memo(() => {
     const sx = useStyles(createStyles);
     const lightTheme = useIsThemeLight();
@@ -70,132 +85,30 @@ export const TrackLayerVisibility: FC = memo(() => {
     return (
         <FormControl component="fieldset" sx={sx.formControl}>
             <FormGroup row sx={sx.formGroup}>
-                <FormControlLabel
-                    name="run"
-                    checked={visibility.run}
-                    onChange={(_, run) => {
-                        act.map.SET_TRACK_LAYERS_VISIBILITY({ run });
-                    }}
-                    sx={sx.formControlLabel}
-                    value="run"
-                    control={
-                        <Checkbox
-                            size="small"
-                            sx={sxColor(TRACK_COLOR.run[colorIndex])}
-                        />
-                    }
-                    label={
-                        <IconRun
-                            sx={{ color: TRACK_COLOR.run[colorIndex] }}
-                        />
-                    }
-                    labelPlacement="top"
-                />
-                <FormControlLabel
-                    name="walk"
-                    checked={visibility.walk}
-                    onChange={(_, walk) => {
-                        act.map.SET_TRACK_LAYERS_VISIBILITY({ walk });
-                    }}
-                    sx={sx.formControlLabel}
-                    value="walk"
-                    control={
-                        <Checkbox
-                            size="small"
-                            sx={sxColor(TRACK_COLOR.walk[colorIndex])}
-                        />
-                    }
-                    label={
-                        <IconWalk
-                            sx={{ color: TRACK_COLOR.walk[colorIndex] }}
-                        />
-                    }
-                    labelPlacement="top"
-                />
-                <FormControlLabel
-                    name="hike"
-                    checked={visibility.hike}
-                    onChange={(_, hike) => {
-                        act.map.SET_TRACK_LAYERS_VISIBILITY({ hike });
-                    }}
-                    sx={sx.formControlLabel}
-                    value="hike"
-                    control={
-                        <Checkbox
-                            size="small"
-                            sx={sxColor(TRACK_COLOR.hike[colorIndex])}
-                        />
-                    }
-                    label={
-                        <IconHike
-                            sx={{ color: TRACK_COLOR.hike[colorIndex] }}
-                        />
-                    }
-                    labelPlacement="top"
-                />
-                <FormControlLabel
-                    name="bike"
-                    checked={visibility.bike}
-                    onChange={(_, bike) => {
-                        act.map.SET_TRACK_LAYERS_VISIBILITY({ bike });
-                    }}
-                    sx={sx.formControlLabel}
-                    value="bike"
-                    control={
-                        <Checkbox
-                            size="small"
-                            sx={sxColor(TRACK_COLOR.bike[colorIndex])}
-                        />
-                    }
-                    label={
-                        <IconBike
-                            sx={{ color: TRACK_COLOR.bike[colorIndex] }}
-                        />
-                    }
-                    labelPlacement="top"
-                />
-                <FormControlLabel
-                    name="flight"
-                    checked={visibility.flight}
-                    onChange={(_, flight) => {
-                        act.map.SET_TRACK_LAYERS_VISIBILITY({ flight });
-                    }}
-                    sx={sx.formControlLabel}
-                    value="flight"
-                    control={
-                        <Checkbox
-                            size="small"
-                            sx={sxColor(TRACK_COLOR.flight[colorIndex])}
-                        />
-                    }
-                    label={
-                        <IconFlight
-                            sx={{ color: TRACK_COLOR.flight[colorIndex] }}
-                        />
-                    }
-                    labelPlacement="top"
-                />
-                <FormControlLabel
-                    name="water"
-                    checked={visibility.water}
-                    onChange={(_, water) => {
-                        act.map.SET_TRACK_LAYERS_VISIBILITY({ water });
-                    }}
-                    sx={sx.formControlLabel}
-                    value="water"
-                    control={
-                        <Checkbox
-                            size="small"
-                            sx={sxColor(TRACK_COLOR.water[colorIndex])}
-                        />
-                    }
-                    label={
-                        <IconWater
-                            sx={{ color: TRACK_COLOR.water[colorIndex] }}
-                        />
-                    }
-                    labelPlacement="top"
-                />
+                { trackIcons.map(({ type, Icon }) => (
+                    <FormControlLabel
+                        key={type}
+                        name={type}
+                        checked={visibility[type]}
+                        onChange={(_, v) => {
+                            act.map.SET_TRACK_LAYERS_VISIBILITY({ [type]: v });
+                        }}
+                        sx={sx.formControlLabel}
+                        value={type}
+                        control={
+                            <Checkbox
+                                size="small"
+                                sx={sxColor(TRACK_COLOR[type][colorIndex])}
+                            />
+                        }
+                        label={
+                            <Icon
+                                sx={{ color: TRACK_COLOR[type][colorIndex] }}
+                            />
+                        }
+                        labelPlacement="top"
+                    />
+                )) }
             </FormGroup>
         </FormControl>
     );
