@@ -40,14 +40,14 @@ export default function configureErrorHandling (): void {
         }
 
         // oops...
-        if (!res.headersSent) { next(new Error("panic!")); }
+        if (!res.headersSent) { next(); }
 
     });
 
 
     // simple error handler/logger
     app.use((
-        error: Error, req: Request, res: Response, _next: NextFunction,
+        error: Error, req: Request, res: Response, next: NextFunction,
     ) => {
 
         if (res.headersSent) {
@@ -61,8 +61,6 @@ export default function configureErrorHandling (): void {
 
         } else {
 
-            res.status(500).send({ error: error.toString() });
-
             logger.info(
                 chalk.red(req.ip ?? "aborted"),
                 chalk.gray(req.method), req.url,
@@ -73,6 +71,8 @@ export default function configureErrorHandling (): void {
             logger.err(error.toString());
 
         }
+
+        return next();
 
     });
 
