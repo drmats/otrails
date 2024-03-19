@@ -192,10 +192,13 @@ const MapGL: FC = memo(() => {
 
     return (
         <ReactMapGL
+            antialias
             attributionControl={false}
+            interactive
             interactiveLayerIds={INTERACTIVE_TRACK_LAYERS}
             mapStyle={presentationMapStyle}
             maxPitch={85}
+            maxTileCacheSize={1024}
             maxZoom={22}
             minPitch={0}
             minZoom={1}
@@ -206,6 +209,7 @@ const MapGL: FC = memo(() => {
             ref={mapRef}
             reuseMaps
             style={{ width: "100vw", height: "100vh" }}
+            styleDiffing
             {...viewport}
         >
             <MapContent />
