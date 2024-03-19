@@ -6,7 +6,6 @@
 import type { FC } from "react";
 import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
-import Box from "@mui/material/Box";
 
 import MapGL from "~web/map/components/MapGL";
 import { selectMapInspectVisible } from "~web/layout/selectors";
@@ -30,6 +29,7 @@ import { MapInspect } from "~web/map/components/MapInspect";
 const createStyles = (isMobile: boolean, width: number) => sxStyles({
     mapInspectSurface: {
         position: "fixed",
+        zIndex: 100,
         right: isMobile ? "0px" : "10px",
         top: isMobile ? "0px" : "10px",
         width: isMobile ? "100%" : "auto",
@@ -37,15 +37,12 @@ const createStyles = (isMobile: boolean, width: number) => sxStyles({
         maxWidth:
             isMobile
                 ? "100%"
-                : width >= 440 ? "440px" : `${width}px`,
+                : width >= 600 ? "600px" : `${width}px`,
         maxHeight: isMobile ? "40%" : "640px",
-        overflow: "hidden",
+        overflowX: "hidden",
+        overflowY: "scroll",
         "& > *": {
-            m: 1,
-            width: "calc(100% - 16px)",
-            maxHeight: "calc(640px - 16px)",
-            overflowX: "hidden",
-            overflowY: "auto",
+            m: 1, pr: !isMobile ? 1 : 0,
         },
     },
 });
@@ -72,7 +69,7 @@ const BasicMap: FC = () => {
             <MapGL />
             { mapInspectVisible && (
                 <MobilePaper sx={sx.mapInspectSurface}>
-                    <Box><MapInspect /></Box>
+                    <MapInspect />
                 </MobilePaper>
             ) }
         </>

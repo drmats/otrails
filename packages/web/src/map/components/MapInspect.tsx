@@ -28,7 +28,11 @@ export const MapInspect: FC = memo(() => {
     return (
         <FreeFormInspect
             overrides={{
-                container: { "& > *": { marginLeft: "0 !important" } },
+                container: {
+                    "& > *": {
+                        marginLeft: "0 !important",
+                    },
+                },
             }}
             data={mapSelection ? {
                 ...truncMapViewport,
