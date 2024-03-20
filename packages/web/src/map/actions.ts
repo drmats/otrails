@@ -28,6 +28,7 @@ export enum MapActionType {
     SET_DIMENSIONS = "Map/SET_DIMENSIONS",
     SET_MAPSTYLE_SOURCES = "Map/SET_MAPSTYLE_SOURCES",
     SET_MAPSTYLE_SOURCE_INDEX = "Map/SET_MAPSTYLE_SOURCE_INDEX",
+    SET_MAX_PITCH = "Map/SET_MAX_PITCH",
     SET_VIEWPORT = "Map/SET_VIEWPORT",
     SET_TRACK_LAYERS_VISIBILITY = "Map/SET_TRACK_LAYERS_VISIBILITY",
     SET_TERRAIN_ENABLED = "Map/SET_TERRAIN_ENABLED",
@@ -54,6 +55,8 @@ export default actionCreators(MapActionType, {
     SET_MAPSTYLE_SOURCE_INDEX: (
         mapStyleSourceIndex: number,
     ) => ({ mapStyleSourceIndex }),
+
+    SET_MAX_PITCH: (pitch: number) => ({ pitch }),
 
     SET_VIEWPORT: (viewport: Partial<MapViewport>) => ({ viewport }),
 

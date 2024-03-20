@@ -42,6 +42,11 @@ export default sliceReducer(initState) ((slice) => slice
             draft.mapStyleSourceIndex = mapStyleSourceIndex;
     }))
 
+    // map defaults
+    .handle(act.SET_MAX_PITCH, produce((draft, { pitch }) => {
+        draft.maxPitch = pitch;
+    }))
+
     // set map viewport
     .handle(act.SET_VIEWPORT, produce((draft, { viewport }) => {
         if (viewport.bearing) draft.viewport.bearing = viewport.bearing;

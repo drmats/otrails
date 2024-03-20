@@ -28,6 +28,9 @@ export default {
     // what's the current map style source?
     mapStyleSourceIndex: 0,
 
+    // map defaults and limits
+    maxPitch: 85,
+
     // viewport state
     viewport: {
         bearing: 0,

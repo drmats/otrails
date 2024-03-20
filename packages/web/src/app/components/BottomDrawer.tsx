@@ -65,7 +65,7 @@ const createStyles = (isMobile: boolean, width: number) => {
 /**
  * ...
  */
-const { act } = appMemory();
+const { act, tnk } = appMemory();
 
 
 
@@ -106,7 +106,7 @@ const BottomDrawer: FC<{
                         label={t("Map:terrain")}
                         state={terrainEnabled}
                         onStateChange={(s) => {
-                            act.map.SET_TERRAIN_ENABLED(s);
+                            void tnk.map.setTerrainEnabled(s);
                         }}
                         overrides={{
                             container: sx.switch,

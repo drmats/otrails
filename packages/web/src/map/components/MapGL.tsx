@@ -30,6 +30,7 @@ import ReactMapGL, {
 
 import { substitute } from "~common/framework/routing";
 import {
+    selectMaxPitch,
     selectRawMapStyleSource,
     selectTerrainEnabled,
     selectViewport,
@@ -62,6 +63,7 @@ const MapGL: FC = memo(() => {
     // map reference and viewport status
     const mapRef = useRef<MapRef | null>(null);
     const viewport = useSelector(selectViewport);
+    const maxPitch = useSelector(selectMaxPitch);
 
 
     // otrails tracks
@@ -197,7 +199,7 @@ const MapGL: FC = memo(() => {
             interactive
             interactiveLayerIds={INTERACTIVE_TRACK_LAYERS}
             mapStyle={presentationMapStyle}
-            maxPitch={85}
+            maxPitch={maxPitch}
             maxTileCacheSize={1024}
             maxZoom={22}
             minPitch={0}

@@ -44,6 +44,8 @@ export const selectMapStyleSource = createSelector(
             },
 );
 
+export const selectMaxPitch = (s: RootState) => s.map.maxPitch;
+
 export const selectViewport = (s: RootState) => s.map.viewport;
 
 export const selectDimensions = (s: RootState) => s.map.dimensions;

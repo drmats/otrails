@@ -6,6 +6,8 @@
  */
 
 import type { StyleSpecification } from "maplibre-gl";
+import { delay } from "@xcmats/js-toolbox/async";
+import { timeUnit } from "@xcmats/js-toolbox/utils";
 
 import type { ThunkType } from "~web/store/types";
 import type {
@@ -13,6 +15,7 @@ import type {
     TileSourcesResponseOk,
 } from "~common/app/actions/map";
 import type { MapViewport } from "~web/map/types";
+import { selectTerrainEnabled } from "~web/map/selectors";
 import { ACTION } from "~common/app/api";
 
 
@@ -112,3 +115,36 @@ export const getTrackStyle = (): ThunkType<Promise<StyleSpecification>> =>
         await tnk.network.jsonRequest(
             ACTION.mapTrackStyle,
         ) as StyleSpecification;
+
+
+
+
+/**
+ * Enable/disable terrain and adjust map max pitch accordingly.
+ */
+export const setTerrainEnabled = (flag: boolean): ThunkType<Promise<void>> =>
+    async (_d, getState, { act, mut }) => {
+        const state = getState();
+        const isTerrainEnabled = selectTerrainEnabled(state);
+        if (isTerrainEnabled === flag) return;
+        if (!mut.map) return;
+        if (flag) {
+            act.map.SET_TERRAIN_ENABLED(flag);
+            await delay(0.35 * timeUnit.second);
+            act.map.SET_MAX_PITCH(85);
+            mut.map.flyTo({
+                pitch: 55,
+                duration: 0.25 * timeUnit.second,
+            });
+            await delay(0.25 * timeUnit.second);
+        } else {
+            mut.map.flyTo({
+                pitch: 0,
+                bearing: 0,
+                duration: 0.25 * timeUnit.second,
+            });
+            await delay(0.25 * timeUnit.second);
+            act.map.SET_MAX_PITCH(0);
+            act.map.SET_TERRAIN_ENABLED(flag);
+        }
+    };
