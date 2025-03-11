@@ -8,7 +8,7 @@
 import type { Database } from "better-sqlite3";
 import { isString } from "@xcmats/js-toolbox";
 
-import type { ComplexValue } from "~common/lib/type";
+import type { ComplexValue, OrUndefined } from "~common/lib/type";
 import type { PlainRecipe } from "~common/lib/struct";
 import { access, isComplexRecord, recordModify } from "~common/lib/struct";
 
@@ -122,7 +122,7 @@ export default function setting (db: Database) {
 
 
         // ...
-        get: (key: string): ComplexValue | undefined => {
+        get: (key: string): OrUndefined<ComplexValue> => {
             const statementGetResult = statement.get.get({ key });
             if (!isComplexRecord(statementGetResult)) return undefined;
             const val = access(statementGetResult, ["val"]);
@@ -145,7 +145,7 @@ export default function setting (db: Database) {
         update: (
             key: string,
             recipe?: PlainRecipe,
-        ): ComplexValue | undefined => {
+        ): OrUndefined<ComplexValue> => {
             const val = pub.get(key);
             let newVal = val;
             if (isComplexRecord(val)) {
