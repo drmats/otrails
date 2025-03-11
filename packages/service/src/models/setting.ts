@@ -1,6 +1,6 @@
 /**
  * @license BSD-2-Clause
- * @copyright Mat. 2024-present
+ * @copyright Mat. 2022-present
  */
 
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
@@ -9,7 +9,8 @@ import type { Database } from "better-sqlite3";
 import { isString } from "@xcmats/js-toolbox";
 
 import type { ComplexValue } from "~common/lib/type";
-import { access, isComplexRecord } from "~common/lib/struct";
+import type { PlainRecipe } from "~common/lib/struct";
+import { access, isComplexRecord, recordModify } from "~common/lib/struct";
 
 
 
@@ -139,6 +140,22 @@ export default function setting (db: Database) {
             statement.set.run({ key, val: JSON.stringify(val) });
         },
 
+
+        // ...
+        update: (
+            key: string,
+            recipe?: PlainRecipe,
+        ): ComplexValue | undefined => {
+            const val = pub.get(key);
+            let newVal = val;
+            if (isComplexRecord(val)) {
+                newVal = recordModify(val, recipe);
+            } else if (typeof recipe !== "undefined") {
+                newVal = recordModify({}, recipe);
+            }
+            if (typeof newVal !== "undefined") pub.set(key, newVal);
+            return newVal;
+        },
 
         // ...
         delete: (key: string): void => {
