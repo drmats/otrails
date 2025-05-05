@@ -137,8 +137,22 @@ is maintained in [`packages/cli/`](../packages/cli/) project directory.
     cli <command>
 
     Commands:
-    cli hello                         database connection and versions
-    cli dev [cwd]                     development console
+    cli hello                                            database connection and versions
+    cli dev [cwd]                                        development console
+    cli db-size [name]                                   check database size
+    cli wipe-all-data                                    wipe all data from postgis database
+    cli extract-garmin-data [zipFileName] [userShortId]  (1) uncompress contents of garmin export
+    cli fetch-images [userShortId]                       (2) fetch all export-data images
+    cli process-summaries [userShortId]                  (3) process summarized activities
+    cli process-tcxes [userShortId]                      (4) process tcx-file activities
+    cli process-fits [userShortId]                       (5) process fit-file activities
+    cli ingest-garmin-data [zipFileName] [userShortId]   ingest garmin user data (automate 5 steps)
+    cli process-igcs [folder] [userShortId]              process igc flights
+    cli setup-views                                      database views setup
+    cli bake-tiles                                       bake mbtiles file
+    cli prepare-base-maps                                prepare base maps
+    cli init-proxy-tiles [name] [url]                    initialize named tile proxy
+    cli init-all-proxy-tiles                             initialize defined set of cached tile proxies
 
     Options:
     --version  Show version number
