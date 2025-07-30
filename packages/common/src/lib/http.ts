@@ -17,7 +17,9 @@ import https, {
 import { createWriteStream } from "node:fs";
 import { createMutex } from "@xcmats/js-toolbox/async";
 import { clamp } from "@xcmats/js-toolbox/math";
-import { isString } from "@xcmats/js-toolbox/type";
+import { isBoolean, isString } from "@xcmats/js-toolbox/type";
+import type { FreeFormRecord } from "~common/lib/type";
+import { isPlainRecord } from "~common/lib/struct";
 
 
 
@@ -184,17 +186,29 @@ export const getFile = async (
 
 
 /**
+ * Headers record - one-level-deep object consisiting of strings and numbers.
+ */
+export type HeadersRecord = FreeFormRecord<string | number>;
+
+
+
+
+/**
+ * Headers record - type predicate.
+ */
+export const isHeadersRecord = (c: unknown): c is HeadersRecord =>
+    isPlainRecord(c) && Object.values(c).every((v) => !isBoolean(v));
+
+
+
+
+/**
  * Firefox headers.
  */
-export const browserRequestHeaders = (): Record<string, string> => ({
+export const browserRequestHeaders = (): HeadersRecord => ({
     "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:125.0) Gecko/20100101 Firefox/125.0",
     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
     "Accept-Language": "en-US,en;q=0.5",
-    "Upgrade-Insecure-Requests": "1",
-    "Sec-Fetch-Dest": "document",
-    "Sec-Fetch-Mode": "navigate",
-    "Sec-Fetch-Site": "none",
-    "Sec-Fetch-User": "?1",
     "Pragma": "no-cache",
     "Cache-Control": "no-cache",
 });

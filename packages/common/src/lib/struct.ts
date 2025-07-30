@@ -36,7 +36,6 @@ import {
 
 /**
  * Plain record - one-level-deep object consisiting only of plain values.
- *
  */
 export type PlainRecord = FreeFormRecord<PlainValue>;
 
