@@ -221,7 +221,7 @@ export default async function configureArgsParser (): Promise<void> {
 
         // tile proxy (single)
         .command(
-            "init-proxy-tiles [name] [url]",
+            "init-proxy-tiles [name] [url] [headers]",
             "initialize named tile proxy",
             {
                 name: {
@@ -231,6 +231,10 @@ export default async function configureArgsParser (): Promise<void> {
                 url: {
                     type: "string",
                     describe: "original tile source url (scheme)",
+                },
+                headers: {
+                    type: "string",
+                    describe: "additional request headers (JSON)",
                 },
             },
             initProxyTiles,

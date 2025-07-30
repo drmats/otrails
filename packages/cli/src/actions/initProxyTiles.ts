@@ -16,7 +16,18 @@ import { isFile } from "~common/lib/fs";
 import { printError } from "~common/lib/error";
 import { setPragmas } from "~common/sqlite/lib";
 import { ensureSchema, metaInserter, tileInserter } from "~common/mbtiles/lib";
-import { browserRequestHeaders, collectData, httpGet } from "~common/lib/http";
+import {
+    type HeadersRecord,
+    browserRequestHeaders,
+    collectData,
+    httpGet,
+    isHeadersRecord,
+} from "~common/lib/http";
+import {
+    plainRecordParse,
+    plainRecordStringify,
+    recordKeys,
+} from "~common/lib/struct";
 
 
 
@@ -33,9 +44,10 @@ const MAX_ZOOM = 22;
 export const initProxyTiles: CliAction<{
     name?: string;
     url?: string;
+    headers?: string;
     type?: string;
     encoding?: string;
-}> = async ({ name, url, type, encoding }) => {
+}> = async ({ name, url, headers, type, encoding }) => {
 
     const { vars } = useMemory();
 
@@ -52,6 +64,18 @@ export const initProxyTiles: CliAction<{
         // check arguments existence
         if (!isString(name) || !isString(url)) {
             throw new Error("Provide [name] and [url].");
+        }
+
+        // check headers presence and validity
+        let parsedHeaders: HeadersRecord = {};
+        if (isString(headers)) {
+            const headersCandidate = plainRecordParse(headers);
+            if (isHeadersRecord(headersCandidate)) {
+                parsedHeaders = headersCandidate;
+            }
+            if (recordKeys(parsedHeaders).length === 0) {
+                throw new Error("Malformed [headers] argument.");
+            }
         }
 
         // mbtiles destination file name
@@ -86,8 +110,10 @@ export const initProxyTiles: CliAction<{
                 .replaceAll("{y}", "0")
                 .replaceAll("{z}", "0"),
             {
-                // pretend firefox
-                headers: browserRequestHeaders(),
+                headers: {
+                    ...browserRequestHeaders(),
+                    ...parsedHeaders,
+                },
             },
         );
 
@@ -138,6 +164,12 @@ export const initProxyTiles: CliAction<{
             insertMeta({ name: "type", value: type ?? "basemap" });
             insertMeta({ name: "version", value: "1" });
             insertMeta({ name: "x-proxied-url", value: url });
+            if (isString(headers)) {
+                insertMeta({
+                    name: "x-headers",
+                    value: plainRecordStringify(parsedHeaders),
+                });
+            }
 
             // insert first tile
             tileInserter(filedb)({ z: 0, x: 0, y: 0, data: firstTileData });

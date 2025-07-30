@@ -14,8 +14,15 @@ import type { ResponseErr } from "~common/framework/actions";
 import { HttpMessage } from "~common/framework/http";
 import { useMemory } from "~service/logic/memory";
 import { TILE_VALIDITY_PERIOD } from "~service/logic/configuration";
-import { browserRequestHeaders, collectData, httpGet } from "~common/lib/http";
+import {
+    type HeadersRecord,
+    browserRequestHeaders,
+    collectData,
+    httpGet,
+    isHeadersRecord,
+} from "~common/lib/http";
 import { tileInserter } from "~common/mbtiles/lib";
+import { plainRecordParse } from "~common/lib/struct";
 
 
 
@@ -40,6 +47,16 @@ const handleTileProxy = async (
         throw new Error(HttpMessage.C404);
     }
 
+    // check for additional request headers
+    const requestHeadersString = model.mbtile.getMeta(name, "x-headers");
+    let requestHeaders: HeadersRecord = {};
+    if (isString(requestHeadersString)) {
+        const requestHeadersCandidate = plainRecordParse(requestHeadersString);
+        if (isHeadersRecord(requestHeadersCandidate)) {
+            requestHeaders = requestHeadersCandidate;
+        }
+    }
+
     // try fetching tile from remote resource
     const {
         request: tileRequest,
@@ -49,8 +66,12 @@ const handleTileProxy = async (
             .replaceAll("{x}", String(x))
             .replaceAll("{y}", String(y))
             .replaceAll("{z}", String(z)),
-        // pretend firefox
-        { headers: browserRequestHeaders() },
+        {
+            headers: {
+                ...browserRequestHeaders(),
+                ...requestHeaders,
+            },
+        },
     );
 
     // check response code and response with 404 if not ok
